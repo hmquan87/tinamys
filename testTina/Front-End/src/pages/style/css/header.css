@@ -1,0 +1,64 @@
+.header {
+  position: relative;
+  left: 0;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  /* z-index: 1000; */
+  box-shadow: 0 4px 6px -4px rgba(170, 170, 170, 0.8);
+}
+
+.header-left {
+  width: 58%;
+}
+
+#txtphone {
+  margin-top: 10px;
+}
+
+#logo {
+  padding-left: 320px;
+}
+
+.header-right {
+  display: flex;
+  right: 0;
+  align-items: center;
+}
+
+#img1 {
+  width: 90px;
+  margin-left: 10px;
+}
+
+.header-right button {
+  width: 100px;
+  height: 28px;
+  border-radius: 0.3em;
+  border: 1px solid rgb(17, 0, 255);
+  margin-left: 10px;
+  background-color: rgb(17, 0, 255);
+  color: white;
+  font-weight: 300;
+  font-size: 12px;
+}
+
+.header-right button:hover {
+  background-color: rgb(83, 72, 241);
+  cursor: pointer;
+}
+
+#iconreact {
+  margin-right: 5px;
+  color: rgb(17, 0, 255);
+}
+
+.phones {
+  display: flex;
+  margin-left: 10px;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+
+}

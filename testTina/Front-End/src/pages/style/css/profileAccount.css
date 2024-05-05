@@ -1,0 +1,99 @@
+.profile-account-full {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+}
+
+.header-form {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px solid #dcdcdc;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    z-index: 999;
+}
+
+.body-home-right-form {
+    position: relative;
+    right: 0;
+    width: 100%;
+}
+
+.form-account {
+    width: 769px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.title-profile-account h4 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.bg-gradient-form {
+    height: 172px;
+    background: linear-gradient(90deg, #8961ff, #71bbff);
+    border-radius: 10px 10px 0 0;
+}
+
+#img-account {
+    position: relative;
+    width: 220px;
+    top: 20%;
+    left: 5%;
+    border-radius: 999px;
+}
+
+.form-profile {
+    padding-top: 120px;
+    border: 1px solid #d8d7d7;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.ant-input-profile {
+    padding: 10px 40px;
+}
+
+.ant-input-profile label {
+    font-size: 16px;
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+
+.ant-input-profile label b {
+    color: red;
+    font-weight: 400;
+}
+
+.ant-input-form {
+    height: 42px;
+}
+
+.ant-select-arrow {
+    display: none !important;
+}
+
+.ant-btn-save {
+    position: relative;
+    display: flex;
+    justify-content: right;
+    margin-right: 40px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.title-term {
+    position: relative;
+    width: 50%;
+    top: 10%;
+    left: 30%;
+}

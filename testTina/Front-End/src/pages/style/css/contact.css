@@ -1,0 +1,129 @@
+.con-full {
+    position: relative;
+    margin: 0 54px;
+    padding-left: 250px;
+    margin-bottom: 100px;
+}
+
+.ct-full {
+    display: flex;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    width: 80%;
+    gap: 2rem;
+    justify-content: center;
+    padding-bottom: 2.75rem;
+    max-width: 100%;
+}
+
+.img-ct-full {
+    margin-right: 15%;
+    margin-right: 5%;
+}
+
+.img-ct-full img {
+    color: transparent;
+    width: 120%;
+    height: 100%;
+    max-width: 600px;
+}
+
+
+
+.contact-form {
+    position: relative;
+    width: 80%;
+    margin-top: 5%;
+}
+
+.contact-form h1 {
+    position: relative;
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 4rem;
+    justify-content: flex-start;
+    z-index: 10;
+    font-weight: 700;
+}
+
+
+input:focus {
+    outline: none;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+
+textarea:hover {
+    box-shadow: 0 0 6px rgb(120, 132, 238);
+}
+
+
+.form-item-input-error {
+    display: none;
+    color: red;
+}
+
+.form-item-input-error.show {
+    display: inherit;
+
+}
+
+.focused-error input,
+.focused-error textarea {
+    box-shadow: 0 0 3px rgb(255, 0, 0);
+
+}
+
+
+.w {
+    width: 186px;
+}
+
+#submit:hover {
+    opacity: 0.9;
+}
+
+#submit {
+    background: rgb(32 130 255);
+    width: 190px;
+    height: 56px;
+    font-weight: 500;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    border: none;
+    color: white;
+}
+
+.ant-input-cont {
+    height: 50px;
+}
+
+.ant-input-cont-1 {
+    height: 50px;
+    width: 100%;
+}
+
+.st {
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.ant-textarea-cont {
+    height: 100px !important;
+}
+
+.btn-ant-cont {
+    width: 35%;
+    height: 60px !important;
+    border-radius: 20px;
+}

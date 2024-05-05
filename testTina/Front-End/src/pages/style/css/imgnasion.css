@@ -1,0 +1,58 @@
+#covn {
+  width: 38px;
+  margin-left: 10px;
+}
+
+
+.icon {
+  display: flex;
+  font-size: 14px;
+
+}
+
+.icon p {
+  margin-left: 10px;
+}
+
+.icon img {
+  width: 38px;
+  height: 38px;
+}
+
+
+
+.taskbar {
+  position: fixed;
+  right: 305px;
+  width: 8%;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 10px;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+  transition: transform 0.3s ease;
+  border-radius: 0.7vh;
+  box-shadow: 0 0 6px #d1d1d1;
+}
+
+.taskbar p {
+  color: black
+}
+
+.taskbar.visible {
+  transform: translateY(0);
+}
+
+.taskbar.hidden {
+  transform: translateY(100%);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0.3;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,56 @@
+.profile-component-full {
+    position: fixed;
+    right: 2%;
+    width: 250px;
+    box-shadow: 0 0 10px #d9dadb;
+    background: rgb(255, 255, 255) !important;
+}
+
+.title-profile-component {
+    display: flex;
+    align-items: center;
+    padding: 20px 16px;
+    border-bottom: 1px solid rgb(220 220 220);
+}
+
+.img-profile {
+    margin-right: 5px;
+}
+
+.img-profile img {
+    border-radius: 99px;
+}
+
+.title-profile-component p {
+    margin: inherit;
+}
+
+.text-profile #name {
+    font-size: 18px;
+    color: #000000D9;
+}
+
+.text-profile #email {
+    font-size: 14px;
+    color: #000000D9;
+}
+
+.btnpf {
+    align-items: center;
+}
+
+.btnpf:hover {
+    background: #e4e4e4;
+}
+
+.gr-btnpf {
+    border-bottom: 1px solid rgb(220 220 220);
+}
+
+.btnpf p {
+    margin: inherit;
+    padding: 9px 16px;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #555555;
+}

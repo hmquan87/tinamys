@@ -1,0 +1,103 @@
+.ant-modal-body {
+    display: flex !important;
+    width: 620px;
+    border-radius: 10px !important;
+
+}
+
+
+
+.review-ant {
+    width: 100%;
+    background: white;
+    margin-top: 20%;
+    border-radius: 10px;
+}
+
+.form-review {
+    width: 100%;
+
+}
+
+.title-reiview {
+    width: 100%;
+    padding: 14px 26px;
+}
+
+.text-title-review {
+    position: relative;
+    left: 43%;
+}
+
+.title-css {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d7d7d7;
+
+}
+
+.text-title-review {
+    font-size: 16px;
+    font-weight: 600;
+    color: #575757;
+}
+
+.item-body-review {
+    display: flex;
+    justify-content: center;
+}
+
+.text-body {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.item-btn button {
+    border: none;
+    background: #1C7FFF;
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: 400;
+    color: white;
+    border-radius: 20px;
+    padding: 6px 12px;
+}
+
+.btn-rv {
+    padding: 20px 20px;
+}
+
+.form-rp {
+    padding-top: 30px;
+}
+
+.label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #575757;
+}
+
+.text-input-area textarea {
+    width: 100%;
+    border: 1px solid #d7d7d7;
+    height: 70px;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.btn-sub {
+    width: 100%;
+    margin-top: 30px;
+}
+
+.ant-btn-sub {
+    width: 100%;
+    border-radius: 10px;
+    height: 42px !important;
+}
+
+.cancel-ant {
+    background: rgb(206, 206, 206);
+}

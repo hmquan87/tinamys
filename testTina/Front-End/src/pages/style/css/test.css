@@ -1,0 +1,127 @@
+* {
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+}
+
+.questions {
+    line-height: inherit;
+    display: flex;
+    padding-top: 90px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    gap: 1.25rem;
+    align-items: flex-start;
+    flex-direction: row;
+    width: 85%;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+
+
+}
+
+.pd-qt-title {
+    padding: 18px 38px;
+}
+
+.qt {
+    position: relative;
+    color: rgba(0, 0, 0, .85);
+    line-height: 1.5715;
+    background: white;
+    margin-bottom: 20px;
+    width: 773px;
+
+}
+
+
+.qt-title {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    color: rgba(0, 0, 0, .85);
+    line-height: 1.625rem;
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    margin: 0;
+    z-index: 999;
+}
+
+.text-content {
+    display: none;
+    overflow: auto;
+    font-size: 15px;
+    color: rgb(80 80 86);
+    line-height: 1.625rem;
+    font-style: normal;
+    font-weight: 400;
+    margin: 0;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.text-content.show {
+    display: inherit;
+    overflow: auto;
+    max-height: 500px;
+    opacity: 1;
+
+}
+
+
+
+.qt-title-icon {
+    width: 39px;
+    height: 39px;
+    margin-right: 38px;
+}
+
+#icon-qt {
+    font-size: 40px;
+}
+
+.text-qt-title {
+    font-size: 16px;
+    line-height: 20px;
+    color: rgb(14 17 51);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.rotate-icon {
+    transition: transform 0.2s ease;
+    background: #2A6DF5;
+    color: #EEF4FE;
+    align-items: center;
+    margin-top: 8px;
+    padding: 7px;
+    border-radius: 50%;
+}
+
+.reversed {
+    transform: rotate(-90deg);
+    background: #EEF4FE;
+    color: #2A6DF5;
+    align-items: center;
+    margin-top: 8px;
+    padding: 7px;
+    border-radius: 50%;
+}
+
+
+.ques {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5rem;
+    color: rgb(80 80 86);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1rem;
+
+
+}

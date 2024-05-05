@@ -1,0 +1,82 @@
+.forgot-ant {
+
+    width: 70%;
+    background: white;
+    margin-top: 32%;
+    border-radius: 10px;
+}
+
+.form-forgot {
+    width: 100%;
+
+}
+
+.title-forgot {
+    width: 100%;
+    padding: 14px 26px;
+}
+
+.text-title-forgot {
+    position: relative;
+    left: 40%;
+}
+
+.title-css {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #d7d7d7;
+
+}
+
+.text-title-forgot {
+    font-size: 16px;
+    font-weight: 600;
+    color: #575757;
+}
+
+.body-forgot {
+    padding: 16px 24px;
+}
+
+.err-input1 {
+    display: none;
+    color: red;
+}
+
+.err-input1.show {
+    display: inherit;
+}
+
+.err-input2 {
+    display: none;
+    color: red;
+}
+
+.err-input2.show {
+    display: inherit;
+}
+
+#star {
+    color: red;
+    font-weight: 400;
+}
+
+.btn-forgot {
+    width: 100%;
+    margin-top: 10px;
+
+}
+
+.forgot-input label {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #575757;
+}
+
+.input-forgot {
+    height: 42px;
+}

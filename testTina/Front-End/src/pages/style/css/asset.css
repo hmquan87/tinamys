@@ -1,0 +1,65 @@
+.ant-menu-submenu-title {
+    height: 70px !important;
+    padding-left: 0 !important;
+    padding-bottom: 40px;
+}
+
+.ant-menu .ant-menu-item {
+    border-radius: 0 !important;
+}
+
+.ant-menu-item-only-child {
+    padding-left: 24px !important;
+}
+
+:where(.css-dev-only-do-not-override-10vo1te).ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+    border-color: transparent;
+    color: transparent;
+}
+
+th.ant-table-cell {
+    background: #E9EDF3 !important;
+}
+
+.ant-table-container {
+    border: 2px solid #E9EDF3 !important;
+    border-radius: 10px !important;
+}
+
+.ant-table-wrapper .ant-table-thead tr th {
+    text-align: center !important;
+    /* border-right: 1px  solid #cacaca !important; */
+
+}
+
+.ant-table-thead tr th {
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.ant-table-wrapper .ant-table-tbody tr td {
+    text-align: center !important;
+
+}
+
+.ant-table-thead tr th .ant-table-cell {
+    border-right: 2px solid #E9EDF3 !important;
+}
+
+.ant-modal-content .ant-modal-body {
+    width: 930px !important;
+    margin-top: 50px !important;
+}
+
+.ant-upload {
+    width: 158px !important;
+    height: 158px !important;
+}
+
+.ant-upload-list-item-container {
+    width: 158px !important;
+    height: 158px !important;
+}
+
+.modal2 .ant-modal-content .ant-modal-body{
+    width: 100% !important;
+}

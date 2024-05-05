@@ -1,0 +1,43 @@
+.contact-component-full {
+    position: fixed;
+    margin-top: 5px;
+    right: 4%;
+    width: 430px;
+    box-shadow: 0 0 10px #d9dadb;
+    border-radius: 2px;
+    background: white;
+}
+
+.title-contact-component {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgb(226 232 240);
+}
+
+.text-title-contact {
+    padding: 10px 16px;
+    color: #000000D9;
+}
+
+.contact-components {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.style {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem;
+    background: rgb(242 250 255);
+    margin-bottom: 0.5rem;
+}
+
+.style p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 400;
+    margin-left: 1rem;
+}

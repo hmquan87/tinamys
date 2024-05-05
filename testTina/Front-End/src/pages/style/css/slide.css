@@ -1,0 +1,99 @@
+.slide-item {
+    text-align: center;
+    align-items: center;
+}
+
+
+.slide-item-top {
+    background: white;
+    box-shadow: 0 35px 60px 0 rgba(115, 188, 255, .1);
+    border-radius: 10px;
+}
+
+.slide-item-bottom {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slide {
+    width: 640px;
+}
+
+.slide-item-bottom img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.style-slide {
+    padding: 5px 5px;
+    text-align: center;
+}
+
+.slide-item-top h2 {
+    line-height: 1.5rem;
+    font-size: 1.125rem;
+    padding-bottom: 9.5px;
+    padding-top: 25px;
+    font-style: normal;
+    font-weight: 600;
+    text-align: center;
+    color: rgb(16 26 41);
+    margin-block-start: initial;
+    margin-block-end: initial;
+}
+
+.slide-item-top h3 {
+    line-height: 1.25rem;
+    font-size: .875rem;
+    padding-bottom: 15.5px;
+    font-style: normal;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    margin-block-start: initial;
+    margin-block-end: initial;
+    margin-inline-start: initial;
+    margin-inline-end: initial;
+}
+
+.slide-item-top p {
+    display: block;
+    margin-block-start: initial;
+    margin-block-end: initial;
+    margin-inline-start: initial;
+    margin-inline-end: initial;
+}
+
+.slide-item-top #p1 {
+    line-height: 1.5rem;
+    font-size: 42px;
+    color: rgb(99 165 241);
+    font-style: normal;
+    text-align: center;
+    margin: 0;
+}
+
+.slide-item-top #p2 {
+    line-height: 1.5rem;
+    font-size: 1rem;
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+    margin-top: 1rem;
+    padding-bottom: 2.25rem;
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+    margin: 0;
+}
+
+.slide-item-bottom img {
+    display: block;
+    padding: 0.5rem;
+    width: 3rem;
+    margin-top: 2rem;
+    background-color: white;
+    border-radius: 9999px;
+    height: auto;
+    max-width: 100%;
+    border-style: none;
+}
