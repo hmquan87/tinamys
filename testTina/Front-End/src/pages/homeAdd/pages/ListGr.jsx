@@ -39,6 +39,10 @@ const getBase64 = (file) =>
     });
 
 const ListGr = () => {
+
+
+    const [valueInheritance, setValueInheritance] = useState('');
+
     const [leverGr, setLeverGr] = useState('')
     const [checkSearch, setCheckSearch] = useState(false)
     const [valueBtn, setValueBtn] = useState('1')
@@ -58,15 +62,14 @@ const ListGr = () => {
     };
     const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
-    const [value, setValue] = useState('');
+    // const [value, setValue] = useState('');
     const [checkBtn, setCheckBtn] = useState(false);
     const [valueRv, setValueRv] = useState('')
     const [valueNamegr, setValueNamegr] = useState('');
     const [focusValue, setFocusValue] = useState(false)
     const [outsiteValue, setOutsiteValue] = useState(false)
     // const [group1, setGroup1] = useState([]);
-    const [group2, setGroup2] = useState([]);
-    const [group3, setGroup3] = useState([]);
+
     const handleFocus = () => {
         setFocusValue(true)
     }
@@ -81,36 +84,15 @@ const ListGr = () => {
 
 
     const [group1Data, setGroup1Data] = useState([]);
-    const fetchData = async () => {
-        try {
-            const response = await axios.get('http://localhost:3001/getDataGr');
-            const data = response.data;
-
-            if (data.success) {
-                localStorage.setItem('group1', JSON.stringify(data.group));
-                console.log('Dữ liệu đã được lưu vào localStorage:', data.group);
-            } else {
-                console.error('Đã xảy ra lỗi khi lấy dữ liệu từ server:', data.error);
-            }
-        } catch (error) {
-            console.error('Đã xảy ra lỗi khi gọi API:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchData(); // Gọi fetchData khi component được render lần đầu tiên
-    }, []);
-
     const [checkID, setCheckID] = useState()
-
-
-
     const handleAdd1 = async () => {
+        if (leverGr === '1') setValueInheritance('');
         try {
             const res = await axios.post(`http://localhost:3001/addGrLv1`, {
                 leverGr: leverGr,
                 valueNamegr: valueNamegr,
-                valueRv: valueRv
+                valueRv: valueRv,
+                valueInheritance: valueInheritance
             });
             if (res.data && res.data.success && Array.isArray(res.data.group)) {
                 const newGroupData = res.data.group;
@@ -163,6 +145,12 @@ const ListGr = () => {
         }
     }
 
+    const handleCheck = (value) => {
+        setValueInheritance(value)
+
+    }
+
+    console.log(valueInheritance);
 
     const handleClick = (key, id) => {
         if (key === '0') {
@@ -235,7 +223,6 @@ const ListGr = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="basis-2/3 flex justify-between">
-                                                                {/* <Button className="w-[100%]">{items.valueNamegr}</Button> */}
                                                                 <div>
                                                                     <div>
                                                                         {items.valueNamegr}
@@ -245,7 +232,6 @@ const ListGr = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="">
-
                                                                     <Dropdown
                                                                         overlay={
                                                                             <Menu>
@@ -311,6 +297,7 @@ const ListGr = () => {
                 </Layout>
 
             </div>
+            {/* model1 */}
             <Modal
                 className="bg-white rounded-lg"
                 title={
@@ -386,18 +373,49 @@ const ListGr = () => {
                             </div>
                             <div >
                                 <Select
-                                    showSearch
+                                    // showSearch
                                     className="h-[48px]"
                                     placeholder="Nhóm quản lý"
-                                    filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                                    filterSort={(optionA, optionB) =>
-                                        (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                                    }
-                                    disabled
-                                    options={[
+                                    // filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                                    // filterSort={(optionA, optionB) =>
+                                    //     (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                                    // }
+                                    disabled={leverGr !== '1' ? false : true}
+                                    onChange={handleCheck}
+                                    allowClear
+                                >
+                                    {leverGr === '2' ? 
+                                        <>
+                                            {group1Data.map(item =>
+                                                <>
+                                                    {item.leverGr === '1' ?
+                                                        <Select.Option value={item.valueNamegr}>
 
-                                    ]}
-                                />
+                                                            {item.valueNamegr}
+
+                                                        </Select.Option>
+                                                        : null
+                                                    }
+                                                </>
+                                            )}
+                                        </> 
+                                        :
+                                        <>
+                                            {group1Data.map(item =>
+                                                <>
+                                                    {item.leverGr === '2' ?
+                                                        <Select.Option value={item.valueNamegr}>
+
+                                                            {item.valueNamegr}
+
+                                                        </Select.Option>
+                                                        : null
+                                                    }
+                                                </>
+                                            )}
+                                        </>
+                                    }
+                                </Select>
                             </div>
 
                         </div>
@@ -462,6 +480,7 @@ const ListGr = () => {
                     </div>
                 </div>
             </Modal>
+            {/* model2 */}
             <Modal
                 className="bg-white rounded-lg w-[687px] modal2"
                 title={
@@ -588,6 +607,7 @@ const ListGr = () => {
                 )
                 )}
             </Modal>
+            {/* model3 */}
             <Modal
                 className="bg-white rounded-lg"
                 title={
@@ -653,11 +673,17 @@ const ListGr = () => {
                                                 filterSort={(optionA, optionB) =>
                                                     (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                                 }
-                                                disabled
-                                                options={[
+                                                disabled={item.leverGr !== '1' ? false : true}
+                                                onChange={handleCheck}
+                                            >
+                                                {group1Data.map(item =>
+                                                    <Select.Option value={item.valueNamegr}>
 
-                                                ]}
-                                            />
+                                                        {item.valueNamegr}
+
+                                                    </Select.Option>
+                                                )}
+                                            </Select>
                                         </div>
 
                                     </div>
