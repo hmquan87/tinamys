@@ -168,13 +168,13 @@ app.get('/getDataGr', async (req, res) => {
 })
 
 app.post('/addGrLv1', async (req, res) => {
-    const { leverGr, valueNamegr, valueRv } = req.body;
+    const { leverGr, valueNamegr, valueRv, valueInheritance } = req.body;
     try {
         let data = await fs.promises.readFile(dbFilePath, 'utf8');
         const dataAdd = JSON.parse(data);
         const maxId = Math.max(...dataAdd.group1.map(item => item.id));
         const id = maxId >= 0 ? maxId + 1 : 1;
-        dataAdd.group1.push({ id, leverGr, valueNamegr, valueRv });
+        dataAdd.group1.push({ id, leverGr, valueNamegr, valueRv, valueInheritance });
         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
         res.json({ success: true, group: dataAdd.group1 });
     } catch (err) {
@@ -215,15 +215,23 @@ app.post('/editDataGr', async (req, res) => {
         console.error('Error:', err);
         res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
     }
-    // fs.promises.readFile(dbFilePath, 'utf8', (err, data) => {
-    //     const grData = JSON.parse(data);
-    //     const Index = grData.group1.findIndex(group1 => group1.id === id);
-    //     grData.group1[Index].valueNamegr = valueNamegr;
-    //     grData.group1[Index].valueRv = valueRv;
-    //     fs.promises.writeFile(dbFilePath, JSON.stringify(grData));
-    // })
 });
 
+// app.post('/addGrLv2', async (req, res) => {
+//     const { leverGr, valueNamegr, valueRv, valueInheritance } = req.body;
+//     try {
+//         let data = await fs.promises.readFile(dbFilePath, 'utf8');
+//         const dataAdd = JSON.parse(data);
+//         const maxId1 = Math.max(...dataAdd.group1.map(item => item.id));
+//         const id1 = maxId1 >= 0 ? maxId1 + 1 : 1;
+//         dataAdd.group2.push({ id1, leverGr, valueNamegr, valueRv, valueInheritance });
+//         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
+//         res.json({ success: true, group: dataAdd.group1 });
+//     } catch (err) {
+//         console.error('Error:', err);
+//         res.status(500).json({ error: 'Error adding contact' });
+//     }
+// });
 
 
 
