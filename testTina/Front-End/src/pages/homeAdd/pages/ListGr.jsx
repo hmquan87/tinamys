@@ -224,10 +224,10 @@ const ListGr = () => {
                                                             </div>
                                                             <div className="basis-2/3 flex justify-between">
                                                                 <div>
-                                                                    <div>
+                                                                    <div className="font-normal text-black text-[18px]">
                                                                         {items.valueNamegr}
                                                                     </div>
-                                                                    <div>
+                                                                    <div className="mt-4 text-zinc-500">
                                                                         thành viên
                                                                     </div>
                                                                 </div>
@@ -323,8 +323,9 @@ const ListGr = () => {
                 <div className="flex flex-row w-[100%]">
                     <div className=" basis-2/5" >
                         <div className="flex justify-center">
-                            <div>
+                            <div >
                                 <Upload
+                                    className="test"
                                     action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                                     listType="picture-card"
                                     onPreview={handlePreview}

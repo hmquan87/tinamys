@@ -2,6 +2,7 @@ import React, { Children, useEffect, useState } from 'react'
 import { Button, Input, Tree } from "antd";
 import { SearchOutlined, TableOutlined, PlusOutlined, CarryOutOutlined, CheckOutlined, FormOutlined } from '@ant-design/icons'
 import axios from 'axios';
+import '../../style/css/asset.css'
 import { TreeNode } from 'antd/es/tree-select';
 
 // const data1 = [];
@@ -68,22 +69,22 @@ import { TreeNode } from 'antd/es/tree-select';
 //         ],
 //     },
 // ];
-const newTree = [
-    {
-        title: 'Parent 1',
-        key: 'parent-1',
-        children: [
-            {
-                title: 'Child 1',
-                key: 'child-1',
-            },
-            {
-                title: 'Child 2',
-                key: 'child-2',
-            },
-        ],
-    },
-];
+// const newTree = [
+//     {
+//         title: 'Parent 1',
+//         key: 'parent-1',
+//         children: [
+//             {
+//                 title: 'Child 1',
+//                 key: 'child-1',
+//             },
+//             {
+//                 title: 'Child 2',
+//                 key: 'child-2',
+//             },
+//         ],
+//     },
+// ];
 
 const ListPs = () => {
 
@@ -144,7 +145,7 @@ const ListPs = () => {
     }, [dataGroup1, dataGroup2]);
 
     console.log('dataTree1:', treeData);
-    console.log('dataTree2:', newTree);
+    // console.log('dataTree2:', newTree);
     const [checkSearch, setCheckSearch] = useState(false)
     return (
         <div className="bg-white flex flex-row h-[100%]">
@@ -157,7 +158,7 @@ const ListPs = () => {
                         Danh sách nhóm
                     </div>
                 </div>
-                <div>
+                <div className='ml-5'>
                     <Tree
                         treeData={treeData}
                         showLine
