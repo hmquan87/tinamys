@@ -50,7 +50,7 @@ th.ant-table-cell {
     margin-top: 50px !important;
 }
 
-.ant-upload {
+.test .ant-upload {
     width: 158px !important;
     height: 158px !important;
 }
@@ -62,4 +62,26 @@ th.ant-table-cell {
 
 .modal2 .ant-modal-content .ant-modal-body{
     width: 100% !important;
+}
+
+.ql-toolbar.ql-snow{
+    border: none !important;
+    border-bottom: 1px solid #ccc !important;
+}
+
+.ql-container.ql-snow{
+    border: none !important;
+    height: 480px !important
+}
+
+.ant-btn-primary.ant-btn-dangerous:disabled{
+    background: red;
+    color: white;
+    border: none;
+}
+
+.custom-label-class .ant-form-item-label > label {
+    font-size: 16px; 
+    font-weight: 600;
+    color: #242424;
 }
