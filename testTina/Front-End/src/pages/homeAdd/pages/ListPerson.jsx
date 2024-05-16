@@ -100,7 +100,7 @@ const ListPerson = () => {
     }
   };
 
-  // Hàm hiển thị modal thêm nhân sự      đayayyyyyyyyyyy
+  // Hàm hiển thị modal thêm nhân sự     2
   const showModalAdd = () => {
     addForm.resetFields();
     setIsModalVisible(true);
