@@ -233,6 +233,104 @@ app.post('/editDataGr', async (req, res) => {
 //     }
 // });
 
+// getDataPerson
+app.get("/getDataPerson", async (req, res) => {
+  try {
+    let data = await fs.promises.readFile(dbFilePath, "utf8");
+    const parsedData = JSON.parse(data);
+    res.json({ success: true, person: parsedData.person });
+  } catch (err) {
+    console.error("Error getting data person:", err);
+    res.status(500).json({ error: "Error getting data person" });
+  }
+});
+
+
+//add
+app.post("/addPerson", async (req, res) => {
+  const { email, name, phone, group, position, status } = req.body;
+  try {
+    let data = await fs.promises.readFile(dbFilePath, "utf8");
+    const dataAdd = JSON.parse(data);
+    const maxId = Math.max(...dataAdd.person.map((item) => item.id));
+    const id = maxId >= 0 ? maxId + 1 : 1;
+    dataAdd.person.push({ id, email, name, phone, group, position, status });
+    await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
+    res.json({ success: true, person: dataAdd.person });
+  } catch (err) {
+    console.error("Error adding person:", err);
+    res.status(500).json({ error: "Error adding person" });
+  }
+});
+//update
+app.put("/updatePerson/:id", async (req, res) => {
+  const { id } = req.params;
+  const { email, name, phone, group, position, status } = req.body;
+  try {
+    let data = await fs.promises.readFile(dbFilePath, "utf8");
+    let dataUpdate = JSON.parse(data);
+
+    // Tìm và cập nhật thông tin nhân sự theo id
+    const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
+    if (personIndex === -1) {
+      return res.status(404).json({ error: "Person not found" });
+    }
+
+    dataUpdate.person[personIndex] = {
+      id: Number(id),
+      email,
+      name,
+      phone,
+      group,
+      position,
+      status,
+    };
+    await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
+    res.json({ success: true, person: dataUpdate.person });
+  } catch (err) {
+    console.error("Error updating person:", err);
+    res.status(500).json({ error: "Error updating person" });
+  }
+});
+//delete
+app.delete("/deletePerson/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    let data = await fs.promises.readFile(dbFilePath, "utf8");
+    let dataUpdate = JSON.parse(data);
+
+    // Tìm và xóa thông tin nhân sự theo id
+    const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
+    if (personIndex === -1) {
+      return res.status(404).json({ error: "Person not found" });
+    }
+
+    dataUpdate.person.splice(personIndex, 1); // Xóa người dùng khỏi danh sách
+    await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
+    res.json({ success: true, person: dataUpdate.person });
+  } catch (err) {
+    console.error("Error deleting person:", err);
+    res.status(500).json({ error: "Error deleting person" });
+  }
+});
+// search
+app.get("/searchPerson", async (req, res) => {
+  const { query } = req.query;
+  try {
+    let data = await fs.promises.readFile(dbFilePath, "utf8");
+    const dataSearch = JSON.parse(data);
+    const filteredData = dataSearch.person.filter((person) =>
+      Object.values(person).some((value) =>
+        value.toString().toLowerCase().includes(query.toLowerCase())
+      )
+    );
+    res.json({ success: true, person: filteredData });
+  } catch (err) {
+    console.error("Error searching person:", err);
+    res.status(500).json({ error: "Error searching person" });
+  }
+});
+
 
 
 
