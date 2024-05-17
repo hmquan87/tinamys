@@ -14,7 +14,7 @@ import AddTask from "./component-body-right/addTask";
 import { Button, Input, Modal, Select } from 'antd';
 import avt from '../style/img/avtDefault.png'
 import { notification } from 'antd';
-
+import axios from 'axios';
 
 
 const ProfileAccount = () => {
@@ -66,6 +66,22 @@ const ProfileAccount = () => {
     const userData = JSON.parse(localStorage.getItem("user"));
     const { name, email, username } = userData;
 
+    const handleEdit = async (id, phone) => {
+        try {
+
+            const res = await axios.post(`http://localhost:3001/editProfileAccount?id=${id}&phone=${phone}`);
+
+            if (res.data) {
+                const newGroupData = res.data.personnel;
+                localStorage.setItem('personnel', JSON.stringify(newGroupData));
+
+            } else {
+                console.error(res.data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const ProceedLogin = async (e) => {
         e.preventDefault();
@@ -81,6 +97,7 @@ const ProfileAccount = () => {
                 throw new Error(errorData.error || 'Lưu không thành công');
             }
             else {
+                handleEdit(1, numberPhone);
                 notification.success({
                     message: 'Lưu thông tin thành công!',
                 })

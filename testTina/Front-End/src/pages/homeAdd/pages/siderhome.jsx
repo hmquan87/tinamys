@@ -50,6 +50,7 @@ const SiderHome = ({ setCheckPath }) => {
                 mode="inline"
                 style={{ flex: '1', height: '100%' }}
                 inlineCollapsed={isMenu}
+                defaultOpenKeys='sub1'
             >
                 <SubMenu        
                     

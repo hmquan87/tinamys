@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios';
 
 
 
@@ -81,6 +81,30 @@ const LoginForm = () => {
     }
     const navigate = useNavigate();
 
+
+    const AddPersonnel = async (name, email, group, position, phone) => {
+        try {
+            // const res = await axios.post(`http://localhost:3001/addpersonnel`, {
+            //     name: '1',
+            //     email: '1',
+            //     group: ['1','2'],
+            //     position: ['quanly'],
+            //     phone: '098755188'
+            // });
+            const res = await axios.post(`http://localhost:3001/addpersonnel?name=${name}&email=${email}&group=${group}&position=${position}&phone=${phone}`);
+
+            if (res.data) {
+                const newGroupData = res.data.personnel;
+                localStorage.setItem('personnel', JSON.stringify(newGroupData));
+
+            } else {
+                console.error(res.data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (validate()) {
@@ -100,6 +124,7 @@ const LoginForm = () => {
                     const userDataResponse = await response.json();
                     const userDataToSave = { username: userDataResponse.user.username, password: userDataResponse.user.password, email: userDataResponse.user.email, name: userDataResponse.user.name }; // Lấy chỉ các thuộc tính username và password để lưu vào localStorage
                     localStorage.setItem("user", JSON.stringify(userDataToSave));
+                    AddPersonnel(userDataToSave.name, userDataToSave.email, "","","" );
                     navigate('/home')
                 }
             } catch (error) {

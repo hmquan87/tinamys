@@ -87,5 +87,15 @@
             "valueRv": "",
             "valueInheritance": "n1-1"
         }
+    ],
+    "personnel": [
+        {
+            "id": 1,
+            "name": "name",
+            "email": "email",
+            "group": "",
+            "position": "",
+            "phone": "test"
+        }
     ]
 }
