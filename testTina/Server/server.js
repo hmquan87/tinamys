@@ -217,21 +217,39 @@ app.post('/editDataGr', async (req, res) => {
     }
 });
 
-// app.post('/addGrLv2', async (req, res) => {
-//     const { leverGr, valueNamegr, valueRv, valueInheritance } = req.body;
-//     try {
-//         let data = await fs.promises.readFile(dbFilePath, 'utf8');
-//         const dataAdd = JSON.parse(data);
-//         const maxId1 = Math.max(...dataAdd.group1.map(item => item.id));
-//         const id1 = maxId1 >= 0 ? maxId1 + 1 : 1;
-//         dataAdd.group2.push({ id1, leverGr, valueNamegr, valueRv, valueInheritance });
-//         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
-//         res.json({ success: true, group: dataAdd.group1 });
-//     } catch (err) {
-//         console.error('Error:', err);
-//         res.status(500).json({ error: 'Error adding contact' });
-//     }
-// });
+app.post('/addpersonnel', async (req, res) => {
+    const { name, email, group, position, phone } = req.query;
+
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataPersonnel = JSON.parse(data)
+        const maxId = Math.max(...dataPersonnel.personnel.map(item => item.id));
+        const id = maxId >= 0 ? maxId + 1 : 1;
+        dataPersonnel.personnel.push({ id, name, email, group, position, phone });
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataPersonnel));
+        res.json({ success: true, personnel: dataPersonnel.personnel });
+    }
+    catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+    }
+});
+
+app.post('/editProfileAccount', async (req, res) => {
+    const { id, phone } = req.query;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataPfAcc = JSON.parse(data);
+        const index = dataPfAcc.personnel.findIndex(personnel => personnel.id === parseInt(id))
+        dataPfAcc.personnel[index].phone = phone;
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataPfAcc));
+        res.json({ success: true, personnel: dataPfAcc.personnel });
+
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+    }
+})
 
 // getDataPerson
 app.get("/getDataPerson", async (req, res) => {
