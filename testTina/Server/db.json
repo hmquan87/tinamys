@@ -86,6 +86,13 @@
             "valueNamegr": "n2-2",
             "valueRv": "",
             "valueInheritance": "n1-1"
+        },
+        {
+            "id": 11,
+            "leverGr": "1",
+            "valueNamegr": "1",
+            "valueRv": "",
+            "valueInheritance": ""
         }
     ],
     "personnel": [

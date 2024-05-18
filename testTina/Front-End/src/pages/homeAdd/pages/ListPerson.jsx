@@ -5,13 +5,38 @@ import { SearchOutlined } from '@ant-design/icons'
 import { IoFilter } from "react-icons/io5";
 import { GrAdd } from "react-icons/gr";
 
-
+const items = [
+    {
+        key: '1',
+        label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+                1st menu item
+            </a>
+        ),
+    },
+    {
+        key: '2',
+        label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
+                2nd menu item
+            </a>
+        ),
+    },
+    {
+        key: '3',
+        label: (
+            <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
+                3rd menu item
+            </a>
+        ),
+    },
+];
 
 const columns = [
     {
         title: 'STT',
         dataIndex: 'stt',
-        key: 'stt'
+        key: 'id'
     },
     {
         title: 'Họ và tên',
@@ -91,9 +116,9 @@ const ListPerson = () => {
                     <div>
                         <Dropdown
                             className="bg-[#F1F2F4] border-none h-[38px] ml-5"
-                            // menu={{
-                            //     items,
-                            // }}
+                            menu={{
+                                items,
+                            }}
                             placement="bottomRight"
                             arrow
 
