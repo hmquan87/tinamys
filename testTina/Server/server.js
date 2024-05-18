@@ -233,7 +233,7 @@ app.post('/editDataGr', async (req, res) => {
 //     }
 // });
 
-// getDataPerson
+// getDataPerson1
 app.get("/getDataPerson", async (req, res) => {
   try {
     let data = await fs.promises.readFile(dbFilePath, "utf8");
