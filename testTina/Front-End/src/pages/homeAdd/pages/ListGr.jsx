@@ -1,4 +1,4 @@
-import { Button, Input, Layout, Modal, Upload, Select, Checkbox, ConfigProvider, Dropdown, Space, Menu } from "antd"
+import { Button, Input, Layout, Modal, Upload, Select, Checkbox, Dropdown, Space, Menu, Avatar, Transfer } from "antd"
 import React, { useState, useEffect } from "react"
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons'
 import img1 from '../../style/img/imgListgr1.svg'
@@ -85,6 +85,63 @@ const ListGr = () => {
 
     const [group1Data, setGroup1Data] = useState([]);
     const [checkID, setCheckID] = useState()
+    const [member, setMember] = useState(1)
+    const [personData, setPersonData] = useState([])
+    const [targetKeys, setTargetKeys] = useState([]);
+    const [mockData, setMockData] = useState([]);
+    const [targetKeys1, setTargetKeys1] = useState([]);
+    const [mockData1, setMockData1] = useState([]);
+    useEffect(() => {
+        const FetchDataPerson = async () => {
+            try {
+                const res = await axios.get(`http://localhost:3001/getDataPerson`);
+                const data = res.data;
+                setPersonData(data.person)
+            } catch (error) {
+
+            }
+        }
+        FetchDataPerson();
+    }, [])
+
+    const AddPersonToTheGroup = async (target, level, keyIdGroup) => {
+        try {
+            const res = await axios.post(`http://localhost:3001/addPersonToTheGroup?id=${target}&levelGroup=${level}&keyIdGroup=${keyIdGroup}`)
+            const datatransfer = res.data;
+            setPersonData(datatransfer.persons)
+            console.log('testAPI: ', datatransfer.persons);
+        } catch (error) {
+
+        }
+    }
+
+    const [dataSource, setDataSource] = useState([]);
+    useEffect(() => {
+        const fetchDataPerson = async () => {
+            try {
+                const res = await axios.get(`http://localhost:3001/getDataPerson`);
+                const datatransfer = res.data.person;
+                setPersonData(datatransfer);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchDataPerson();
+    }, []);
+
+    useEffect(() => {
+        const updatedDataSource = personData.map((person, index) => ({
+            key: index + 1,
+            title: `${person.name}`,
+            description: `description of content${index + 1}`,
+        }));
+        setDataSource(updatedDataSource);
+        setMockData(dataSource);
+    }, [personData]);
+
+
+    console.log('data:', personData);
     const handleAdd1 = async () => {
         if (leverGr === '1') setValueInheritance('');
         try {
@@ -97,8 +154,10 @@ const ListGr = () => {
             if (res.data && res.data.success && Array.isArray(res.data.group)) {
                 const newGroupData = res.data.group;
                 localStorage.setItem('group1', JSON.stringify(newGroupData));
+                AddPersonToTheGroup(targetKeys, leverGr, newGroupData.length)
                 setOpen(false);
                 setGroup1Data(newGroupData)
+
             } else {
                 console.error(res.data);
             }
@@ -106,11 +165,21 @@ const ListGr = () => {
             console.error(error);
         }
     };
+    const DeleteKeyIdGroup = async (keyIdGroup, groupKey) => {
+        try {
+            const res = await axios.post(`http://localhost:3001/deleteKeyIdGroup?keyIdGroup=${keyIdGroup}&groupKey=${groupKey}`);
+            const dataNew = res.data;
+            setPersonData(dataNew.person)
+        } catch (error) {
+
+        }
+    }
     const handleDelete = async (id) => {
         try {
             const res = await axios.post('http://localhost:3001/deleteGrLv1', { id });
             if (res.data && res.data.success && Array.isArray(res.data.group)) {
                 const updatedGroupData = res.data.group;
+                DeleteKeyIdGroup(id, leverGr)
                 localStorage.setItem('group1', JSON.stringify(updatedGroupData));
                 setGroup1Data(updatedGroupData);
             } else {
@@ -122,22 +191,17 @@ const ListGr = () => {
     };
 
     const handleEdit = async (id, valueNamegr, valueRv) => {
-        try {
-            const res = await axios.post('http://localhost:3001/editDataGr',
-                {
-                    id: id,
-                    valueNamegr: valueNamegr,
-                    valueRv: valueRv,
-                });
 
-            if (res.data.group) {
-                const updatedGroupData = res.data.group;
-                localStorage.setItem('group1', JSON.stringify(updatedGroupData));
-                setGroup1Data(updatedGroupData);
-                setOpen2(false);
-            } else {
-                console.error('Không có dữ liệu group trả về từ server');
-            }
+        try {
+            const res = await axios.post(`http://localhost:3001/editDataGr?id=${id}&valueNamegr=${valueNamegr}&valueRv=${valueRv}`)
+
+            const updatedGroupData = res.data;
+            console.log(updatedGroupData);
+            localStorage.setItem('group1', JSON.stringify(updatedGroupData));
+            setGroup1Data(updatedGroupData);
+            setOpen2(false);
+
+
 
         } catch (error) {
             console.error(error);
@@ -153,19 +217,40 @@ const ListGr = () => {
     console.log(valueInheritance);
 
     const handleClick = (key, id) => {
+        console.log('key: ', key);
+        console.log('id: ', id);
         if (key === '0') {
-            setOpen1(true)
-            setCheckID(id)
+            setOpen1(true);
+            setCheckID(id);
+        } else if (key === '1') {
+            setOpen2(true);
+            setCheckID(id);
+        } else if (key === '2') {
+            handleDelete(id);
+            setCheckID(id);
         }
-        else if (key === '1') {
-            setOpen2(true)
-            setCheckID(id)
-        }
-        else if (key === '2') {
-            handleDelete(id)
-            setCheckID(id)
-        }
+        const newTargetArray = [];
+        const newDataSourceArray = [];
+        personData.forEach(person => {
+            if (Array.isArray(person.keyIdGroup) && person.keyIdGroup.includes(id)) {
+                newTargetArray.push(person);
+            } else { newDataSourceArray.push(person); };
+        });
+        const updatedDataSource = newDataSourceArray.map((person, index) => ({
+            key: index + 1,
+            title: `${person.name}`,
+            description: `description of content${index + 1}`,
+        }));
+        const updatedTargetSource = newTargetArray.map((person, index) => ({
+            key: index + 1,
+            title: `${person.name}`,
+            description: `description of content${index + 1}`,
+        }));
+        setMockData1(updatedDataSource)
+        setTargetKeys1(updatedTargetSource)
+
     }
+
     console.log(checkID);
 
     useEffect(() => {
@@ -177,10 +262,105 @@ const ListGr = () => {
         }
     }, []);
 
+    const handleItemClick = (key) => {
+        let newTargetKeys = [...targetKeys];
+        if (newTargetKeys.includes(key)) {
+            newTargetKeys = newTargetKeys.filter(targetKey => targetKey !== key);
+        } else {
+            newTargetKeys.push(key);
+        }
+        setTargetKeys(newTargetKeys);
+        const sourceKeys = mockData.filter(item => !newTargetKeys.includes(item.key));
+        console.log("Source Data:", sourceKeys);
+        console.log("Target Data:", newTargetKeys);
+    };
+    console.log('test Target Data: ', targetKeys);
+    const renderItem = (item) => {
+        return {
+            label: (
+                <div className="custom-item" onClick={() => handleItemClick(item.key)}>
+                    <div className='flex'>
+                        <div className='h-[45px] w-[45px] bg-red-400 rounded-full flex justify-center items-center text-[16px] text-white'>
+                            {item.title.slice(0, 2)}
+                        </div>
+                        <div className='flex items-center ml-5'>
+                            {item.title}
+                        </div>
+                    </div>
+                </div>
+            ),
+            value: item.title,
+        };
+    };
+    const handleItemClick1 = (key) => {
+        let newTargetKeys1 = [...targetKeys1];
+        if (newTargetKeys1.includes(key)) {
+            newTargetKeys1 = newTargetKeys1.filter(targetKey1 => targetKey1 !== key);
+        } else {
+            newTargetKeys1.push(key);
+        }
+        setTargetKeys1(newTargetKeys1);
+        const sourceKeys1 = mockData1.filter(item => !newTargetKeys1.includes(item.key));
+        console.log("Source Data:", sourceKeys1);
+        console.log("Target Data:", newTargetKeys1);
+    };
+    console.log('test Target Data: ', targetKeys1);
+    const renderItem1 = (item) => {
+        return {
+            label: (
+                <div className="custom-item" onClick={() => handleItemClick1(item.key)}>
+                    <div className='flex'>
+                        <div className='h-[45px] w-[45px] bg-red-400 rounded-full flex justify-center items-center text-[16px] text-white'>
+                            {item.title.slice(0, 2)}
+                        </div>
+                        <div className='flex items-center ml-5'>
+                            {item.title}
+                        </div>
+                    </div>
+                </div>
+            ),
+            value: item.title,
+        };
+    };
+    const MAX_DISPLAY_PERSONS = 8;
+    const displayData = personData.slice(0, MAX_DISPLAY_PERSONS);
+    const remainingCount = personData.length - MAX_DISPLAY_PERSONS;
+    const getRandomColor = () => {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
+
+
+
+    const countMembers = (groupId) => {
+        console.log('groupId: ', groupId);
+        var count = 0;
+        // const newArray = [];
+        // const newTarget = [];
+        personData.forEach(person => {
+            if (Array.isArray(person.keyIdGroup) && person.keyIdGroup.includes(groupId)) {
+                count++;
+                // newArray.push(person);
+            }
+            // else { newTarget.push(person); };
+        });
+
+        console.log("DAUBIU: ", count);
+        // console.log("DAUBIUxxx: ", newArray)
+        // console.log("DAUBIUxxy: ", newTarget)
+        // setDataNew(newArray)
+        // setDataSourceNew(newTarget)
+        return count;
+    };
+
     return (
         <>
             <div className="flex ">
-                <Layout className="w-[66%] bg-white">
+                <Layout className="w-[80%] bg-white">
                     <div className="pl-[10px] mt-2 flex justify-between bg-white">
                         <div className="flex items-center p-[10px] ">
                             <div className="w-[3px] h-4 bg-green-400 mr-1">
@@ -228,7 +408,7 @@ const ListGr = () => {
                                                                         {items.valueNamegr}
                                                                     </div>
                                                                     <div className="mt-4 text-zinc-500">
-                                                                        thành viên
+                                                                        {countMembers(items.id)} thành viên
                                                                     </div>
                                                                 </div>
                                                                 <div className="">
@@ -285,7 +465,8 @@ const ListGr = () => {
                 </Layout>
                 <Layout className="mt-2 ml-[20px] p-[10px] bg-white">
                     <div className="text-[18px] font-semibold text-gray-700 ">
-                        Danh sách nhân viên ()
+                        Danh sách nhân viên ({personData.length})
+
                     </div>
                     <div className="mt-3">
                         <Input
@@ -293,6 +474,49 @@ const ListGr = () => {
                             prefix={<SearchOutlined />}
                             placeholder="Tìm kiếm"
                         />
+                    </div>
+                    <div className="flex flex-col">
+                        {displayData.map(person =>
+                            <div className="flex flex-row mt-4" key={person.id}>
+                                <div className="basis-1/6">
+                                    <Avatar
+                                        size={45}
+                                        style={{ backgroundColor: getRandomColor() }}
+                                    >
+                                        {person.name.slice(0, 2)}
+                                    </Avatar>
+                                </div>
+                                <div className="basis-3/4 flex flex-col">
+                                    <div className="mt-1">
+                                        {person.name}
+                                    </div>
+                                    <div>
+                                        {person.position}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {remainingCount > 0 &&
+                            <div className="flex flex-row mt-4">
+                                <Avatar.Group
+                                    maxCount={8}
+                                    maxStyle={{
+                                        color: '#f56a00',
+                                        backgroundColor: '#fde3cf',
+                                    }}
+                                    size={45}
+                                >
+                                    {personData.map(item =>
+                                        <Avatar
+
+                                            style={{ backgroundColor: getRandomColor() }}
+                                        >
+                                            {item.name.slice(0, 2)}
+                                        </Avatar>
+                                    )}
+                                </Avatar.Group>
+                            </div>
+                        }
                     </div>
                 </Layout>
 
@@ -374,18 +598,13 @@ const ListGr = () => {
                             </div>
                             <div >
                                 <Select
-                                    // showSearch
                                     className="h-[48px]"
                                     placeholder="Nhóm quản lý"
-                                    // filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                                    // filterSort={(optionA, optionB) =>
-                                    //     (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                                    // }
                                     disabled={leverGr !== '1' ? false : true}
                                     onChange={handleCheck}
                                     allowClear
                                 >
-                                    {leverGr === '2' ? 
+                                    {leverGr === '2' ?
                                         <>
                                             {group1Data.map(item =>
                                                 <>
@@ -399,7 +618,7 @@ const ListGr = () => {
                                                     }
                                                 </>
                                             )}
-                                        </> 
+                                        </>
                                         :
                                         <>
                                             {group1Data.map(item =>
@@ -457,27 +676,17 @@ const ListGr = () => {
 
                         </div>
                     </div>
-                    <div className="basis-3/5 flex flex-row ml-3">
-                        <div className=" basis-1/2">
-                            <div className="text-[14px] text-[#242424] font-semibold flex justify-center mb-1">
-                                Nhân sự thuộc công ty
-                            </div>
-                            <div>
-                                <Input
-                                    placeholder="Tìm kiếm"
-                                />
-                            </div>
-                        </div>
-                        <div className=" basis-1/2 ml-6">
-                            <div className="text-[14px] text-[#242424] font-semibold flex justify-center mb-1">
-                                Nhân sự thuộc công ty
-                            </div>
-                            <div>
-                                <Input
-                                    placeholder="Tìm kiếm"
-                                />
-                            </div>
-                        </div>
+                    <div className="basis-3/5 ">
+                        <Transfer
+                            showSearch
+                            dataSource={mockData}
+                            targetKeys={targetKeys}
+                            render={renderItem}
+                            showSelectAll={false}
+                            listStyle={{ width: 300, height: 530 }}
+                            className="custom-transfer"
+                            titles={['Nhân sự thuộc công ty', 'Nhân sự thuộc nhóm']}
+                        />
                     </div>
                 </div>
             </Modal>
@@ -599,7 +808,31 @@ const ListGr = () => {
                                 </div>
                                 <div className="basis-1/2 ml-3">
                                     <div className="text-[18px] text-[#242424] font-semibold ">
-                                        Danh sách nhân viên (0)
+                                        Danh sách nhân viên ({countMembers(item.id)})
+                                    </div>
+                                    <div>
+                                        {personData.map(person =>
+                                            Array.isArray(person.keyIdGroup) && person.keyIdGroup.includes(checkID) && (
+                                                <div key={person.id} className="mb-1 flex">
+                                                    <div className="mr-3">
+                                                        <Avatar
+                                                            size={45}
+                                                            style={{ backgroundColor: getRandomColor() }}
+                                                        >
+                                                            {person.name.slice(0, 2)}
+                                                        </Avatar>
+                                                    </div>
+                                                    <div>
+                                                        <div>
+                                                            {person.name}
+                                                        </div>
+                                                        <div>
+                                                            {person.group}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -726,26 +959,16 @@ const ListGr = () => {
                                     </div>
                                 </div>
                                 <div className="basis-3/5 flex flex-row ml-3">
-                                    <div className=" basis-1/2">
-                                        <div className="text-[14px] text-[#242424] font-semibold flex justify-center mb-1">
-                                            Nhân sự thuộc công ty
-                                        </div>
-                                        <div>
-                                            <Input
-                                                placeholder="Tìm kiếm"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className=" basis-1/2 ml-6">
-                                        <div className="text-[14px] text-[#242424] font-semibold flex justify-center mb-1">
-                                            Nhân sự thuộc công ty
-                                        </div>
-                                        <div>
-                                            <Input
-                                                placeholder="Tìm kiếm"
-                                            />
-                                        </div>
-                                    </div>
+                                    <Transfer
+                                        showSearch
+                                        dataSource={mockData1}
+                                        targetKeys={targetKeys1}
+                                        render={renderItem1}
+                                        showSelectAll={false}
+                                        listStyle={{ width: 300, height: 530 }}
+                                        className="custom-transfer"
+                                        titles={['Nhân sự thuộc công ty', 'Nhân sự thuộc nhóm']}
+                                    />
                                 </div>
                             </div>
                             : null}

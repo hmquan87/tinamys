@@ -25,7 +25,7 @@ items.push({
                     <PlusOutlined style={{fontSize:'14px'}}/>
                 </div>
                 <div>
-                    Thêm không gian làm việca
+                    Thêm không gian làm việc
                 </div>
             </div>
         </Button>

@@ -27,7 +27,7 @@ const columns = [
     title: "Họ và tên",
     dataIndex: "name",
     key: "name",
-    sorter: (a, b) => a.name - b.name,
+    sorter: (a, b) => a.name.localeCompare(b.name),
   },
   {
     title: "Trạng thái",
@@ -66,10 +66,12 @@ const ListPerson = () => {
   const [detailForm] = Form.useForm(); // Form dùng để chỉnh sửa thông tin
   const [isEditMode, setIsEditMode] = useState(false); // Trạng thái chỉnh sửa
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false); // Trạng thái hiển thị modal xác nhận xóa
-
+  const [dataGroup, setDataGroup] = useState([]);
   // Hook useEffect được sử dụng để gửi yêu cầu HTTP khi component được render
   useEffect(() => {
     fetchDataFromServer();
+    fetchDataGroup();
+    
   }, []);
 
   // Hàm gửi yêu cầu HTTP để lấy dữ liệu từ máy chủ
@@ -81,6 +83,16 @@ const ListPerson = () => {
       console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
     }
   };
+
+  const fetchDataGroup = async () => {
+    
+    try {
+      const res = await axios.get("http://localhost:3001/grDatatest");
+      setDataGroup(res.data.dataGroup)
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
+    }
+  }
 
   // Hàm gửi yêu cầu HTTP để thêm một nhân sự mới
   const AddPerson = async (values) => {
@@ -99,6 +111,7 @@ const ListPerson = () => {
       console.error(error);
     }
   };
+ 
 
   // Hàm hiển thị modal thêm nhân sự 
   const showModalAdd = () => {
@@ -206,7 +219,7 @@ const ListPerson = () => {
       console.error("Lỗi khi tìm kiếm:", error);
     }
   };
-
+  console.log(dataGroup);
   return (
     <div>
       <div>
@@ -223,7 +236,7 @@ const ListPerson = () => {
             <Input
               placeholder="Tìm kiếm"
               prefix={<SearchOutlined className="h-[26px]" />}
-            //   Gọi hàm handleSearch
+              //   Gọi hàm handleSearch
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
@@ -296,11 +309,11 @@ const ListPerson = () => {
                   rules={[{ required: true, message: "Vui lòng chọn Nhóm!" }]}
                 >
                   <Select placeholder="Chọn Nhóm">
-                    <Option value="Nhóm A">Nhóm A</Option>
-                    <Option value="Nhóm B">Nhóm B</Option>
-                    <Option value="Nhóm C">Nhóm C</Option>
-                    <Option value="Nhóm D">Nhóm D</Option>
-                    {/* Thêm các tùy chọn khác tương tự */}
+                    {dataGroup.map(item => (
+                      <Select.Option key={item.valueNamegr} value={item.valueNamegr}>
+                        {item.valueNamegr}
+                      </Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -355,7 +368,7 @@ const ListPerson = () => {
           })}
         />
       </div>
-     
+
       {/* Modal xem chi tiết và sửa  */}
       <Modal
         title={
@@ -390,11 +403,12 @@ const ListPerson = () => {
               </Select>
             </Form.Item>
             <Form.Item label="Nhóm" name="group">
-              <Select disabled={!isEditMode} className="h-[40px]">
-                <Option value="Nhóm A">Nhóm A</Option>
-                <Option value="Nhóm B">Nhóm B</Option>
-                <Option value="Nhóm C">Nhóm C</Option>
-                <Option value="Nhóm D">Nhóm D</Option>
+              <Select placeholder="Chọn Nhóm">
+                {dataGroup.map(item => (
+                  <Select.Option key={item.valueNamegr} value={item.valueNamegr}>
+                    {item.valueNamegr}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
             <Form.Item label="Chức vụ" name="position">
