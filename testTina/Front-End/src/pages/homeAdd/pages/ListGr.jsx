@@ -103,7 +103,7 @@ const ListGr = () => {
         }
         FetchDataPerson();
     }, [])
-
+    console.log('dataGROUP', group1Data);
     const AddPersonToTheGroup = async (target, level, keyIdGroup) => {
         try {
             const res = await axios.post(`http://localhost:3001/addPersonToTheGroup?id=${target}&levelGroup=${level}&keyIdGroup=${keyIdGroup}`)
@@ -190,19 +190,15 @@ const ListGr = () => {
         }
     };
 
-    const handleEdit = async (id, valueNamegr, valueRv) => {
+    const handleEdit = async (id, valueNamegr, valueRv, arrID) => {
 
         try {
-            const res = await axios.post(`http://localhost:3001/editDataGr?id=${id}&valueNamegr=${valueNamegr}&valueRv=${valueRv}`)
-
-            const updatedGroupData = res.data;
-            console.log(updatedGroupData);
+            const res = await axios.post(`http://localhost:3001/editDataGr?id=${id}&valueNamegr=${valueNamegr}&valueRv=${valueRv}&memberId=${arrID}`)
+            const updatedGroupData = res.data.group1;
+            console.log('test32123123',updatedGroupData);
             localStorage.setItem('group1', JSON.stringify(updatedGroupData));
             setGroup1Data(updatedGroupData);
             setOpen2(false);
-
-
-
         } catch (error) {
             console.error(error);
             throw error;
@@ -335,7 +331,6 @@ const ListGr = () => {
     };
 
 
-
     const countMembers = (groupId) => {
         console.log('groupId: ', groupId);
         var count = 0;
@@ -356,6 +351,7 @@ const ListGr = () => {
         // setDataSourceNew(newTarget)
         return count;
     };
+    const arrID = [1, 3, 4];
 
     return (
         <>
@@ -439,6 +435,7 @@ const ListGr = () => {
                                                 }
                                             </div>
                                         ))}
+
                                     </div>
                                     <div className="flex justify-center items-center">
                                         <Button
@@ -951,7 +948,7 @@ const ListGr = () => {
                                             className="text-[14px] w-[160px] h-[44px] p-2"
                                             type="primary"
                                             danger={!valueNamegr && !valueRv ? true : false}
-                                            onClick={() => !valueNamegr && !valueRv ? setOpen2(false) : handleEdit(item.id, valueNamegr, valueRv)}
+                                            onClick={() => !valueNamegr && !valueRv ? setOpen2(false) : handleEdit(item.id, valueNamegr, valueRv, arrID)}
                                         >
                                             {!valueNamegr && !valueRv ? 'Đóng' : 'Lưu chỉnh sửa'}
                                         </Button>

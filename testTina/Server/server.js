@@ -39,8 +39,6 @@ app.post('/login', (req, res) => {
             const users = JSON.parse(data).user;
             const user = users.find(user => user.username === username && user.password === password);
             if (user) {
-                // loggedInUser = users.username;
-                // console.log("loggedInUser: ", loggedInUser);
                 res.json({ success: true, message: 'Đăng nhập thành công', user });
 
             } else {
@@ -199,17 +197,57 @@ app.post('/deleteGrLv1', async (req, res) => {
     }
 });
 
+// app.post('/editDataGr', async (req, res) => {
+//     const { id, valueNamegr, valueRv, member  } = req.query;
+//     try {
+//         let data = await fs.promises.readFile(dbFilePath, 'utf8');
+//         const grData = JSON.parse(data);
+//         const idToFind = typeof grData.group1[0].id === 'number' ? Number(id) : id;
+//         const index = grData.group1.findIndex(group1 => group1.id === idToFind);
+//         if (index !== -1) {
+//             grData.group1[index].valueNamegr = valueNamegr;
+//             grData.group1[index].valueRv = valueRv;
+//             await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
+//             res.json({ success: true, group1: grData.group1 });
+//         } else {
+//             res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
+//         }
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+//     }
+// });
+
 app.post('/editDataGr', async (req, res) => {
-    const { id, valueNamegr, valueRv } = req.query;
+    const { id, valueNamegr, valueRv, memberId } = req.query;
+
+    // Ensure memberId is parsed as an array of numbers
+    let memberIdArray = [];
+    if (Array.isArray(memberId)) {
+        memberIdArray = memberId.map(member => parseInt(member));
+    } else {
+        memberIdArray.push(parseInt(memberId));
+    }
+
+    console.log('memberIdArray', memberIdArray);
     try {
         let data = await fs.promises.readFile(dbFilePath, 'utf8');
         const grData = JSON.parse(data);
         const idToFind = typeof grData.group1[0].id === 'number' ? Number(id) : id;
         const index = grData.group1.findIndex(group1 => group1.id === idToFind);
+
         if (index !== -1) {
             grData.group1[index].valueNamegr = valueNamegr;
             grData.group1[index].valueRv = valueRv;
-            await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2)); // Thêm `null, 2` để định dạng JSON đẹp hơn
+
+            // Ensure memberId array exists and add new memberId values
+            if (!Array.isArray(grData.group1[index].memberId)) {
+                grData.group1[index].memberId = [];
+            }
+            // Add new memberId values to the memberId array
+            grData.group1[index].memberId.push(...memberIdArray);
+
+            await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
             res.json({ success: true, group1: grData.group1 });
         } else {
             res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
@@ -217,6 +255,91 @@ app.post('/editDataGr', async (req, res) => {
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+    }
+});
+
+app.post('/addPersonToTheGroup', async (req, res) => {
+    const { id, levelGroup, keyIdGroup } = req.query;
+    const targetIds = id.split(',').map(ids => parseInt(ids, 10));
+    const keyIdGroupArray = keyIdGroup.split(',').map(key => parseInt(key, 10));
+    const groupKeyArray = levelGroup.split(',').map(key => parseInt(key, 10));
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataUserss = JSON.parse(data);
+        const updatedPersons = dataUserss.person.map(person => {
+            if (targetIds.includes(person.id)) {
+                const currentKeyIdGroup = Array.isArray(person.keyIdGroup) ? person.keyIdGroup : [];
+                const newKeyIdGroup = [...new Set([...currentKeyIdGroup, ...keyIdGroupArray])];
+                const currentLevelGroup = Array.isArray(person.groupKey) ? person.groupKey : [];
+                const newGroupKey = [...new Set([...currentLevelGroup, ...groupKeyArray])]
+                return { ...person, groupKey: newGroupKey, keyIdGroup: newKeyIdGroup };
+            }
+            return person;
+        });
+        dataUserss.person = updatedPersons;
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUserss));
+
+        res.json({
+            success: true,
+            persons: updatedPersons,
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error updating person data' });
+    }
+});
+
+app.post('/addPosition', async (req, res) => {
+    const { name, group, permissions, idPersion } = req.query;
+    console.log('Permissions:', permissions);
+
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataPosition = JSON.parse(data);
+        const maxId = Math.max(...dataPosition.position.map(item => item.id));
+        const id = maxId >= 0 ? maxId + 1 : 1;
+        const permissionsArray = permissions.split(',');
+        const idPersionArray = idPersion.split(',').map(id => parseInt(id.trim(), 10));
+        const newPosition = {
+            id,
+            name,
+            group,
+            permissions: permissionsArray,
+            idPersion: idPersionArray
+        };
+        dataPosition.position.push(newPosition);
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataPosition));
+
+        res.status(200).json({ success: true, message: 'Thêm chức vụ thành công' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm chức vụ' });
+    }
+})
+
+
+app.post('/deleteKeyIdGroup', async (req, res) => {
+    const { groupKey, keyIdGroup, idPerson } = req.query;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataUserss = JSON.parse(data);
+        const keyIdGroupToDelete = Number(keyIdGroup);
+        const groupKeyToDelete = Number(groupKey);
+        dataUserss.person.forEach(person => {
+            if (Array.isArray(person.keyIdGroup)) {
+                person.keyIdGroup = person.keyIdGroup.filter(group => group !== keyIdGroupToDelete);
+                if (Array.isArray(person.groupKey)) {
+                    person.groupKey = person.groupKey.filter(group => group !== groupKeyToDelete);
+                }
+            }
+        });
+
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUserss, null, 2));
+        res.json({ success: true, person: dataUserss.person });
+
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa thuộc tính keyIdGroup' });
     }
 });
 
@@ -299,7 +422,6 @@ app.put("/updatePerson/:id", async (req, res) => {
         let data = await fs.promises.readFile(dbFilePath, "utf8");
         let dataUpdate = JSON.parse(data);
 
-        // Tìm và cập nhật thông tin nhân sự theo id
         const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
         if (personIndex === -1) {
             return res.status(404).json({ error: "Person not found" });
@@ -328,13 +450,12 @@ app.delete("/deletePerson/:id", async (req, res) => {
         let data = await fs.promises.readFile(dbFilePath, "utf8");
         let dataUpdate = JSON.parse(data);
 
-        // Tìm và xóa thông tin nhân sự theo id
         const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
         if (personIndex === -1) {
             return res.status(404).json({ error: "Person not found" });
         }
 
-        dataUpdate.person.splice(personIndex, 1); // Xóa người dùng khỏi danh sách
+        dataUpdate.person.splice(personIndex, 1);
         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
         res.json({ success: true, person: dataUpdate.person });
     } catch (err) {
@@ -360,68 +481,10 @@ app.get("/searchPerson", async (req, res) => {
     }
 });
 
-app.post('/addPersonToTheGroup', async (req, res) => {
-    const { id, levelGroup, keyIdGroup } = req.query;
-    const targetIds = id.split(',').map(ids => parseInt(ids, 10));
-    const keyIdGroupArray = keyIdGroup.split(',').map(key => parseInt(key, 10));
-    const groupKeyArray = levelGroup.split(',').map(key => parseInt(key, 10));
-    try {
-        let data = await fs.promises.readFile(dbFilePath, 'utf8');
-        const dataUserss = JSON.parse(data);
-        const updatedPersons = dataUserss.person.map(person => {
-            if (targetIds.includes(person.id)) {
-                const currentKeyIdGroup = Array.isArray(person.keyIdGroup) ? person.keyIdGroup : [];
-                const newKeyIdGroup = [...new Set([...currentKeyIdGroup, ...keyIdGroupArray])];
-                const currentLevelGroup = Array.isArray(person.groupKey) ? person.groupKey : [];
-                const newGroupKey = [...new Set([...currentLevelGroup, ...groupKeyArray])]
-                return { ...person, groupKey: newGroupKey, keyIdGroup: newKeyIdGroup };
-            }
-            return person;
-        });
-        dataUserss.person = updatedPersons;
-        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUserss));
-
-        res.json({
-            success: true,
-            persons: updatedPersons,
-        });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Error updating person data' });
-    }
-});
-
-
-
-app.post('/deleteKeyIdGroup', async (req, res) => {
-    const { groupKey, keyIdGroup, idPerson } = req.query;
-    try {
-        let data = await fs.promises.readFile(dbFilePath, 'utf8');
-        const dataUserss = JSON.parse(data);
-        const keyIdGroupToDelete = Number(keyIdGroup);
-        const groupKeyToDelete = Number(groupKey);
-        dataUserss.person.forEach(person => {
-            if (Array.isArray(person.keyIdGroup)) {
-                person.keyIdGroup = person.keyIdGroup.filter(group => group !== keyIdGroupToDelete);
-                if (Array.isArray(person.groupKey)) {
-                    person.groupKey = person.groupKey.filter(group => group !== groupKeyToDelete);
-                }
-            }
-        });
-
-        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUserss, null, 2));
-        res.json({ success: true, person: dataUserss.person });
-
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa thuộc tính keyIdGroup' });
-    }
-});
 
 
 
 
-////////////////////////////
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
