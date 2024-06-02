@@ -24,6 +24,8 @@ app.get('/user', (req, res) => {
     });
 });
 
+
+
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -37,8 +39,6 @@ app.post('/login', (req, res) => {
             const users = JSON.parse(data).user;
             const user = users.find(user => user.username === username && user.password === password);
             if (user) {
-                // loggedInUser = users.username;
-                // console.log("loggedInUser: ", loggedInUser);
                 res.json({ success: true, message: 'Đăng nhập thành công', user });
 
             } else {
@@ -167,6 +167,7 @@ app.get('/getDataGr', async (req, res) => {
     }
 })
 
+
 app.post('/addGrLv1', async (req, res) => {
     const { leverGr, valueNamegr, valueRv, valueInheritance } = req.body;
     try {
@@ -197,41 +198,193 @@ app.post('/deleteGrLv1', async (req, res) => {
     }
 });
 
+// app.post('/editDataGr', async (req, res) => {
+//     const { id, valueNamegr, valueRv, member  } = req.query;
+//     try {
+//         let data = await fs.promises.readFile(dbFilePath, 'utf8');
+//         const grData = JSON.parse(data);
+//         const idToFind = typeof grData.group1[0].id === 'number' ? Number(id) : id;
+//         const index = grData.group1.findIndex(group1 => group1.id === idToFind);
+//         if (index !== -1) {
+//             grData.group1[index].valueNamegr = valueNamegr;
+//             grData.group1[index].valueRv = valueRv;
+//             await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
+//             res.json({ success: true, group1: grData.group1 });
+//         } else {
+//             res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
+//         }
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+//     }
+// });
+
 app.post('/editDataGr', async (req, res) => {
-    const { id, valueNamegr, valueRv } = req.body;
+    const { id, valueNamegr, valueRv, memberId } = req.query;
+
+    // Ensure memberId is parsed as an array of numbers
+    let memberIdArray = [];
+    if (Array.isArray(memberId)) {
+        memberIdArray = memberId.map(member => parseInt(member));
+    } else {
+        memberIdArray.push(parseInt(memberId));
+    }
+
+    console.log('memberIdArray', memberIdArray);
     try {
         let data = await fs.promises.readFile(dbFilePath, 'utf8');
         const grData = JSON.parse(data);
-        const index = grData.group1.findIndex(group1 => group1.id === id);
+        const idToFind = typeof grData.group1[0].id === 'number' ? Number(id) : id;
+        const index = grData.group1.findIndex(group1 => group1.id === idToFind);
+
         if (index !== -1) {
             grData.group1[index].valueNamegr = valueNamegr;
             grData.group1[index].valueRv = valueRv;
-            await fs.promises.writeFile(dbFilePath, JSON.stringify(grData));
-            res.json({ success: true, group: grData.group1 });
+
+            // Ensure memberId array exists and add new memberId values
+            if (!Array.isArray(grData.group1[index].memberId)) {
+                grData.group1[index].memberId = [];
+            }
+            // Add new memberId values to the memberId array
+            grData.group1[index].memberId.push(...memberIdArray);
+
+            await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
+            res.json({ success: true, group1: grData.group1 });
         } else {
             res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
         }
-    } catch (err) {
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+    }
+});
+
+app.post('/addPersonToTheGroup', async (req, res) => {
+    const { id, levelGroup, keyIdGroup } = req.query;
+    const targetIds = id.split(',').map(ids => parseInt(ids, 10));
+    const keyIdGroupArray = keyIdGroup.split(',').map(key => parseInt(key, 10));
+    const groupKeyArray = levelGroup.split(',').map(key => parseInt(key, 10));
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataUserss = JSON.parse(data);
+        const updatedPersons = dataUserss.person.map(person => {
+            if (targetIds.includes(person.id)) {
+                const currentKeyIdGroup = Array.isArray(person.keyIdGroup) ? person.keyIdGroup : [];
+                const newKeyIdGroup = [...new Set([...currentKeyIdGroup, ...keyIdGroupArray])];
+                const currentLevelGroup = Array.isArray(person.groupKey) ? person.groupKey : [];
+                const newGroupKey = [...new Set([...currentLevelGroup, ...groupKeyArray])]
+                return { ...person, groupKey: newGroupKey, keyIdGroup: newKeyIdGroup };
+            }
+            return person;
+        });
+        dataUserss.person = updatedPersons;
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUserss));
+
+        res.json({
+            success: true,
+            persons: updatedPersons,
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error updating person data' });
+    }
+});
+
+app.post('/addPosition', async (req, res) => {
+    const { name, group, permissions, idPersion } = req.query;
+    console.log('Permissions:', permissions);
+
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataPosition = JSON.parse(data);
+        const maxId = Math.max(...dataPosition.position.map(item => item.id));
+        const id = maxId >= 0 ? maxId + 1 : 1;
+        const permissionsArray = permissions.split(',');
+        const idPersionArray = idPersion.split(',').map(id => parseInt(id.trim(), 10));
+        const newPosition = {
+            id,
+            name,
+            group,
+            permissions: permissionsArray,
+            idPersion: idPersionArray
+        };
+        dataPosition.position.push(newPosition);
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataPosition));
+
+        res.status(200).json({ success: true, message: 'Thêm chức vụ thành công' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm chức vụ' });
+    }
+})
+//1
+
+app.post('/deleteKeyIdGroup', async (req, res) => {
+    const { groupKey, keyIdGroup, idPerson } = req.query;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataUserss = JSON.parse(data);
+        const keyIdGroupToDelete = Number(keyIdGroup);
+        const groupKeyToDelete = Number(groupKey);
+        dataUserss.person.forEach(person => {
+            if (Array.isArray(person.keyIdGroup)) {
+                person.keyIdGroup = person.keyIdGroup.filter(group => group !== keyIdGroupToDelete);
+                if (Array.isArray(person.groupKey)) {
+                    person.groupKey = person.groupKey.filter(group => group !== groupKeyToDelete);
+                }
+            }
+        });
+
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUserss, null, 2));
+        res.json({ success: true, person: dataUserss.person });
+
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa thuộc tính keyIdGroup' });
+    }
+});
+
+
+app.get('/grDatatest', async (req, res) => {
+    let data = await fs.promises.readFile(dbFilePath, "utf8");
+    const parsedData = JSON.parse(data);
+    res.json({ success: true, dataGroup: parsedData.group1 });
+})
+app.post('/addpersonnel', async (req, res) => {
+    const { name, email, group, position, phone } = req.query;
+
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataPersonnel = JSON.parse(data)
+        const maxId = Math.max(...dataPersonnel.personnel.map(item => item.id));
+        const id = maxId >= 0 ? maxId + 1 : 1;
+        dataPersonnel.person.push({ id, name, email, group, position, phone });
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataPersonnel));
+        res.json({ success: true, personnel: dataPersonnel.personnel });
+    }
+    catch (err) {
         console.error('Error:', err);
         res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
     }
 });
 
-// app.post('/addGrLv2', async (req, res) => {
-//     const { leverGr, valueNamegr, valueRv, valueInheritance } = req.body;
-//     try {
-//         let data = await fs.promises.readFile(dbFilePath, 'utf8');
-//         const dataAdd = JSON.parse(data);
-//         const maxId1 = Math.max(...dataAdd.group1.map(item => item.id));
-//         const id1 = maxId1 >= 0 ? maxId1 + 1 : 1;
-//         dataAdd.group2.push({ id1, leverGr, valueNamegr, valueRv, valueInheritance });
-//         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
-//         res.json({ success: true, group: dataAdd.group1 });
-//     } catch (err) {
-//         console.error('Error:', err);
-//         res.status(500).json({ error: 'Error adding contact' });
-//     }
-// });
+app.post('/editProfileAccount', async (req, res) => {
+    const { id, phone } = req.query;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataPfAcc = JSON.parse(data);
+        const index = dataPfAcc.personnel.findIndex(personnel => personnel.id === parseInt(id))
+        dataPfAcc.personnel[index].phone = phone;
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataPfAcc));
+        res.json({ success: true, personnel: dataPfAcc.personnel });
+
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+    }
+})
+
+
 
 // getDataPerson1
 app.get("/getDataPerson", async (req, res) => {
@@ -270,7 +423,10 @@ app.put("/updatePerson/:id", async (req, res) => {
         let data = await fs.promises.readFile(dbFilePath, "utf8");
         let dataUpdate = JSON.parse(data);
 
+<<<<<<< HEAD
+=======
         // Tìm và cập nhật thông tin nhân sự theo id
+>>>>>>> main
         const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
         if (personIndex === -1) {
             return res.status(404).json({ error: "Person not found" });
@@ -299,13 +455,20 @@ app.delete("/deletePerson/:id", async (req, res) => {
         let data = await fs.promises.readFile(dbFilePath, "utf8");
         let dataUpdate = JSON.parse(data);
 
+<<<<<<< HEAD
+=======
         // Tìm và xóa thông tin nhân sự theo id
+>>>>>>> main
         const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
         if (personIndex === -1) {
             return res.status(404).json({ error: "Person not found" });
         }
 
+<<<<<<< HEAD
+        dataUpdate.person.splice(personIndex, 1);
+=======
         dataUpdate.person.splice(personIndex, 1); // Xóa người dùng khỏi danh sách
+>>>>>>> main
         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
         res.json({ success: true, person: dataUpdate.person });
     } catch (err) {
@@ -332,6 +495,11 @@ app.get("/searchPerson", async (req, res) => {
 });
 
 
+<<<<<<< HEAD
+
+
+
+=======
 const responseError = (res, msg) => {
     res.status(404).json({
         sttatus: 400,
@@ -430,6 +598,7 @@ app.put('/company-space/edit', async (req, res) => {
 // Với th dữ liệu gửi lên là đunng
 
 ////////////////////////////
+>>>>>>> main
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

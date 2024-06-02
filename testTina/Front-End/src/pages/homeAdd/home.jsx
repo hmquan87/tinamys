@@ -11,15 +11,15 @@ import News from './pages/news';
 import NewsManagement from './pages/newsManagement';
 import EditCompany from './pages/EditCompany';
 
-const { Header,  Content } = Layout;
+const { Header, Content } = Layout;
 
 const data = [
     { key: 'n1', component: <ListGr /> },
     { key: 'n2', component: <ListPs /> },
     { key: 'n3', component: <ListPerson /> },
-    { key: 'n4', component: <News/> },
-    { key: 'n5', component: <NewsManagement/> },
-    { key: 'n6', component: <EditCompany/> },
+    { key: 'n4', component: <News /> },
+    { key: 'n5', component: <NewsManagement /> },
+    { key: 'n6', component: <EditCompany /> },
     { key: 'nav1', component: <></> },
     { key: 'nav2', component: <></> },
     { key: 'nav3', component: <></> },
@@ -27,13 +27,8 @@ const data = [
 ]
 
 const HomeAdd = () => {
-
-
     const [checkPath, setCheckPath] = useState('')
     console.log(checkPath);
-
-
-
     return (
         <>
             <Layout className="relative bg-transparent min-h-[100%] min-w-[100%]">
@@ -57,7 +52,7 @@ const HomeAdd = () => {
 
                     </Content>
                 </Layout>
-                
+
             </Layout>
         </>
     )

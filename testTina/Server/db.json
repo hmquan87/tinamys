@@ -49,54 +49,29 @@
             "id": 1,
             "leverGr": "1",
             "valueNamegr": "1",
-            "valueRv": "1",
-            "valueInheritance": ""
-        },
-        {
-            "id": 2,
-            "leverGr": "2",
-            "valueNamegr": "2",
-            "valueRv": "1",
-            "valueInheritance": "1"
-        },
-        {
-            "id": 3,
-            "leverGr": "3",
-            "valueNamegr": "3",
-            "valueRv": "1",
-            "valueInheritance": "2"
-        },
-        {
-            "id": 8,
-            "leverGr": "1",
-            "valueNamegr": "n1-1",
             "valueRv": "",
             "valueInheritance": ""
-        },
-        {
-            "id": 9,
-            "leverGr": "2",
-            "valueNamegr": "n2-1",
-            "valueRv": "",
-            "valueInheritance": "1"
-        },
-        {
-            "id": 10,
-            "leverGr": "2",
-            "valueNamegr": "n2-2",
-            "valueRv": "",
-            "valueInheritance": "n1-1"
         }
+    ],
+    "position": [
+        
     ],
     "person": [
         {
             "id": 1,
-            "email": "john@example.com",
-            "name": "John Doe",
-            "phone": "1234567890",
-            "group": "Nhóm B",
-            "position": "Nhân viên",
-            "status": "Ngưng hoạt động"
+            "email": "vuhung200222@gmail.com",
+            "name": "Hung Vũ",
+            "phone": "0866788248",
+            "group": "Nhóm A",
+            "position": "Quản lý",
+            "status": "Hoạt động",
+            "groupKey": [
+                1
+            ],
+            "keyIdGroup": [
+                2,
+                1
+            ]
         },
         {
             "id": 2,
@@ -105,7 +80,13 @@
             "phone": "0866788248",
             "group": "Nhóm A",
             "position": "Quản lý",
-            "status": "Hoạt động"
+            "status": "Hoạt động",
+            "groupKey": [
+                1
+            ],
+            "keyIdGroup": [
+                1
+            ]
         },
         {
             "id": 3,
@@ -321,6 +302,24 @@
             "phone": "0123456987",
             "group": "Nhóm C",
             "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 27,
+            "email": "hoanglop8a1@gmail.com",
+            "name": "1",
+            "phone": "2",
+            "group": "3",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 28,
+            "email": "1",
+            "name": "2",
+            "phone": "3",
+            "group": "1",
+            "position": "Quản lý",
             "status": "Hoạt động"
         }
     ],

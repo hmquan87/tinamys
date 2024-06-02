@@ -13,22 +13,15 @@ const { Header, Content } = Layout;
 const App = () => {
     return (
         <Router>
-            {/* <Layout className=''>
-                <Header className='bg-transparent '>
-
-                </Header>
-                <Content className=''> */}
-                    <Routes>
-                        <Route exact path="/" element={<LandingPage />} />
-                        <Route path="/about" element={<LandingPage />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/home" element={<Home />} />
-                        <Route path='/profile-account' element={<ProfileAccount />} />
-                        <Route path='/terms-of-use' element={<TermsOfUse />} />
-                        <Route path='/home-add' element={<HomeAdd />} />
-                    </Routes>
-                {/* </Content>
-            </Layout> */}
+            <Routes>
+                <Route exact path="/" element={<LandingPage />} />
+                <Route path="/about" element={<LandingPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/home" element={<Home />} />
+                <Route path='/profile-account' element={<ProfileAccount />} />
+                <Route path='/terms-of-use' element={<TermsOfUse />} />
+                <Route path='/home-add' element={<HomeAdd />} />
+            </Routes>
         </Router>
     )
 }

@@ -60,28 +60,71 @@ th.ant-table-cell {
     height: 158px !important;
 }
 
-.modal2 .ant-modal-content .ant-modal-body{
+.modal2 .ant-modal-content .ant-modal-body {
     width: 100% !important;
 }
 
-.ql-toolbar.ql-snow{
+.ql-toolbar.ql-snow {
     border: none !important;
     border-bottom: 1px solid #ccc !important;
 }
 
-.ql-container.ql-snow{
+.ql-container.ql-snow {
     border: none !important;
     height: 480px !important
 }
 
-.ant-btn-primary.ant-btn-dangerous:disabled{
+.ant-btn-primary.ant-btn-dangerous:disabled {
     background: red;
     color: white;
     border: none;
 }
 
-.custom-label-class .ant-form-item-label > label {
-    font-size: 16px; 
+.custom-label-class .ant-form-item-label>label {
+    font-size: 16px;
     font-weight: 600;
     color: #242424;
+}
+
+
+.custom-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.custom-item:hover {
+    background-color: #f5f5f5;
+}
+
+.ant-transfer-list-content-item .ant-checkbox-wrapper {
+    display: none;
+    /* Hide the checkboxes */
+}
+
+.ant-transfer-list-content-item {
+    padding-left: 0;
+    /* Adjust padding if needed */
+}
+
+.ant-transfer-operation {
+    display: none !important;
+}
+
+/* asset.css */
+.custom-transfer .ant-transfer-list {
+    border: none !important;
+    margin-left: 20px;
+}
+
+.ant-transfer-list-header-selected {
+    display: none !important;
+}
+
+.ant-transfer-list-header-title {
+    text-align: center !important;
+    font-size: 14px !important;
+    color: #242424;
+    font-weight: 600;
 }
