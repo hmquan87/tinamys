@@ -235,102 +235,199 @@ app.post('/editDataGr', async (req, res) => {
 
 // getDataPerson1
 app.get("/getDataPerson", async (req, res) => {
-  try {
-    let data = await fs.promises.readFile(dbFilePath, "utf8");
-    const parsedData = JSON.parse(data);
-    res.json({ success: true, person: parsedData.person });
-  } catch (err) {
-    console.error("Error getting data person:", err);
-    res.status(500).json({ error: "Error getting data person" });
-  }
+    try {
+        let data = await fs.promises.readFile(dbFilePath, "utf8");
+        const parsedData = JSON.parse(data);
+        res.json({ success: true, person: parsedData.person });
+    } catch (err) {
+        console.error("Error getting data person:", err);
+        res.status(500).json({ error: "Error getting data person" });
+    }
 });
 
 
 //add
 app.post("/addPerson", async (req, res) => {
-  const { email, name, phone, group, position, status } = req.body;
-  try {
-    let data = await fs.promises.readFile(dbFilePath, "utf8");
-    const dataAdd = JSON.parse(data);
-    const maxId = Math.max(...dataAdd.person.map((item) => item.id));
-    const id = maxId >= 0 ? maxId + 1 : 1;
-    dataAdd.person.push({ id, email, name, phone, group, position, status });
-    await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
-    res.json({ success: true, person: dataAdd.person });
-  } catch (err) {
-    console.error("Error adding person:", err);
-    res.status(500).json({ error: "Error adding person" });
-  }
+    const { email, name, phone, group, position, status } = req.body;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, "utf8");
+        const dataAdd = JSON.parse(data);
+        const maxId = Math.max(...dataAdd.person.map((item) => item.id));
+        const id = maxId >= 0 ? maxId + 1 : 1;
+        dataAdd.person.push({ id, email, name, phone, group, position, status });
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
+        res.json({ success: true, person: dataAdd.person });
+    } catch (err) {
+        console.error("Error adding person:", err);
+        res.status(500).json({ error: "Error adding person" });
+    }
 });
 //update
 app.put("/updatePerson/:id", async (req, res) => {
-  const { id } = req.params;
-  const { email, name, phone, group, position, status } = req.body;
-  try {
-    let data = await fs.promises.readFile(dbFilePath, "utf8");
-    let dataUpdate = JSON.parse(data);
+    const { id } = req.params;
+    const { email, name, phone, group, position, status } = req.body;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, "utf8");
+        let dataUpdate = JSON.parse(data);
 
-    // Tìm và cập nhật thông tin nhân sự theo id
-    const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
-    if (personIndex === -1) {
-      return res.status(404).json({ error: "Person not found" });
+        // Tìm và cập nhật thông tin nhân sự theo id
+        const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
+        if (personIndex === -1) {
+            return res.status(404).json({ error: "Person not found" });
+        }
+
+        dataUpdate.person[personIndex] = {
+            id: Number(id),
+            email,
+            name,
+            phone,
+            group,
+            position,
+            status,
+        };
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
+        res.json({ success: true, person: dataUpdate.person });
+    } catch (err) {
+        console.error("Error updating person:", err);
+        res.status(500).json({ error: "Error updating person" });
     }
-
-    dataUpdate.person[personIndex] = {
-      id: Number(id),
-      email,
-      name,
-      phone,
-      group,
-      position,
-      status,
-    };
-    await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
-    res.json({ success: true, person: dataUpdate.person });
-  } catch (err) {
-    console.error("Error updating person:", err);
-    res.status(500).json({ error: "Error updating person" });
-  }
 });
 //delete
 app.delete("/deletePerson/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    let data = await fs.promises.readFile(dbFilePath, "utf8");
-    let dataUpdate = JSON.parse(data);
+    const { id } = req.params;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, "utf8");
+        let dataUpdate = JSON.parse(data);
 
-    // Tìm và xóa thông tin nhân sự theo id
-    const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
-    if (personIndex === -1) {
-      return res.status(404).json({ error: "Person not found" });
+        // Tìm và xóa thông tin nhân sự theo id
+        const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
+        if (personIndex === -1) {
+            return res.status(404).json({ error: "Person not found" });
+        }
+
+        dataUpdate.person.splice(personIndex, 1); // Xóa người dùng khỏi danh sách
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
+        res.json({ success: true, person: dataUpdate.person });
+    } catch (err) {
+        console.error("Error deleting person:", err);
+        res.status(500).json({ error: "Error deleting person" });
     }
-
-    dataUpdate.person.splice(personIndex, 1); // Xóa người dùng khỏi danh sách
-    await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
-    res.json({ success: true, person: dataUpdate.person });
-  } catch (err) {
-    console.error("Error deleting person:", err);
-    res.status(500).json({ error: "Error deleting person" });
-  }
 });
 // search
 app.get("/searchPerson", async (req, res) => {
-  const { query } = req.query;
-  try {
-    let data = await fs.promises.readFile(dbFilePath, "utf8");
-    const dataSearch = JSON.parse(data);
-    const filteredData = dataSearch.person.filter((person) =>
-      Object.values(person).some((value) =>
-        value.toString().toLowerCase().includes(query.toLowerCase())
-      )
-    );
-    res.json({ success: true, person: filteredData });
-  } catch (err) {
-    console.error("Error searching person:", err);
-    res.status(500).json({ error: "Error searching person" });
-  }
+    const { query } = req.query;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, "utf8");
+        const dataSearch = JSON.parse(data);
+        const filteredData = dataSearch.person.filter((person) =>
+            Object.values(person).some((value) =>
+                value.toString().toLowerCase().includes(query.toLowerCase())
+            )
+        );
+        res.json({ success: true, person: filteredData });
+    } catch (err) {
+        console.error("Error searching person:", err);
+        res.status(500).json({ error: "Error searching person" });
+    }
 });
 
+
+const responseError = (res, msg) => {
+    res.status(404).json({
+        sttatus: 400,
+        error: msg
+    });
+}
+app.post('/company-space/add', async (req, res) => {
+    console.log('123123', req.body.nameWorkSpace);
+    if (req.body) {
+        if (!req.body.nameWorkSpace || req.body.nameWorkSpace === '') {
+            responseError(res, 'Không gian làm việc không được để trống')
+        }
+        else if (!req.body.tyeSpace || req.body.tyeSpace === '') {
+            responseError(res, 'Loại không gian làm việc không được để trống')
+        }
+        else if (!req.body.phone || req.body.phone === '') {
+            responseError(res, 'Phone không được để trống')
+        }
+        else if (!req.body.website || req.body.website === '') {
+            responseError(res, 'Website không được để trống')
+        }
+        else if (!req.body.email || req.body.email === '') {
+            responseError(res, 'Email không được để trống')
+        }
+        else if (!req.body.tyeSizePeople || req.body.tyeSizePeople === '') {
+            responseError(res, 'Số lượng không được để trống')
+        }
+    }
+
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataAddCompany = JSON.parse(data)
+        if (dataAddCompany.companySpace.length === 0) {
+            req.body.id = 1
+        } else {
+            const maxId = Math.max(...dataAddCompany.companySpace.map(item => item.id));
+            console.log('maxid', maxId)
+            req.body.id = maxId + 1;
+        }
+        dataAddCompany.companySpace.push(req.body)
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAddCompany));
+        res.json({ success: true, group: dataAddCompany.companySpace });
+
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'Error adding contact' });
+    }
+});
+
+app.get("/getDataCompany", async (req, res) => {
+    const id = req.query.id;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, "utf8");
+        const parsedData = JSON.parse(data);
+
+        // Assuming parsedData contains an array of companies or a way to access the company by id
+        const companyData = parsedData.companySpace.find(company => company.id == 1);
+
+        if (companyData) {
+            res.json({ success: true, companySpace: companyData });
+        } else {
+            res.status(404).json({ error: "Company not found" });
+        }
+    } catch (err) {
+        console.error("Error getting data companySpace:", err);
+        res.status(500).json({ error: "Error getting data companySpace" });
+    }
+});
+
+
+app.put('/company-space/edit', async (req, res) => {
+    const id = req.query.id;
+    console.log('id là gì', id);
+
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataAddCompany = JSON.parse(data);
+        const elementIndex = dataAddCompany.companySpace.findIndex(item => item.id === Number(id));
+
+        if (elementIndex !== -1) {
+            // Phát hiện phần tử cần chỉnh sửa, tiến hành cập nhật dữ liệu
+            dataAddCompany.companySpace[elementIndex] = { ...dataAddCompany.companySpace[elementIndex], ...req.body };
+            await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAddCompany));
+
+            res.json({ success: true, group: dataAddCompany.companySpace });
+        } else {
+            // Trả về lỗi nếu không tìm thấy phần tử cần chỉnh sửa
+            res.status(404).json({ error: 'Element not found' });
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'Error editing company' });
+    }
+});
+
+// Với th dữ liệu gửi lên là đunng
 
 ////////////////////////////
 

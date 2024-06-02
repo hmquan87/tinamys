@@ -323,5 +323,25 @@
             "position": "Nhân viên",
             "status": "Hoạt động"
         }
+    ],
+    "companySpace": [
+        {
+            "nameWorkSpace": "séd",
+            "tyeSpace": "Tổ chức",
+            "phone": "7534735",
+            "website": "fsdfsdfsd",
+            "email": "63456754",
+            "tyeSizePeople": "min50max100",
+            "id": 1
+        },
+        {
+            "nameWorkSpace": "rewrew",
+            "tyeSpace": "Công ty",
+            "phone": "0467477",
+            "website": "dfgdfg",
+            "email": "fgdfg",
+            "tyeSizePeople": "max50",
+            "id": 2
+        }
     ]
 }
