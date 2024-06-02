@@ -41,7 +41,7 @@ const HomeAdd = () => {
                         <div className='relative w-[13%] min-h-[93vh] border-r border-zinc-300 bg-white'>
                             <SiderHome
                                 className="min-h-[100%] w-[100%] "
-                                setCheckPath={setCheckPath}
+                                setCheckPath={setCheckPath} 
                             />
                         </div>
                         <div className='w-[87%] min-h-[100%] bg-white'>
