@@ -20,7 +20,7 @@ const menuItems = [
     { key: 'n3', icon: i3, text: 'Danh sách nhân sự' },
     { key: 'n4', icon: i4, text: 'Tin tức' },
     { key: 'n5', icon: i5, text: 'Quản lý tin tức' },
-    { key: 'n6', icon: i6, text: 'Chỉnh sử công ty' }
+    { key: 'n6', icon: i6, text: 'Chỉnh sửa công ty' }
 ];
 const menuItems1 = [
     { key: 'nav1', icon: iconHome, text: 'Trang chủ' },
