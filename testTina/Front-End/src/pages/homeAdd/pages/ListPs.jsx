@@ -445,8 +445,8 @@ const ListPs = () => {
                 const data = res.data.person;
                 setPersonData(data);
                 // setCheckedMembers(data.map(member => member.id));
-                setCheckAllMembers(false); 
-                setIdPerson(data.map(member => member.id)); 
+                setCheckAllMembers(false);
+                // setIdPerson(data.map(member => member.id)); 
             } catch (error) {
                 console.error('Đã xảy ra lỗi lấy dataPerson khi gọi API:', error);
             }
@@ -674,7 +674,7 @@ const ListPs = () => {
                                     <div className='flex flex-col max-h-[450px] overflow-y-auto'>
                                         {personData.map(item =>
                                             <div key={item.id} className='mb-3 flex justify-between items-center'>
-                                                
+
                                                 <div className='flex items-center'>
                                                     <div>
                                                         <Avatar

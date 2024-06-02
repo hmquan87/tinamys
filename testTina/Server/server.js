@@ -422,11 +422,6 @@ app.put("/updatePerson/:id", async (req, res) => {
     try {
         let data = await fs.promises.readFile(dbFilePath, "utf8");
         let dataUpdate = JSON.parse(data);
-
-<<<<<<< HEAD
-=======
-        // Tìm và cập nhật thông tin nhân sự theo id
->>>>>>> main
         const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
         if (personIndex === -1) {
             return res.status(404).json({ error: "Person not found" });
@@ -454,21 +449,13 @@ app.delete("/deletePerson/:id", async (req, res) => {
     try {
         let data = await fs.promises.readFile(dbFilePath, "utf8");
         let dataUpdate = JSON.parse(data);
-
-<<<<<<< HEAD
-=======
-        // Tìm và xóa thông tin nhân sự theo id
->>>>>>> main
         const personIndex = dataUpdate.person.findIndex((item) => item.id == id);
         if (personIndex === -1) {
             return res.status(404).json({ error: "Person not found" });
         }
 
-<<<<<<< HEAD
         dataUpdate.person.splice(personIndex, 1);
-=======
         dataUpdate.person.splice(personIndex, 1); // Xóa người dùng khỏi danh sách
->>>>>>> main
         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
         res.json({ success: true, person: dataUpdate.person });
     } catch (err) {
@@ -495,11 +482,9 @@ app.get("/searchPerson", async (req, res) => {
 });
 
 
-<<<<<<< HEAD
 
 
 
-=======
 const responseError = (res, msg) => {
     res.status(404).json({
         sttatus: 400,
@@ -598,7 +583,6 @@ app.put('/company-space/edit', async (req, res) => {
 // Với th dữ liệu gửi lên là đunng
 
 ////////////////////////////
->>>>>>> main
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

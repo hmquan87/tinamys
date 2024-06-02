@@ -51,6 +51,13 @@
             "valueNamegr": "1",
             "valueRv": "",
             "valueInheritance": ""
+        },
+        {
+            "id": 2,
+            "leverGr": "1",
+            "valueNamegr": "3",
+            "valueRv": "",
+            "valueInheritance": ""
         }
     ],
     "position": [
