@@ -167,6 +167,7 @@ app.get('/getDataGr', async (req, res) => {
     }
 })
 
+
 app.post('/addGrLv1', async (req, res) => {
     const { leverGr, valueNamegr, valueRv, valueInheritance } = req.body;
     try {
