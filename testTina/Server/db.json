@@ -1,1 +1,327 @@
-{"user":[{"username":"ad","password":"ad","name":"name","email":"email","number":"test"},{"username":"13","password":"1","name":"13","email":"hello"},{"username":"quanhm","password":"872002","name":"Hoàng Minh Quân","email":"quanhm@gmail.com","number":"2"},{"username":"quan","password":"111111","name":"quan87","email":"quan@gmail.com"},{"username":"admin","password":"111","name":"admin","email":"admin@gmail.com"}],"contact":[{"name":"testname","email":"testphone","phone":"testemail","mess":"testmess"}],"addtask":[{}],"group1":[{"id":1,"leverGr":"1","valueNamegr":"1","valueRv":"1","valueInheritance":""},{"id":2,"leverGr":"2","valueNamegr":"2","valueRv":"1","valueInheritance":"1"},{"id":3,"leverGr":"3","valueNamegr":"3","valueRv":"1","valueInheritance":"2"},{"id":8,"leverGr":"1","valueNamegr":"n1-1","valueRv":"","valueInheritance":""},{"id":9,"leverGr":"2","valueNamegr":"n2-1","valueRv":"","valueInheritance":"1"},{"id":10,"leverGr":"2","valueNamegr":"n2-2","valueRv":"","valueInheritance":"n1-1"}],"person":[{"id":1,"email":"john@example.com","name":"John Do","phone":"1234567890","group":"Nhóm B","position":"Nhân viên","status":"Ngưng hoạt động"},{"id":2,"email":"vuhung200222@gmail.com","name":"Hùng Vũ","phone":"0866788248","group":"Nhóm A","position":"Quản lý","status":"Hoạt động"},{"id":3,"email":"tung@gmail.com","name":"Tùng Lê","phone":"0325325325","group":"Nhóm C","position":"Nhân viên","status":"Hoạt động"},{"id":4,"email":"lophocvetranh@gmail.com","name":"Võ Văn Tranh","phone":"0123456987","group":"Nhóm D","position":"Nhân viên","status":"Hoạt động"},{"id":5,"email":"manh.vx@tinasoft.com.vn","name":"Mạnh Vũ","phone":"0564321987","group":"Nhóm B","position":"Quản lý","status":"Hoạt động"},{"id":6,"email":"cham@gmail.com","name":"Châm Phạm","phone":"0231654798","group":"Nhóm A","position":"Nhân viên","status":"Hoạt động"},{"id":7,"email":"champham2352002@gmail.com","name":"Châm Đinh","phone":"6868686868","group":"Nhóm C","position":"Nhân viên","status":"Hoạt động"},{"id":8,"email":"quyen@gmail.com","name":"Hồng Quyên","phone":"0325325799","group":"Nhóm A","position":"Quản lý","status":"Hoạt động"},{"id":9,"email":"quan@gmail.com","name":"Hoàng Quân","phone":"0123456987","group":"Nhóm D","position":"Nhân viên","status":"Hoạt động"},{"id":10,"email":"lophocvetranh@gmail.com","name":"Đình  Đình Hùng","phone":"0123456987","group":"Nhóm B","position":"Nhân viên","status":"Hoạt động"},{"id":11,"email":"vuhung200222@gmail.com","name":"Vũ Đình Hùng","phone":"0362027979","group":"Nhóm B","position":"Nhân viên","status":"Hoạt động"},{"id":12,"email":"quyenbth@gmail.com","name":"Bùi Thị Hồng Quyên","phone":"0325325979","group":"Nhóm A","position":"Quản lý","status":"Hoạt động"},{"id":13,"email":"toan@gmail.com","name":"Hồ  Sĩ Toàn","phone":"0123456789","group":"Nhóm A","position":"Nhân viên","status":"Hoạt động"},{"id":14,"email":"thang@gmail.com","name":"Nguyễn Đức Thắng","phone":"0987654321","group":"Nhóm B","position":"Nhân viên","status":"Hoạt động"},{"id":15,"email":"thangdoan@gmail.com","name":"Đoàn Thắng","phone":"0231654798","group":"Nhóm C","position":"Nhân viên","status":"Ngưng hoạt động"},{"id":16,"email":"sitoan@gmail.com","name":"Sĩ  Sĩ Toàn ","phone":"0978645312","group":"Nhóm A","position":"Nhân viên","status":"Hoạt động"},{"id":17,"email":"letung@gmail.com","name":"Lê Văn Tùng","phone":"1111111111","group":"Nhóm D","position":"Nhân viên","status":"Hoạt động"},{"id":18,"email":"vuquyen@gmail.com","name":"Bùi Thị Quyên","phone":"0321654987","group":"Nhóm A","position":"Quản lý","status":"Hoạt động"},{"id":19,"email":"tung@gmail.com","name":"Đinh Vinh","phone":"0123456987","group":"Nhóm C","position":"Nhân viên","status":"Hoạt động"},{"id":20,"email":"hung.vd@tinasoft.com.vn","name":"Nguyễn Văn Hùng","phone":"079797979","group":"Nhóm B","position":"Quản lý","status":"Hoạt động"},{"id":21,"email":"namnam@gmail.com","name":"Nam","phone":"78898899","group":"Nhóm A","position":"Quản lý","status":"Hoạt động"},{"id":22,"email":"champham2352009@gmail.com","name":"Phạm Thị Châm","phone":"02022002020","group":"Nhóm D","position":"Nhân viên","status":"Hoạt động"},{"id":23,"email":"vinhthe@gmail.com","name":"Thế Vinh","phone":"98889898898998","group":"Nhóm B","position":"Nhân viên","status":"Hoạt động"},{"id":24,"email":"vanvinh@gmail.com","name":"Văn Vinh","phone":"0564321987","group":"Nhóm A","position":"Nhân viên","status":"Hoạt động"},{"id":25,"email":"ssds","name":"Tăng Ca","phone":"032325325","group":"Nhóm C","position":"Quản lý","status":"Hoạt động"},{"id":26,"email":"hung.vd@vn.com","name":"Lê Hưng","phone":"0321456897","group":"Nhóm B","position":"Nhân viên","status":"Hoạt động"},{"id":27,"email":"namhoai@mail.com","name":"Nam Cao","phone":"0123456987","group":"Nhóm B","position":"Nhân viên","status":"Hoạt động"}]}
+{
+    "user": [
+        {
+            "username": "ad",
+            "password": "ad",
+            "name": "name",
+            "email": "email",
+            "number": "test"
+        },
+        {
+            "username": "13",
+            "password": "1",
+            "name": "13",
+            "email": "hello"
+        },
+        {
+            "username": "quanhm",
+            "password": "872002",
+            "name": "Hoàng Minh Quân",
+            "email": "quanhm@gmail.com",
+            "number": "2"
+        },
+        {
+            "username": "quan",
+            "password": "111111",
+            "name": "quan87",
+            "email": "quan@gmail.com"
+        },
+        {
+            "username": "admin",
+            "password": "111",
+            "name": "admin",
+            "email": "admin@gmail.com"
+        }
+    ],
+    "contact": [
+        {
+            "name": "testname",
+            "email": "testphone",
+            "phone": "testemail",
+            "mess": "testmess"
+        }
+    ],
+    "addtask": [
+        {}
+    ],
+    "group1": [
+        {
+            "id": 1,
+            "leverGr": "1",
+            "valueNamegr": "1",
+            "valueRv": "1",
+            "valueInheritance": ""
+        },
+        {
+            "id": 2,
+            "leverGr": "2",
+            "valueNamegr": "2",
+            "valueRv": "1",
+            "valueInheritance": "1"
+        },
+        {
+            "id": 3,
+            "leverGr": "3",
+            "valueNamegr": "3",
+            "valueRv": "1",
+            "valueInheritance": "2"
+        },
+        {
+            "id": 8,
+            "leverGr": "1",
+            "valueNamegr": "n1-1",
+            "valueRv": "",
+            "valueInheritance": ""
+        },
+        {
+            "id": 9,
+            "leverGr": "2",
+            "valueNamegr": "n2-1",
+            "valueRv": "",
+            "valueInheritance": "1"
+        },
+        {
+            "id": 10,
+            "leverGr": "2",
+            "valueNamegr": "n2-2",
+            "valueRv": "",
+            "valueInheritance": "n1-1"
+        }
+    ],
+    "person": [
+        {
+            "id": 1,
+            "email": "john@example.com",
+            "name": "John Doe",
+            "phone": "1234567890",
+            "group": "Nhóm B",
+            "position": "Nhân viên",
+            "status": "Ngưng hoạt động"
+        },
+        {
+            "id": 2,
+            "email": "vuhung200222@gmail.com",
+            "name": "Hùng Vũ",
+            "phone": "0866788248",
+            "group": "Nhóm A",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 3,
+            "email": "tung@gmail.com",
+            "name": "Tùng Lê",
+            "phone": "0325325325",
+            "group": "Nhóm C",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 4,
+            "email": "lophocvetranh@gmail.com",
+            "name": "Võ Văn Tranh",
+            "phone": "0123456987",
+            "group": "Nhóm D",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 5,
+            "email": "manh.vx@tinasoft.com.vn",
+            "name": "Mạnh Vũ",
+            "phone": "0564321987",
+            "group": "Nhóm B",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 6,
+            "email": "cham@gmail.com",
+            "name": "Châm Phạm",
+            "phone": "0231654798",
+            "group": "Nhóm A",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 7,
+            "email": "champham2352002@gmail.com",
+            "name": "Châm Đinh",
+            "phone": "6868686868",
+            "group": "Nhóm C",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 8,
+            "email": "quyen@gmail.com",
+            "name": "Hồng Quyên",
+            "phone": "0325325799",
+            "group": "Nhóm A",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 9,
+            "email": "quan@gmail.com",
+            "name": "Hoàng Quân",
+            "phone": "0123456987",
+            "group": "Nhóm D",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 10,
+            "email": "lophocvetranh@gmail.com",
+            "name": "Đình  Đình Hùng",
+            "phone": "0123456987",
+            "group": "Nhóm B",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 11,
+            "email": "vuhung200222@gmail.com",
+            "name": "Vũ Đình Hùng",
+            "phone": "0362027979",
+            "group": "Nhóm B",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 12,
+            "email": "quyenbth@gmail.com",
+            "name": "Bùi Thị Hồng Quyên",
+            "phone": "0325325979",
+            "group": "Nhóm A",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 13,
+            "email": "toan@gmail.com",
+            "name": "Hồ  Sĩ Toàn",
+            "phone": "0123456789",
+            "group": "Nhóm A",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 14,
+            "email": "thang@gmail.com",
+            "name": "Nguyễn Đức Thắng",
+            "phone": "0987654321",
+            "group": "Nhóm B",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 15,
+            "email": "thangdoan@gmail.com",
+            "name": "Đoàn Thắng",
+            "phone": "0231654798",
+            "group": "Nhóm C",
+            "position": "Nhân viên",
+            "status": "Ngưng hoạt động"
+        },
+        {
+            "id": 16,
+            "email": "sitoan@gmail.com",
+            "name": "Sĩ  Sĩ Toàn ",
+            "phone": "0978645312",
+            "group": "Nhóm A",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 17,
+            "email": "letung@gmail.com",
+            "name": "Lê Văn Tùng",
+            "phone": "1111111111",
+            "group": "Nhóm D",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 18,
+            "email": "vuquyen@gmail.com",
+            "name": "Bùi Thị Quyên",
+            "phone": "0321654987",
+            "group": "Nhóm A",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 19,
+            "email": "tung@gmail.com",
+            "name": "Đinh Vinh",
+            "phone": "0123456987",
+            "group": "Nhóm C",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 20,
+            "email": "hung.vd@tinasoft.com.vn",
+            "name": "Nguyễn Văn Hùng",
+            "phone": "079797979",
+            "group": "Nhóm B",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 21,
+            "email": "namnam@gmail.com",
+            "name": "Nam",
+            "phone": "78898899",
+            "group": "Nhóm A",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 22,
+            "email": "champham2352009@gmail.com",
+            "name": "Phạm Thị Châm",
+            "phone": "02022002020",
+            "group": "Nhóm D",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 23,
+            "email": "vinhthe@gmail.com",
+            "name": "Thế Vinh",
+            "phone": "98889898898998",
+            "group": "Nhóm B",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 24,
+            "email": "vanvinh@gmail.com",
+            "name": "Văn Vinh",
+            "phone": "0564321987",
+            "group": "Nhóm A",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 25,
+            "email": "ssds",
+            "name": "sdsds",
+            "phone": "sdsdsd",
+            "group": "Nhóm C",
+            "position": "Quản lý",
+            "status": "Hoạt động"
+        },
+        {
+            "id": 26,
+            "email": "sonyu",
+            "name": "Sơn Vũ",
+            "phone": "0123456987",
+            "group": "Nhóm C",
+            "position": "Nhân viên",
+            "status": "Hoạt động"
+        }
+    ]
+}
