@@ -56,6 +56,8 @@ const columns = [
   },
 ];
 
+
+
 // Component chính
 const ListPerson = () => {
   const [data, setData] = useState([]); // Dữ liệu nhân sự
@@ -66,6 +68,7 @@ const ListPerson = () => {
   const [detailForm] = Form.useForm(); // Form dùng để chỉnh sửa thông tin
   const [isEditMode, setIsEditMode] = useState(false); // Trạng thái chỉnh sửa
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false); // Trạng thái hiển thị modal xác nhận xóa
+
 
   // Hook useEffect được sử dụng để gửi yêu cầu HTTP khi component được render
   useEffect(() => {
@@ -100,7 +103,7 @@ const ListPerson = () => {
     }
   };
 
-  // Hàm hiển thị modal thêm nhân sự 
+  // Hàm hiển thị modal thêm nhân sự
   const showModalAdd = () => {
     addForm.resetFields();
     setIsModalVisible(true);
@@ -223,7 +226,7 @@ const ListPerson = () => {
             <Input
               placeholder="Tìm kiếm"
               prefix={<SearchOutlined className="h-[26px]" />}
-            //   Gọi hàm handleSearch
+              //   Gọi hàm handleSearch
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
@@ -353,9 +356,13 @@ const ListPerson = () => {
           onRow={(record) => ({
             onClick: () => showDetailModal(record),
           })}
+          // rowSelection={{
+          //   ...rowSelection,
+          // }}
+
         />
       </div>
-     
+
       {/* Modal xem chi tiết và sửa  */}
       <Modal
         title={

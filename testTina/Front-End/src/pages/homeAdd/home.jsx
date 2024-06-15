@@ -10,6 +10,7 @@ import ListPerson from './pages/ListPerson';
 import News from './pages/news';
 import NewsManagement from './pages/newsManagement';
 import EditCompany from './pages/EditCompany';
+import DailyTask from "./pages/DailyTask";
 
 const { Header,  Content } = Layout;
 
@@ -23,7 +24,7 @@ const data = [
     { key: 'nav1', component: <></> },
     { key: 'nav2', component: <></> },
     { key: 'nav3', component: <></> },
-    { key: 'nav4', component: <></> },
+    { key: 'nav4', component: <DailyTask/> },
 ]
 
 const HomeAdd = () => {
