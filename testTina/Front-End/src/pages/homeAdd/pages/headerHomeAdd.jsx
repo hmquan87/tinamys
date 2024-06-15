@@ -39,7 +39,7 @@ const HeaderHomeAdd = () => {
     }
     return (
         <>
-            <div className='flex items-center'>
+            <div className='flex items-center ml-[-35px]'>
                 <div>
                     <img src={logo} alt='' />
                 </div>
@@ -55,7 +55,7 @@ const HeaderHomeAdd = () => {
                     </Dropdown>
                 </div>
                 <div>
-                    <Button className='text-[14px] h-[28px] font-extralight flex items-center justify-center w-[82px] ml-20' type='primary'>
+                    <Button className='text-[14px] h-[30px] flex items-center justify-center ml-14' type='primary'>
                         Tạo nhanh
                     </Button>
                 </div>

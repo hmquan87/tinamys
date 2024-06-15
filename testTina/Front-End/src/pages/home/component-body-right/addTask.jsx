@@ -273,10 +273,10 @@ const AddTask = ({ handleCancel }) => {
                                 </div>
                             </div>
                             <div className="row mt30">
-                                <div className="group-btn col-6">
+                                <div className="group-btn col-6 btn-task">
                                     <Button onClick={handleCancel}>Hủy</Button>
                                 </div>
-                                <div className="group-btn col-6">
+                                <div className="group-btn col-6 btn-task">
                                     <Button type="primary" htmlType="submit">Tạo không gian làm việc</Button>
                                 </div>
                             </div>

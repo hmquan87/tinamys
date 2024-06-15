@@ -2,7 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
+const mysql = require('mysql');
 const { toast } = require('react-toastify');
+const { error } = require('console');
 
 
 const app = express();
@@ -10,143 +12,192 @@ const port = 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.json());
+
 const dbFilePath = 'db.json';
+
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'tinamys',
+});
+
+
 
 
 app.get('/user', (req, res) => {
-    fs.readFile(dbFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy thông tin.' });
-        }
-        const currentData = JSON.parse(data);
-        res.json({ success: true, user: currentData.user });
-    });
-});
-
-
-
-app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-
-
-    fs.readFile(dbFilePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi đọc thông tin đăng nhập.' });
-        }
-        try {
-            const users = JSON.parse(data).user;
-            const user = users.find(user => user.username === username && user.password === password);
-            if (user) {
-                res.json({ success: true, message: 'Đăng nhập thành công', user });
-
-            } else {
-                res.status(401).json({ success: false, message: 'Thông tin đăng nhập không chính xác' });
-            }
-        } catch (error) {
-            console.error('Đã xảy ra lỗi khi phân tích dữ liệu từ db.json:', error);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi xác thực người dùng.' });
-        }
-    });
-});
-
+    const sql = `SELECT * FROM user`;
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ error: 'Internal Server Error' });
+        else res.json(result);
+    })
+})
 app.post('/register', (req, res) => {
     const { username, password, name, email, again } = req.body;
-
-    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+    const insertSql = `INSERT INTO user (username, password, name, email) VALUES (?,?,?,?)`;
+    const values = [username, password, name, email];
+    if (again !== password) {
+        return res.status(400).json({ error: "Mật khẩu không khớp" });
+    }
+    const checkUsernameSql = `SELECT COUNT(*) AS count FROM user WHERE username = ?`;
+    db.query(checkUsernameSql, [username], (err, results) => {
         if (err) {
-            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
+            return res.status(500).json({ error: "Lỗi truy vấn kiểm tra username.", details: err.message });
         }
-
-        const currentData = JSON.parse(data);
-
-        const check = currentData.user.find(user => user.username === username);
-        if (!check) {
-            if (again === password) {
-                currentData.user.push({ username, password, name, email });
-                fs.writeFile(dbFilePath, JSON.stringify(currentData), (err) => {
-                    if (err) {
-                        console.error('Đã xảy ra lỗi khi ghi file db.json:', err);
-                        return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
-                    }
-                    res.json({ success: true });
-                });
-            } else return res.status(500).json({ error: 'Mật khẩu không khớp!' });
-        } else return res.status(500).json({ error: 'Tài khoản đã tồn tại!' });
+        const count = results[0].count;
+        if (count > 0) {
+            return res.status(400).json({ error: "Username đã tồn tại" });
+        }
+        db.query(insertSql, values, (err, result) => {
+            if (err) {
+                return res.status(500).json({ error: "Lỗi chèn dữ liệu.", details: err.message });
+            }
+            const userId = result.insertId; 
+            res.status(200).json({ success: 'Đăng ký thành công', user: { id: userId, username,password, name, email } });
+        });
     });
 });
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Vui lòng cung cấp tên đăng nhập và mật khẩu.' });
+    }
+
+    const sql = `SELECT * FROM user WHERE username = ? AND password = ?`;
+    const values = [username, password];
+
+    db.query(sql, values, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Lỗi máy chủ nội bộ.' });
+        }
+
+        if (results.length === 0) {
+            return res.status(401).json({ error: 'Tên đăng nhập hoặc mật khẩu không chính xác.' });
+        }
+
+        const user = results[0];
+        res.status(200).json({ success: 'Đăng nhập thành công', user: { id: user.id, username: user.username, name: user.name } });
+    });
+});
+
+
+// app.get('/user', (req, res) => {
+//     fs.readFile(dbFilePath, 'utf8', (err, data) => {
+//         if (err) {
+//             console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy thông tin.' });
+//         }
+//         const currentData = JSON.parse(data);
+//         res.json({ success: true, user: currentData.user });
+//     });
+// });
+// app.post('/login', (req, res) => {
+//     const { username, password } = req.body;
+//     fs.readFile(dbFilePath, 'utf8', (err, data) => {
+//         if (err) {
+//             console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi đọc thông tin đăng nhập.' });
+//         }
+//         try {
+//             const users = JSON.parse(data).user;
+//             const user = users.find(user => user.username === username && user.password === password);
+//             if (user) {
+//                 res.json({ success: true, message: 'Đăng nhập thành công', user });
+
+//             } else {
+//                 res.status(401).json({ success: false, message: 'Thông tin đăng nhập không chính xác' });
+//             }
+//         } catch (error) {
+//             console.error('Đã xảy ra lỗi khi phân tích dữ liệu từ db.json:', error);
+//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi xác thực người dùng.' });
+//         }
+//     });
+// });
+
+// app.post('/register', (req, res) => {
+//     const { username, password, name, email, again } = req.body;
+
+//     fs.readFile(dbFilePath, 'utf8', (err, data) => {
+//         if (err) {
+//             console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
+//         }
+
+//         const currentData = JSON.parse(data);
+
+//         const check = currentData.user.find(user => user.username === username);
+//         if (!check) {
+//             if (again === password) {
+//                 currentData.user.push({ username, password, name, email });
+//                 fs.writeFile(dbFilePath, JSON.stringify(currentData), (err) => {
+//                     if (err) {
+//                         console.error('Đã xảy ra lỗi khi ghi file db.json:', err);
+//                         return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
+//                     }
+//                     res.json({ success: true });
+//                 });
+//             } else return res.status(500).json({ error: 'Mật khẩu không khớp!' });
+//         } else return res.status(500).json({ error: 'Tài khoản đã tồn tại!' });
+//     });
+// });
 
 app.post('/addProfile', (req, res) => {
     const { username, numberPhone } = req.body;
-
-    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+    const updateSql = `UPDATE user SET number = ? WHERE username = ?`;
+    const values = [numberPhone, username];
+    db.query(updateSql, values, (err, result) => {
         if (err) {
-            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
+            console.error('Lỗi khi cập nhật thông tin người dùng:', err);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật thông tin người dùng.' });
         }
-        const currentData = JSON.parse(data);
-        const userIndex = currentData.user.findIndex(user => user.username === username);
-        currentData.user[userIndex].number = numberPhone;
-        fs.writeFile(dbFilePath, JSON.stringify(currentData), (err) => {
-            if (err) {
-                console.error('Đã xảy ra lỗi khi ghi file db.json:', err);
-                return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm số.' });
-            }
-            res.json({ success: true });
-        });
 
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Người dùng không tồn tại.' });
+        }
+
+        res.json({ success: true });
     });
 });
 
 app.post('/forgot', (req, res) => {
     const { newPass, againPass, username } = req.body;
 
-    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+    if (newPass !== againPass) {
+        return res.status(400).json({ error: 'Mật khẩu mới không khớp!' });
+    }
+
+    const updateSql = `UPDATE user SET password = ? WHERE username = ?`;
+    const values = [newPass, username];
+
+    db.query(updateSql, values, (err, result) => {
         if (err) {
-            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+            console.error('Lỗi khi cập nhật mật khẩu:', err);
             return res.status(500).json({ error: 'Đã xảy ra lỗi khi đổi mật khẩu.' });
         }
-        const currentData = JSON.parse(data);
-        const userIndex = currentData.user.findIndex(user => user.username === username);
-        if (newPass === againPass) {
-            currentData.user[userIndex].password = newPass;
-            fs.writeFile(dbFilePath, JSON.stringify(currentData), (err) => {
-                if (err) {
-                    console.error('Đã xảy ra lỗi khi ghi file db.json:', err);
-                    toast.error("Đổi mật khẩu thất bại: " + err.message);
-                    return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm số.' });
 
-                }
-                toast.success("Đổi mật khẩu thành công!")
-                res.json({ success: true, message: 'Đăng nhập thành công' });
-            });
-        } else {
-            return res.status(400).json({ error: 'Mật khẩu mới không khớp!' });
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Người dùng không tồn tại.' });
         }
-    })
-})
+
+        res.json({ success: true, message: 'Đổi mật khẩu thành công!' });
+    });
+});
 
 app.post('/contact', (req, res) => {
     const { name, email, phone, mess } = req.body;
-    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+
+    const insertSql = `INSERT INTO contacts (name, email, phone, message) VALUES (?, ?, ?, ?)`;
+    const values = [name, email, phone, mess];
+
+    db.query(insertSql, values, (err, result) => {
         if (err) {
-            console.error('Error', err);
-            return res.status(500).json({ error: "Error add mess" });
+            console.error('Lỗi khi thêm tin nhắn liên hệ:', err);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi gửi tin nhắn.' });
         }
 
-        const dataContact = JSON.parse(data);
-        dataContact.contact.push({ name, email, phone, mess });
-        fs.writeFile(dbFilePath, JSON.stringify(dataContact), (err) => {
-            if (err) {
-                console.error('Error writefile', err);
-                return res.status(500).json({ error: 'Error add write contact' })
-            }
-            toast.success("Sent!")
-            res.json({ success: true });
-        })
-    })
+        res.json({ success: true, message: 'Tin nhắn đã được gửi thành công!' });
+    });
 });
 
 
@@ -156,16 +207,13 @@ app.post('/logout', async (req, res) => {
 
 
 
-app.get('/getDataGr', async (req, res) => {
-    try {
-        const data = await fs.promises.readFile(dbFilePath, 'utf8');
-        const parsedData = JSON.parse(data);
-        res.json({ success: true, group: parsedData.group1 });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy dữ liệu' });
-    }
-})
+app.get('/getDataGr', (req, res) => {
+    const sql = `SELECT * FROM group`;
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ error: 'Internal Server Error' });
+        else res.json(result);
+    })
+});
 
 
 app.post('/addGrLv1', async (req, res) => {
@@ -198,31 +246,11 @@ app.post('/deleteGrLv1', async (req, res) => {
     }
 });
 
-// app.post('/editDataGr', async (req, res) => {
-//     const { id, valueNamegr, valueRv, member  } = req.query;
-//     try {
-//         let data = await fs.promises.readFile(dbFilePath, 'utf8');
-//         const grData = JSON.parse(data);
-//         const idToFind = typeof grData.group1[0].id === 'number' ? Number(id) : id;
-//         const index = grData.group1.findIndex(group1 => group1.id === idToFind);
-//         if (index !== -1) {
-//             grData.group1[index].valueNamegr = valueNamegr;
-//             grData.group1[index].valueRv = valueRv;
-//             await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
-//             res.json({ success: true, group1: grData.group1 });
-//         } else {
-//             res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
-//         }
-//     } catch (error) {
-//         console.error('Error:', error);
-//         res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
-//     }
-// });
+
 
 app.post('/editDataGr', async (req, res) => {
     const { id, valueNamegr, valueRv, memberId } = req.query;
 
-    // Ensure memberId is parsed as an array of numbers
     let memberIdArray = [];
     if (Array.isArray(memberId)) {
         memberIdArray = memberId.map(member => parseInt(member));
@@ -241,11 +269,9 @@ app.post('/editDataGr', async (req, res) => {
             grData.group1[index].valueNamegr = valueNamegr;
             grData.group1[index].valueRv = valueRv;
 
-            // Ensure memberId array exists and add new memberId values
             if (!Array.isArray(grData.group1[index].memberId)) {
                 grData.group1[index].memberId = [];
             }
-            // Add new memberId values to the memberId array
             grData.group1[index].memberId.push(...memberIdArray);
 
             await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
@@ -290,6 +316,18 @@ app.post('/addPersonToTheGroup', async (req, res) => {
     }
 });
 
+
+app.get('/getPosition', async (req, res) => {
+    try {
+        const data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const parsedData = JSON.parse(data);
+        res.json({ success: true, position: parsedData.position });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy dữ liệu' });
+    }
+})
+
 app.post('/addPosition', async (req, res) => {
     const { name, group, permissions, idPersion } = req.query;
     console.log('Permissions:', permissions);
@@ -317,7 +355,7 @@ app.post('/addPosition', async (req, res) => {
         res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm chức vụ' });
     }
 })
-//1
+
 
 app.post('/deleteKeyIdGroup', async (req, res) => {
     const { groupKey, keyIdGroup, idPerson } = req.query;
@@ -539,8 +577,6 @@ app.get("/getDataCompany", async (req, res) => {
     try {
         let data = await fs.promises.readFile(dbFilePath, "utf8");
         const parsedData = JSON.parse(data);
-
-        // Assuming parsedData contains an array of companies or a way to access the company by id
         const companyData = parsedData.companySpace.find(company => company.id == 1);
 
         if (companyData) {
@@ -565,13 +601,11 @@ app.put('/company-space/edit', async (req, res) => {
         const elementIndex = dataAddCompany.companySpace.findIndex(item => item.id === Number(id));
 
         if (elementIndex !== -1) {
-            // Phát hiện phần tử cần chỉnh sửa, tiến hành cập nhật dữ liệu
             dataAddCompany.companySpace[elementIndex] = { ...dataAddCompany.companySpace[elementIndex], ...req.body };
             await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAddCompany));
 
             res.json({ success: true, group: dataAddCompany.companySpace });
         } else {
-            // Trả về lỗi nếu không tìm thấy phần tử cần chỉnh sửa
             res.status(404).json({ error: 'Element not found' });
         }
     } catch (err) {
@@ -580,9 +614,7 @@ app.put('/company-space/edit', async (req, res) => {
     }
 });
 
-// Với th dữ liệu gửi lên là đunng
 
-////////////////////////////
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

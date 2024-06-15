@@ -48,9 +48,12 @@
         {
             "id": 1,
             "leverGr": "1",
-            "valueNamegr": "1",
+            "valueNamegr": "23",
             "valueRv": "",
-            "valueInheritance": ""
+            "valueInheritance": "",
+            "memberId": [
+                1
+            ]
         },
         {
             "id": 2,
@@ -58,10 +61,122 @@
             "valueNamegr": "3",
             "valueRv": "",
             "valueInheritance": ""
+        },
+        {
+            "id": 3,
+            "leverGr": "2",
+            "valueNamegr": "233",
+            "valueRv": "",
+            "valueInheritance": "23"
+        },
+        {
+            "id": 4,
+            "leverGr": "2",
+            "valueNamegr": "23344",
+            "valueRv": "",
+            "valueInheritance": "3"
         }
     ],
     "position": [
-        
+        {
+            "id": 1,
+            "name": "1",
+            "group": "quanly",
+            "permissions": [
+                "Quản lý nhóm",
+                "Quản lý chức vụ",
+                "Quản lý nhân sự",
+                "Quản lý tin tức"
+            ],
+            "idPersion": [
+                null
+            ]
+        },
+        {
+            "id": 2,
+            "name": "3",
+            "group": "quanly",
+            "permissions": [
+                "Quản lý nhóm",
+                "Quản lý chức vụ",
+                "Quản lý nhân sự",
+                "Quản lý tin tức"
+            ],
+            "idPersion": [
+                null
+            ]
+        },
+        {
+            "id": 3,
+            "name": "4",
+            "group": "nhanvien",
+            "permissions": [
+                "Quản lý nhóm",
+                "Quản lý chức vụ",
+                "Quản lý nhân sự",
+                "Quản lý tin tức"
+            ],
+            "idPersion": [
+                null
+            ]
+        },
+        {
+            "id": 4,
+            "name": "3",
+            "group": "nhanvien",
+            "permissions": [
+                "Quản lý nhóm",
+                "Quản lý chức vụ",
+                "Quản lý nhân sự",
+                "Quản lý tin tức"
+            ],
+            "idPersion": [
+                1,
+                2,
+                3
+            ]
+        },
+        {
+            "id": 5,
+            "name": "1",
+            "group": "nhanvien",
+            "permissions": [
+                "Quản lý nhóm",
+                "Quản lý chức vụ",
+                "Quản lý nhân sự",
+                "Quản lý tin tức"
+            ],
+            "idPersion": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28
+            ]
+        }
     ],
     "person": [
         {
@@ -348,6 +463,24 @@
             "email": "fgdfg",
             "tyeSizePeople": "max50",
             "id": 2
+        },
+        {
+            "nameWorkSpace": "",
+            "tyeSpace": "Công ty",
+            "phone": "",
+            "website": "",
+            "email": "",
+            "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
+            "id": 3
+        },
+        {
+            "nameWorkSpace": "6",
+            "tyeSpace": "Công ty",
+            "phone": "5",
+            "website": "",
+            "email": "",
+            "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
+            "id": 4
         }
     ]
 }

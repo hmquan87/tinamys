@@ -343,12 +343,6 @@ const ListGr = () => {
             }
             // else { newTarget.push(person); };
         });
-
-        console.log("DAUBIU: ", count);
-        // console.log("DAUBIUxxx: ", newArray)
-        // console.log("DAUBIUxxy: ", newTarget)
-        // setDataNew(newArray)
-        // setDataSourceNew(newTarget)
         return count;
     };
     const arrID = [1, 3, 4];
@@ -391,7 +385,7 @@ const ListGr = () => {
                                         {group1Data.map(items => (
                                             <div className=" w-[100%]">
                                                 {items.leverGr === item.lever &&
-                                                    <div className="flex justify-center w-[100%] ">
+                                                    <div className="flex justify-center w-[100%] mb-3">
                                                         <div className="w-[90%] flex flex-row p-2 border-zinc-500 border">
                                                             <div className="basis-1/3 mr-2">
                                                                 <div className="h-[100px] w-[100px] bg-red-300 text-[50px] flex items-center justify-center text-white">

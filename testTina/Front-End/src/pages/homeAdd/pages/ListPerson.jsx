@@ -67,11 +67,12 @@ const ListPerson = () => {
   const [isEditMode, setIsEditMode] = useState(false); // Trạng thái chỉnh sửa
   const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false); // Trạng thái hiển thị modal xác nhận xóa
   const [dataGroup, setDataGroup] = useState([]);
+  const [dataPosition, setDataPosition] = useState([]);
   // Hook useEffect được sử dụng để gửi yêu cầu HTTP khi component được render
   useEffect(() => {
     fetchDataFromServer();
     fetchDataGroup();
-    
+    fetchDataPosition();
   }, []);
 
   // Hàm gửi yêu cầu HTTP để lấy dữ liệu từ máy chủ
@@ -93,7 +94,14 @@ const ListPerson = () => {
       console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
     }
   }
-
+  const fetchDataPosition = async () => {
+  try {
+    const res = await axios.get('http://localhost:3001/getPosition')
+    setDataPosition(res.data.position)
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
+  }
+}
   // Hàm gửi yêu cầu HTTP để thêm một nhân sự mới
   const AddPerson = async (values) => {
     try {
@@ -324,15 +332,17 @@ const ListPerson = () => {
                   ]}
                 >
                   <Select placeholder="Chọn Chức vụ">
-                    <Option value="Quản lý">Quản lý</Option>
-                    <Option value="Nhân viên">Nhân viên</Option>
-                    {/* Thêm các tùy chọn khác tương tự */}
+                    {dataPosition.map(item =>
+                      <Select.Option key={item.name} value={item.name}>
+                        {item.name}
+                      </Select.Option>
+                    )}
                   </Select>
                 </Form.Item>
                 <Form.Item
                   label="Trạng thái"
                   name="status"
-                  initialValue="Hoạt động" // Giá trị mặc định
+                  initialValue="Hoạt động"
                 >
                   <Input disabled className="h-[40px]" />
                 </Form.Item>
