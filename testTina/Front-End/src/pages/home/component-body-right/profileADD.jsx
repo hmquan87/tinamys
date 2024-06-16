@@ -42,7 +42,7 @@ const ProfileAdd = ({ setCheckPath }) => {
 
     const fetchData = async () => {
         try {
-            const res = await axios.get('http://localhost:3001/getDataCompany');
+            const res = await axios.get(`http://localhost:3001/getDataCompany?id=${1}`);
             const namecom = res.data.companySpace;
             setCompaneName(namecom.nameWorkSpace)
             setCompany(namecom)

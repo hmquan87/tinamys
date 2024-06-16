@@ -91,6 +91,19 @@ const ListGr = () => {
     const [mockData, setMockData] = useState([]);
     const [targetKeys1, setTargetKeys1] = useState([]);
     const [mockData1, setMockData1] = useState([]);
+
+
+    const FetchDataGroup = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/getDataGr`);
+            const data = res.data;
+            setGroup1Data(data.group)
+            console.log('asdasdasda: ', data.group);
+        } catch (error) {
+
+        }
+    }
+
     useEffect(() => {
         const FetchDataPerson = async () => {
             try {
@@ -102,6 +115,8 @@ const ListGr = () => {
             }
         }
         FetchDataPerson();
+        FetchDataGroup();
+
     }, [])
     console.log('dataGROUP', group1Data);
     const AddPersonToTheGroup = async (target, level, keyIdGroup) => {
@@ -144,25 +159,26 @@ const ListGr = () => {
     console.log('data:', personData);
     const handleAdd1 = async () => {
         if (leverGr === '1') setValueInheritance('');
-        try {
-            const res = await axios.post(`http://localhost:3001/addGrLv1`, {
-                leverGr: leverGr,
-                valueNamegr: valueNamegr,
-                valueRv: valueRv,
-                valueInheritance: valueInheritance
-            });
-            if (res.data && res.data.success && Array.isArray(res.data.group)) {
-                const newGroupData = res.data.group;
-                localStorage.setItem('group1', JSON.stringify(newGroupData));
-                AddPersonToTheGroup(targetKeys, leverGr, newGroupData.length)
-                setOpen(false);
-                setGroup1Data(newGroupData)
 
+        const newData = {
+            leverGr: leverGr,
+            valueNamegr: valueNamegr,
+            valueRv: valueRv,
+            valueInheritance: valueInheritance
+        };
+
+        try {
+            const res = await axios.post('http://localhost:3001/addGrLv1', newData);
+            if (res.data && res.data.success && res.data.group) {
+                const newGroupData = res.data.group;
+                AddPersonToTheGroup(targetKeys, leverGr, newGroupData.length);
+                setOpen(false);
+                FetchDataGroup();
             } else {
                 console.error(res.data);
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error:', error);
         }
     };
     const DeleteKeyIdGroup = async (keyIdGroup, groupKey) => {
@@ -180,8 +196,6 @@ const ListGr = () => {
             if (res.data && res.data.success && Array.isArray(res.data.group)) {
                 const updatedGroupData = res.data.group;
                 DeleteKeyIdGroup(id, leverGr)
-                localStorage.setItem('group1', JSON.stringify(updatedGroupData));
-                setGroup1Data(updatedGroupData);
             } else {
                 console.error(res.data);
             }
@@ -194,9 +208,9 @@ const ListGr = () => {
         try {
             const res = await axios.post(`http://localhost:3001/editDataGr?id=${id}&valueNamegr=${valueNamegr}&valueRv=${valueRv}&memberId=${arrID}`)
             const updatedGroupData = res.data.group1;
-            console.log('test32123123',updatedGroupData);
-            localStorage.setItem('group1', JSON.stringify(updatedGroupData));
-            setGroup1Data(updatedGroupData);
+            console.log('test32123123', updatedGroupData);
+            // localStorage.setItem('group1', JSON.stringify(updatedGroupData));
+            // setGroup1Data(updatedGroupData);
             setOpen2(false);
         } catch (error) {
             console.error(error);
@@ -248,14 +262,14 @@ const ListGr = () => {
 
     console.log(checkID);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const storedData = localStorage.getItem("group1");
-        if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            setGroup1Data(parsedData);
-        }
-    }, []);
+    //     const storedData = localStorage.getItem("group1");
+    //     if (storedData) {
+    //         const parsedData = JSON.parse(storedData);
+    //         setGroup1Data(parsedData);
+    //     }
+    // }, []);
 
     const handleItemClick = (key) => {
         let newTargetKeys = [...targetKeys];

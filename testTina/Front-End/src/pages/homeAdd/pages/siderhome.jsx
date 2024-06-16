@@ -38,11 +38,29 @@ const SiderHome = ({ setCheckPath }) => {
     const toggleMenu = () => {
         setIsMenu(!isMenu);
     }
+
+    const [personData, setPersonData] = useState([])
+
     
+
+    useEffect(() => {
+        const FetchDataPerson = async () => {
+            try {
+                const res = await axios.get(`http://localhost:3001/getDataPerson`);
+                const data = res.data;
+                setPersonData(data.person)
+            } catch (error) {
+
+            }
+        }
+        FetchDataPerson();
+    }, [])
+
     const fetchData = async () => {
         try {
-            const res = await axios.get('http://localhost:3001/getDataCompany');
+            const res = await axios.get(`http://localhost:3001/getDataCompany?id=${1}`);
             const namecom = res.data.companySpace;
+            console.log('nananananana: ', namecom);
             setData(namecom)
             setCompany(namecom.nameWorkSpace)
         } catch (error) {
@@ -67,7 +85,7 @@ const SiderHome = ({ setCheckPath }) => {
                 mode="inline"
                 style={{ flex: '1', height: '100%' }}
                 inlineCollapsed={isMenu}
-                
+
             >
                 <SubMenu
 
@@ -78,20 +96,20 @@ const SiderHome = ({ setCheckPath }) => {
                             {!isMenu &&
                                 <div className='flex items-center pt-[40px] '>
                                     <div className='flex items-center justify-center text-[24px] h-[60px] w-[60px] mx-2 bg-purple-600 text-white '>
-                                        {company.substring(0,2)}
+                                        {company.slice(0, 2)}
                                     </div>
 
                                     <div className='leading-[20px] text-black'>
                                         <div className='text-[18px] '>{data.nameWorkSpace}</div>
-                                        <div className='text-[14px]'>1 nhân sự</div>
+                                        <div className='text-[14px]'>{personData.length} nhân sự</div>
                                     </div>
 
                                 </div>
-                                
+
                             }
                         </div>
                     }
-                    
+
                 >
                     {menuItems.map(item => (
                         <Menu.Item
