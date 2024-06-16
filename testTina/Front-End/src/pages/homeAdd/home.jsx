@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Layout } from 'antd'
 import '../style/css/asset.css'
 import HeaderHomeAdd from './pages/headerHomeAdd';
-import HomePage from './pages/ListPs';
+import HomePage from './pages/homePage';
 import SiderHome from './pages/siderhome';
 import ListGr from './pages/ListGr';
 import ListPs from './pages/ListPs';
@@ -10,7 +10,9 @@ import ListPerson from './pages/ListPerson';
 import News from './pages/news';
 import NewsManagement from './pages/newsManagement';
 import EditCompany from './pages/EditCompany';
-
+import TargetPerson from './pages/targetPerson';
+import TargetCompany from './pages/targetCompany';
+import DailyTask from './pages/DailyTask';
 const { Header, Content } = Layout;
 
 const data = [
@@ -20,14 +22,14 @@ const data = [
     { key: 'n4', component: <News /> },
     { key: 'n5', component: <NewsManagement /> },
     { key: 'n6', component: <EditCompany /> },
-    { key: 'nav1', component: <></> },
-    { key: 'nav2', component: <></> },
-    { key: 'nav3', component: <></> },
-    { key: 'nav4', component: <></> },
+    { key: 'nav1', component: <HomePage/> },
+    { key: 'nav2', component: <TargetPerson /> },
+    { key: 'nav3', component: <TargetCompany/> },
+    { key: 'nav4', component: <DailyTask/> },
 ]
 
 const HomeAdd = () => {
-    const [checkPath, setCheckPath] = useState('')
+    const [checkPath, setCheckPath] = useState('nav1')
     console.log(checkPath);
     return (
         <>

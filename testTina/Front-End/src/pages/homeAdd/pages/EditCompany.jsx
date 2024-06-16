@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, Select, Button, notification } from "antd";
 import { FaCamera } from "react-icons/fa";
-
+import axios from "axios";
 const { Option } = Select;
 
 const EditCompany = ({ companyId = 1 }) => {
@@ -14,47 +14,18 @@ const EditCompany = ({ companyId = 1 }) => {
   const [selectedValue1, setSelectedValue1] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
-  useEffect(() => {
-    fetchData();
-  }, [companyId]);
-
+  const [data, setData] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/getDataCompany?id=${1}`
-      );
-      const result = await response.json();
-
-      console.log("Kết quả từ API:", result); // Kiểm tra dữ liệu từ API
-
-      if (result.success && result.companySpace) {
-        const {
-          nameWorkSpace,
-          phone,
-          website,
-          email,
-          tyeSpace,
-          tyeSizePeople,
-        } = result.companySpace;
-
-        console.log("Dữ liệu công ty:", result.companySpace); // Kiểm tra dữ liệu công ty
-
-        setWorkSpace(nameWorkSpace);
-        setNumber(phone);
-        setWebsite(website);
-        setEmail(email);
-        setSelectedValue1(tyeSpace);
-        setSelectedValue(tyeSizePeople);
-      } else {
-        console.error("Cấu trúc phản hồi không mong đợi:", result);
-      }
+      const res = await axios.get('http://localhost:3001/getDataCompany');
+      setData(res.data.companySpace)
     } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  }, [])
   const handleEdit = async () => {
     const requestData = {
       nameWorkSpace: workSpace,

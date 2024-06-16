@@ -191,7 +191,6 @@ const ListGr = () => {
     };
 
     const handleEdit = async (id, valueNamegr, valueRv, arrID) => {
-
         try {
             const res = await axios.post(`http://localhost:3001/editDataGr?id=${id}&valueNamegr=${valueNamegr}&valueRv=${valueRv}&memberId=${arrID}`)
             const updatedGroupData = res.data.group1;

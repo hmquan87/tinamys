@@ -1,0 +1,206 @@
+import React from "react";
+import { FaCheckCircle } from "react-icons/fa";
+import { BsFilterLeft } from "react-icons/bs";
+import { IoAdd } from "react-icons/io5";
+
+
+
+const Tab4 = () => {
+    return (
+        <div className="flex">
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[400px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Tuần 24 (10/06 - 16/06)
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[300px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Thứ hai
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[300px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Thứ ba
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[300px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Thứ tư
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[300px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Thứ năm
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[300px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Thứ sáu
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[300px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Thứ bảy
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-gray-100 px-4 pt-3 pb-4 w-[300px] mr-4">
+                <div className="flex justify-between items-center rounded-lg ">
+                    <div className="text-[14px] font-bold text-[#575757]">
+                        Chủ nhật
+                    </div>
+                    <div className="flex text-gray-400 text-[20px] items-center">
+                        <div className="mr-2">
+                            <FaCheckCircle />
+                        </div>
+                        <div className="text-[25px]">
+                            <BsFilterLeft />
+                        </div>
+                    </div>
+                </div>
+                <div className='flex items-center ml-[-5px]'>
+                    <div>
+                        <IoAdd />
+                    </div>
+                    <div>
+                        Thêm mục tiêu
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default Tab4;

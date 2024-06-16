@@ -28,9 +28,15 @@
         },
         {
             "username": "admin",
-            "password": "111",
+            "password": "admin",
             "name": "admin",
             "email": "admin@gmail.com"
+        },
+        {
+            "username": "admind",
+            "password": "admin",
+            "name": "a",
+            "email": "a@gmail.com"
         }
     ],
     "contact": [
@@ -48,133 +54,24 @@
         {
             "id": 1,
             "leverGr": "1",
-            "valueNamegr": "23",
-            "valueRv": "",
-            "valueInheritance": "",
-            "memberId": [
-                1
-            ]
-        },
-        {
-            "id": 2,
-            "leverGr": "1",
-            "valueNamegr": "3",
+            "valueNamegr": "test",
             "valueRv": "",
             "valueInheritance": ""
-        },
-        {
-            "id": 3,
-            "leverGr": "2",
-            "valueNamegr": "233",
-            "valueRv": "",
-            "valueInheritance": "23"
-        },
-        {
-            "id": 4,
-            "leverGr": "2",
-            "valueNamegr": "23344",
-            "valueRv": "",
-            "valueInheritance": "3"
         }
     ],
     "position": [
         {
             "id": 1,
-            "name": "1",
-            "group": "quanly",
+            "name": "Chức vụ 1",
+            "group": "test",
             "permissions": [
                 "Quản lý nhóm",
-                "Quản lý chức vụ",
-                "Quản lý nhân sự",
-                "Quản lý tin tức"
-            ],
-            "idPersion": [
-                null
-            ]
-        },
-        {
-            "id": 2,
-            "name": "3",
-            "group": "quanly",
-            "permissions": [
-                "Quản lý nhóm",
-                "Quản lý chức vụ",
-                "Quản lý nhân sự",
-                "Quản lý tin tức"
-            ],
-            "idPersion": [
-                null
-            ]
-        },
-        {
-            "id": 3,
-            "name": "4",
-            "group": "nhanvien",
-            "permissions": [
-                "Quản lý nhóm",
-                "Quản lý chức vụ",
-                "Quản lý nhân sự",
-                "Quản lý tin tức"
-            ],
-            "idPersion": [
-                null
-            ]
-        },
-        {
-            "id": 4,
-            "name": "3",
-            "group": "nhanvien",
-            "permissions": [
-                "Quản lý nhóm",
-                "Quản lý chức vụ",
-                "Quản lý nhân sự",
-                "Quản lý tin tức"
+                "Quản lý chức vụ"
             ],
             "idPersion": [
                 1,
                 2,
                 3
-            ]
-        },
-        {
-            "id": 5,
-            "name": "1",
-            "group": "nhanvien",
-            "permissions": [
-                "Quản lý nhóm",
-                "Quản lý chức vụ",
-                "Quản lý nhân sự",
-                "Quản lý tin tức"
-            ],
-            "idPersion": [
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8,
-                9,
-                10,
-                11,
-                12,
-                13,
-                14,
-                15,
-                16,
-                17,
-                18,
-                19,
-                20,
-                21,
-                22,
-                23,
-                24,
-                25,
-                26,
-                27,
-                28
             ]
         }
     ],
@@ -191,7 +88,6 @@
                 1
             ],
             "keyIdGroup": [
-                2,
                 1
             ]
         },
@@ -217,7 +113,9 @@
             "phone": "0325325325",
             "group": "Nhóm C",
             "position": "Nhân viên",
-            "status": "Hoạt động"
+            "status": "Hoạt động",
+            "groupKey": [],
+            "keyIdGroup": []
         },
         {
             "id": 4,
@@ -226,7 +124,9 @@
             "phone": "0123456987",
             "group": "Nhóm D",
             "position": "Nhân viên",
-            "status": "Hoạt động"
+            "status": "Hoạt động",
+            "groupKey": [],
+            "keyIdGroup": []
         },
         {
             "id": 5,
@@ -235,7 +135,9 @@
             "phone": "0564321987",
             "group": "Nhóm B",
             "position": "Quản lý",
-            "status": "Hoạt động"
+            "status": "Hoạt động",
+            "groupKey": [],
+            "keyIdGroup": []
         },
         {
             "id": 6,
@@ -447,7 +349,7 @@
     ],
     "companySpace": [
         {
-            "nameWorkSpace": "séd",
+            "nameWorkSpace": "Company",
             "tyeSpace": "Tổ chức",
             "phone": "7534735",
             "website": "fsdfsdfsd",
@@ -456,29 +358,29 @@
             "id": 1
         },
         {
-            "nameWorkSpace": "rewrew",
+            "nameWorkSpace": "tesst",
             "tyeSpace": "Công ty",
-            "phone": "0467477",
-            "website": "dfgdfg",
-            "email": "fgdfg",
-            "tyeSizePeople": "max50",
+            "phone": "0987654321",
+            "website": "",
+            "email": "",
+            "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
             "id": 2
         },
         {
-            "nameWorkSpace": "",
+            "nameWorkSpace": "tesst",
             "tyeSpace": "Công ty",
-            "phone": "",
-            "website": "",
-            "email": "",
+            "phone": "0987654321",
+            "website": "2",
+            "email": "2",
             "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
             "id": 3
         },
         {
-            "nameWorkSpace": "6",
+            "nameWorkSpace": "quan",
             "tyeSpace": "Công ty",
-            "phone": "5",
-            "website": "",
-            "email": "",
+            "phone": "0985755188",
+            "website": "1",
+            "email": "1",
             "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
             "id": 4
         }

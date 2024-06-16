@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Input, Modal, Tree, Form, Select, Checkbox, Avatar, Dropdown, Menu, Flex, Tag } from "antd";
+import { Button, Input, Modal, Tree, Form, Select, Checkbox, Avatar, Dropdown, Menu, Tag } from "antd";
 import { SearchOutlined, TableOutlined, PlusOutlined } from '@ant-design/icons'
 import axios from 'axios';
 import '../../style/css/asset.css'
@@ -24,15 +24,13 @@ const items = [
 const ListPs = () => {
     const [open, setOpen] = useState(false);
     const [open1, setOpen1] = useState(false);
-    const [checkedList, setCheckedList] = useState(defaultCheckedList);
+    const [open2, setOpen2] = useState(false);
+    const [checkedList, setCheckedList] = useState([]);
     const [personData, setPersonData] = useState([]);
     const [checkedMembers, setCheckedMembers] = useState([]);
     const [checkAllMembers, setCheckAllMembers] = useState(false);
     const [addForm] = Form.useForm();
     const [idPerson, setIdPerson] = useState([]);
-    const [personInPosition, setPersonInPosition] = useState([]);
-
-
     console.log('idPerson: ', idPerson);
     console.log('checkList: ', checkedList)
 
@@ -142,7 +140,7 @@ const ListPs = () => {
         fetchDataPerson();
         fetchDataPosition();
     }, []);
-    console.log('tesstttttt: ', dataPosition);
+
     useEffect(() => {
         const newTree = dataGroup1.map(item => ({
             title: item.valueNamegr,
@@ -160,13 +158,16 @@ const ListPs = () => {
     }, [dataGroup1, dataGroup2]);
 
     const handleOpenModal = () => {
-        setOpen(true);
+        
+        setCheckedList(defaultCheckedList)
+        setCheckAllMembers(false);
         addForm.setFieldsValue({
             position: '',
             group: '',
             option: checkedList,
             idPerson: idPerson,
         });
+        setOpen(true);
     };
 
     const handleAddPosition = async (value) => {
@@ -181,6 +182,10 @@ const ListPs = () => {
             console.error('Error:', error);
         }
     }
+
+    const handleEditPosition = async (value) => {
+
+    }
     const getRandomColor = () => {
         const letters = '0123456789ABCDEF';
         let color = '#';
@@ -192,6 +197,17 @@ const ListPs = () => {
     const [checkSearch, setCheckSearch] = useState(false);
     const [checkID, setCheckID] = useState();
 
+
+    const handleDelete = async (id) => {
+        try {
+            const res = await axios.post(`http://localhost:3001/deletePosition?id=${id}`)
+            fetchDataPosition();
+        } catch (error) {
+
+        }
+    }
+    
+
     const handleClick = (key, id) => {
         console.log('key: ', key);
         console.log('id: ', id);
@@ -199,34 +215,22 @@ const ListPs = () => {
             setOpen1(true);
             setCheckID(id);
         } else if (key === '1') {
-            // setOpen2(true);
-            // setCheckID(id);
+            setOpen2(true);
+            setCheckID(id);
+            const position = dataPosition.find(position => position.id === id);
+            if (position) {
+                setCheckedList(position.permissions);
+                console.log("trummafia: ", position.permissions);
+            }
         } else if (key === '2') {
-            // handleDelete(id);
-            // setCheckID(id);
+            handleDelete(id);
+            setCheckID(id);
         }
-        // const newTargetArray = [];
-        // const newDataSourceArray = [];
-        // personData.forEach(person => {
-        //     if (Array.isArray(person.keyIdGroup) && person.keyIdGroup.includes(id)) {
-        //         newTargetArray.push(person);
-        //     } else { newDataSourceArray.push(person); };
-        // });
-        // const updatedDataSource = newDataSourceArray.map((person, index) => ({
-        //     key: index + 1,
-        //     title: `${person.name}`,
-        //     description: `description of content${index + 1}`,
-        // }));
-        // const updatedTargetSource = newTargetArray.map((person, index) => ({
-        //     key: index + 1,
-        //     title: `${person.name}`,
-        //     description: `description of content${index + 1}`,
-        // }));
-        // setMockData1(updatedDataSource)
-        // setTargetKeys1(updatedTargetSource)
+
 
     }
 
+    console.log('tesstneww: ', checkedList);
 
 
     return (
@@ -311,7 +315,7 @@ const ListPs = () => {
                                     {data.name}
                                 </div>
                                 <div className='flex'>
-                                    <span className='mr-2'>Quyyền:</span>
+                                    <span className='mr-2'>Quyền:</span>
                                     <div className=''>
                                         {data.permissions.map(item =>
                                             <Tag bordered={false} className='mb-2' color="processing">
@@ -400,9 +404,7 @@ const ListPs = () => {
                                     ]}
                                 >
                                     <Select placeholder="Chọn Chức vụ" className='h-[48px]'>
-                                        {/* <Select.Option value="quanly">Quản lý</Select.Option>
-                                        <Select.Option value="nhanvien">Nhân viên</Select.Option> */}
-                                        {groupData.map(gr => 
+                                        {groupData.map(gr =>
                                             <Select.Option value={gr.valueNamegr}>{gr.valueNamegr}</Select.Option>
                                         )}
                                     </Select>
@@ -610,6 +612,153 @@ const ListPs = () => {
                     </div>)
 
                 )}
+            </Modal>
+
+            {/* Modal EditPosition */}
+            <Modal
+                className="bg-white rounded-lg"
+                title={
+                    <div className=" flex items-center justify-between pb-2 border-b-2 border-[#dcdcdc]" >
+                        <div className="w-[10px]">
+
+                        </div>
+                        <div>
+                            Sửa chức vụ
+                        </div>
+                        <div>
+                            <GrClose onClick={() => setOpen2(false)} />
+                        </div>
+                    </div>
+                }
+                centered
+                open={open2}
+                onOk={() => setOpen2(false)}
+                onCancel={() => setOpen2(false)}
+                width={650}
+
+            >
+                {dataPosition.map(position =>
+                    <>
+                        {position.id === checkID &&
+                            <div className='mt-[-30px] w-[600px]'>
+                                <Form
+                                    form={addForm}
+                                    layout='vertical'
+                                    name='form'
+                                    onFinish={handleEditPosition}
+                                >
+                                    <div className='flex flex-row'>
+                                        <div className='basis-1/2'>
+                                            <Form.Item
+                                                label='Tên chức vụ'
+                                                name="position"
+                                                className='custom-label-class'
+                                                rules={[
+                                                    {
+                                                        required: true
+                                                    }
+                                                ]}
+                                            >
+                                                <Input className='h-[48px]' defaultValue={position.name} />
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Nhóm"
+                                                name="group"
+                                                className='custom-label-class'
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: 'Vui lòng chọn chức vụ!'
+                                                    }
+                                                ]}
+                                            >
+                                                <Select placeholder={position.group} className='h-[48px]' disabled>
+
+                                                </Select>
+                                            </Form.Item>
+                                            <Form.Item
+                                                label="Quyền"
+                                                name='option'
+                                                className='custom-label-class'
+                                            >
+
+                                                <Checkbox.Group>
+                                                    <div className='flex flex-col'>
+                                                        {plainOptions.map((option) => (
+                                                            <Checkbox
+                                                                key={option}
+                                                                value={option}
+                                                                checked={checkedList.includes(option)}
+                                                                onChange={() => onChange(option)}
+                                                            >
+                                                                {option}
+                                                            </Checkbox>
+                                                        ))}
+                                                    </div>
+                                                </Checkbox.Group>
+                                            </Form.Item>
+                                            <Form.Item className='mt-[180px]'>
+                                                <div className='flex'>
+
+                                                    <Button
+                                                        type='primary'
+                                                        className='w-[160px] h-[44px] ml-5 text-[14px]'
+                                                        htmlType='submit'
+                                                    >
+                                                        Lưu chỉnh sửa
+                                                    </Button>
+                                                </div>
+                                            </Form.Item>
+                                        </div>
+                                        <div className='basis-1/2 ml-3'>
+                                            <Form.Item>
+                                                <div className='flex justify-between'>
+                                                    <div className='text-[16px] font-semibold text-gray-700'>
+                                                        Danh sách thành viên ({personData.length})
+                                                    </div>
+                                                    <div className='mb-2'>
+                                                        <Checkbox
+                                                            checked={checkAllMembers}
+                                                            onChange={onCheckAllMembersChange}
+                                                        >
+                                                        </Checkbox>
+                                                    </div>
+                                                </div>
+                                                <div className='flex flex-col max-h-[450px] overflow-y-auto'>
+                                                    {personData.map(item =>
+                                                        <div key={item.id} className='mb-3 flex justify-between items-center'>
+
+                                                            <div className='flex items-center'>
+                                                                <div>
+                                                                    <Avatar
+                                                                        size={42}
+                                                                        style={{ backgroundColor: getRandomColor() }}
+                                                                    >
+                                                                        {item.name.slice(0, 2)}
+                                                                    </Avatar>
+                                                                </div>
+                                                                <div className='ml-2'>{item.name}</div>
+                                                            </div>
+                                                            <div>
+                                                                <Checkbox
+                                                                    checked={checkedMembers.includes(item.id)}
+                                                                    onChange={() => onChangeMember(item.id)}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </Form.Item>
+                                        </div>
+                                    </div>
+
+
+                                </Form>
+                            </div>
+                        }
+                    </>
+                )}
+
             </Modal>
         </div>
     );
