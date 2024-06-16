@@ -14,12 +14,595 @@ app.use(express.json());
 
 const dbFilePath = 'db.json';
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'tinamys',
-});
+// const db = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'tinamys',
+// });
+
+
+// app.post('/addGrLv1', async (req, res) => {
+//     const { leverGr, valueNamegr, valueRv, valueInheritance } = req.body;
+//     try {
+//         const insertSql = `INSERT INTO group1 (leverGr, valueNamegr, valueRv, valueInheritance) VALUES (?, ?, ?, ?)`;
+//         const values = [leverGr, valueNamegr, valueRv, valueInheritance];
+
+//         db.query(insertSql, values, (err, result) => {
+//             if (err) {
+//                 console.error('Error inserting data:', err);
+//                 return res.status(500).json({ error: 'Error adding group level 1' });
+//             }
+//             // Select all data from group1 after insert
+//             const selectSql = 'SELECT * FROM group1 WHERE id = ?';
+//             db.query(selectSql, result.insertId, (selectErr, selectResult) => {
+//                 if (selectErr) {
+//                     console.error('Error fetching inserted data:', selectErr);
+//                     return res.status(500).json({ error: 'Error fetching inserted data' });
+//                 }
+//                 res.json({ success: true, group: selectResult });
+//             });
+//         });
+
+//     } catch (err) {
+//         console.error('Error:', err);
+//         res.status(500).json({ error: 'Error adding group level 1' });
+//     }
+// });
+ 
+
+// app.post('/deleteGrLv1', async (req, res) => {
+//     const { id } = req.body;
+//     try {
+//         const deleteSql = `DELETE FROM group1 WHERE id = ?`;
+//         db.query(deleteSql, [id], (err, result) => {
+//             if (err) {
+//                 console.error('Error deleting data:', err);
+//                 return res.status(500).json({ error: 'Error deleting group level 1' });
+//             }
+
+//             // Select all data from group1 after delete
+//             const selectSql = 'SELECT * FROM group1';
+//             db.query(selectSql, (selectErr, selectResult) => {
+//                 if (selectErr) {
+//                     console.error('Error fetching data after delete:', selectErr);
+//                     return res.status(500).json({ error: 'Error fetching data after delete' });
+//                 }
+//                 res.json({ success: true, group: selectResult });
+//             });
+//         });
+
+//     } catch (err) {
+//         console.error('Error:', err);
+//         res.status(500).json({ error: 'Error deleting group level 1' });
+//     }
+// });
+
+
+
+// app.get('/getDataGr', (req, res) => {
+//     const sql = `SELECT * FROM group1`;
+//     db.query(sql, (err, result) => {
+//         if (err) return res.status(500).json({ error: 'Internal Server Error' });
+//         else res.json({ success: true, group: result });
+//     })
+// });
+
+// app.post('/forgot', (req, res) => {
+//     const { newPass, againPass, username } = req.body;
+
+//     if (newPass !== againPass) {
+//         return res.status(400).json({ error: 'Mật khẩu mới không khớp!' });
+//     }
+
+//     const updateSql = `UPDATE user SET password = ? WHERE username = ?`;
+//     const values = [newPass, username];
+
+//     db.query(updateSql, values, (err, result) => {
+//         if (err) {
+//             console.error('Lỗi khi cập nhật mật khẩu:', err);
+//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi đổi mật khẩu.' });
+//         }
+
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: 'Người dùng không tồn tại.' });
+//         }
+
+//         res.json({ success: true, message: 'Đổi mật khẩu thành công!' });
+//     });
+// });
+
+// app.post('/contact', (req, res) => {
+//     const { name, email, phone, mess } = req.body;
+
+//     const insertSql = `INSERT INTO contacts (name, email, phone, message) VALUES (?, ?, ?, ?)`;
+//     const values = [name, email, phone, mess];
+
+//     db.query(insertSql, values, (err, result) => {
+//         if (err) {
+//             console.error('Lỗi khi thêm tin nhắn liên hệ:', err);
+//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi gửi tin nhắn.' });
+//         }
+
+//         res.json({ success: true, message: 'Tin nhắn đã được gửi thành công!' });
+//     });
+// });
+
+// app.post('/addProfile', (req, res) => {
+//     const { username, numberPhone } = req.body;
+//     const updateSql = `UPDATE user SET number = ? WHERE username = ?`;
+//     const values = [numberPhone, username];
+//     db.query(updateSql, values, (err, result) => {
+//         if (err) {
+//             console.error('Lỗi khi cập nhật thông tin người dùng:', err);
+//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật thông tin người dùng.' });
+//         }
+
+//         if (result.affectedRows === 0) {
+//             return res.status(404).json({ error: 'Người dùng không tồn tại.' });
+//         }
+
+//         res.json({ success: true });
+//     });
+// });
+
+
+// app.get('/user', (req, res) => {
+//     const sql = `SELECT * FROM user`;
+//     db.query(sql, (err, result) => {
+//         if (err) return res.status(500).json({ error: 'Internal Server Error' });
+//         else res.json(result);
+//     })
+// })
+// app.post('/register', (req, res) => {
+//     const { username, password, name, email, again } = req.body;
+//     const insertSql = `INSERT INTO user (username, password, name, email) VALUES (?,?,?,?)`;
+//     const values = [username, password, name, email];
+//     if (again !== password) {
+//         return res.status(400).json({ error: "Mật khẩu không khớp" });
+//     }
+//     const checkUsernameSql = `SELECT COUNT(*) AS count FROM user WHERE username = ?`;
+//     db.query(checkUsernameSql, [username], (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: "Lỗi truy vấn kiểm tra username.", details: err.message });
+//         }
+//         const count = results[0].count;
+//         if (count > 0) {
+//             return res.status(400).json({ error: "Username đã tồn tại" });
+//         }
+//         db.query(insertSql, values, (err, result) => {
+//             if (err) {
+//                 return res.status(500).json({ error: "Lỗi chèn dữ liệu.", details: err.message });
+//             }
+//             const userId = result.insertId;
+//             res.status(200).json({ success: 'Đăng ký thành công', user: { id: userId, username, password, name, email } });
+//         });
+//     });
+// });
+
+
+// app.post('/login', (req, res) => {
+//     const { username, password } = req.body;
+//     if (!username || !password) {
+//         return res.status(400).json({ error: 'Vui lòng cung cấp tên đăng nhập và mật khẩu.' });
+//     }
+
+//     const sql = `SELECT * FROM user WHERE username = ? AND password = ?`;
+//     const values = [username, password];
+
+//     db.query(sql, values, (err, results) => {
+//         if (err) {
+//             return res.status(500).json({ error: 'Lỗi máy chủ nội bộ.' });
+//         }
+
+//         if (results.length === 0) {
+//             return res.status(401).json({ error: 'Tên đăng nhập hoặc mật khẩu không chính xác.' });
+//         }
+
+//         const user = results[0];
+//         res.status(200).json({ success: 'Đăng nhập thành công', user: { id: user.id, username: user.username, name: user.name } });
+//     });
+// });
+
+
+
+
+// app.post('/editDataGr', async (req, res) => {
+//     const { id, valueNamegr, valueRv, memberId } = req.query;
+
+//     let memberIdArray = [];
+//     if (Array.isArray(memberId)) {
+//         memberIdArray = memberId.map(member => parseInt(member));
+//     } else {
+//         memberIdArray.push(parseInt(memberId));
+//     }
+
+//     console.log('memberIdArray', memberIdArray);
+
+//     try {
+//         const memberIdJson = JSON.stringify(memberIdArray);
+
+//         const updateSql = `UPDATE group1 SET valueNamegr = ?, valueRv = ?, memberId = JSON_ARRAY_APPEND(memberId, '$', ?) WHERE id = ?`;
+
+//         db.query(updateSql, [valueNamegr, valueRv, memberIdJson, id], (err, result) => {
+//             if (err) {
+//                 console.error('Error updating data:', err);
+//                 return res.status(500).json({ error: 'Error updating group data' });
+//             }
+
+//             if (result.affectedRows === 0) {
+//                 return res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
+//             }
+
+//             res.json({ success: true, message: 'Group data updated successfully' });
+//         });
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+//     }
+// });
+
+
+// app.post('/deletePosition', (req, res) => {
+//     const { id } = req.query;
+//     const idInt = parseInt(id);
+
+//     // Truy vấn SQL DELETE
+//     const query = `DELETE FROM position WHERE id = ?`;
+
+//     // Thực hiện truy vấn SQL
+//     db.query(query, [idInt], (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi xóa vị trí:', error);
+//             res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa vị trí' });
+//         } else {
+//             if (results.affectedRows === 0) {
+//                 res.status(404).json({ error: 'Không tìm thấy vị trí để xóa' });
+//             } else {
+//                 res.json({ success: true, message: 'Đã xóa vị trí thành công' });
+//             }
+//         }
+//     });
+// });
+
+// app.post('/addPerson', (req, res) => {
+//     const { email, name, phone, group, position, status } = req.body;
+
+//     // Truy vấn SQL INSERT
+//     const query = `INSERT INTO person (email, name, phone, group, position, status) VALUES (?, ?, ?, ?, ?, ?)`;
+//     const values = [email, name, phone, group, position, status];
+
+//     // Thực hiện truy vấn SQL
+//     db.query(query, values, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi thêm người dùng:', error);
+//             res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng' });
+//         } else {
+//             res.json({ success: true, message: 'Đã thêm người dùng thành công' });
+//         }
+//     });
+// });
+
+
+// app.post('/addPerson1', (req, res) => {
+//     const { email, name, phone, status } = req.query;
+
+//     // Truy vấn SQL INSERT
+//     const query = `INSERT INTO person (email, name, phone, status) VALUES (?, ?, ?, ?)`;
+//     const values = [email, name, phone, status];
+
+//     // Thực hiện truy vấn SQL
+//     db.query(query, values, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi thêm người dùng:', error);
+//             res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng' });
+//         } else {
+//             res.json({ success: true, message: 'Đã thêm người dùng thành công' });
+//         }
+//     });
+// });
+
+// app.put('/updatePerson/:id', (req, res) => {
+//     const { id } = req.params;
+//     const { email, name, phone, group, position, status } = req.body;
+
+//     // Truy vấn SQL UPDATE
+//     const query = `UPDATE person SET email = ?, name = ?, phone = ?, group = ?, position = ?, status = ? WHERE id = ?`;
+//     const values = [email, name, phone, group, position, status, id];
+
+//     // Thực hiện truy vấn SQL
+//     db.query(query, values, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi cập nhật người dùng:', error);
+//             res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật người dùng' });
+//         } else {
+//             if (results.affectedRows === 0) {
+//                 res.status(404).json({ error: 'Không tìm thấy người dùng để cập nhật' });
+//             } else {
+//                 res.json({ success: true, message: 'Đã cập nhật người dùng thành công' });
+//             }
+//         }
+//     });
+// });
+
+
+// app.delete('/deletePerson/:id', (req, res) => {
+//     const { id } = req.params;
+
+//     // Truy vấn SQL DELETE
+//     const query = `DELETE FROM person WHERE id = ?`;
+
+//     // Thực hiện truy vấn SQL
+//     db.query(query, [id], (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi xóa người dùng:', error);
+//             res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa người dùng' });
+//         } else {
+//             if (results.affectedRows === 0) {
+//                 res.status(404).json({ error: 'Không tìm thấy người dùng để xóa' });
+//             } else {
+//                 res.json({ success: true, message: 'Đã xóa người dùng thành công' });
+//             }
+//         }
+//     });
+// });
+// app.get("/getDataPerson", async (req, res) => {
+//     try {
+//         const sqlQuery = "SELECT * FROM person";
+
+//         db.query(sqlQuery, (error, results) => {
+//             if (error) {
+//                 console.error("Error getting data person:", error);
+//                 res.status(500).json({ error: "Error getting data person" });
+//             } else {
+//                 res.json({ success: true, person: results });
+//             }
+//         });
+
+//     } catch (error) {
+//         console.error("Error getting data person:", error);
+//         res.status(500).json({ error: "Error getting data person" });
+//     }
+// });
+
+
+// app.get('/searchPerson', (req, res) => {
+//     const { query } = req.query;
+
+//     // Truy vấn SQL SELECT
+//     const sqlQuery = `SELECT * FROM person WHERE LOWER(CONCAT(email, name, phone, group, position, status)) LIKE ?`;
+//     const searchValue = `%${query.toLowerCase()}%`;
+
+//     // Thực hiện truy vấn SQL
+//     db.query(sqlQuery, [searchValue], (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi tìm kiếm người dùng:', error);
+//             res.status(500).json({ error: 'Đã xảy ra lỗi khi tìm kiếm người dùng' });
+//         } else {
+//             res.json({ success: true, person: results });
+//         }
+//     });
+// });
+
+
+// const responseError = (res, msg) => {
+//     res.status(400).json({
+//         status: 400,
+//         error: msg
+//     });
+// };
+
+// // API endpoint company-space/add
+// app.post('/company-space/add', (req, res) => {
+//     // Kiểm tra dữ liệu từ request body
+//     if (!req.body.nameWorkSpace || req.body.nameWorkSpace === '') {
+//         return responseError(res, 'Tên không gian làm việc không được để trống');
+//     }
+//     if (!req.body.tyeSpace || req.body.tyeSpace === '') {
+//         return responseError(res, 'Loại không gian làm việc không được để trống');
+//     }
+//     if (!req.body.phone || req.body.phone === '') {
+//         return responseError(res, 'Số điện thoại không được để trống');
+//     }
+
+//     // Trích xuất dữ liệu từ request body
+//     const { nameWorkSpace, tyeSpace, phone, website, email, tyeSizePeople } = req.body;
+
+//     // Truy vấn SQL INSERT
+//     const sqlQuery = 'INSERT INTO companyspace (nameWorkSpace, tyeSpace, phone, website, email, tyeSizePeople) VALUES (?, ?, ?, ?, ?, ?)';
+
+//     // Thực hiện truy vấn SQL
+//     db.query(sqlQuery, [nameWorkSpace, tyeSpace, phone, website, email, tyeSizePeople], (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi thêm không gian làm việc:', error);
+//             res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm không gian làm việc' });
+//         } else {
+//             const insertedCompany = {
+//                 id: results.insertId,
+//                 nameWorkSpace,
+//                 tyeSpace,
+//                 phone,
+//                 website,
+//                 email,
+//                 tyeSizePeople
+//             };
+//             res.json({ success: true, companySpace: insertedCompany });
+//         }
+//     });
+// });
+
+// app.get('/getDataCompany', (req, res) => {
+//     const {id} = req.query;
+
+//     // Truy vấn SQL SELECT
+//     const sqlQuery = 'SELECT * FROM companyspace WHERE id = ?';
+
+//     // Thực hiện truy vấn SQL
+//     db.query(sqlQuery, [id], (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi lấy dữ liệu companySpace:', error);
+//             res.status(500).json({ error: 'Error getting data companySpace' });
+//         } else {
+//             if (results.length > 0) {
+//                 res.json({ success: true, companySpace: results[0] });
+//             } else {
+//                 res.status(404).json({ error: 'Company not found' });
+//             }
+//         }
+//     });
+// });
+
+// // API endpoint company-space/edit
+// app.put('/company-space/edit', (req, res) => {
+//     const id = req.query.id;
+
+//     // Truy vấn SQL UPDATE
+//     const sqlQuery = 'UPDATE companySpace SET ? WHERE id = ?';
+
+//     // Thực hiện truy vấn SQL
+//     db.query(sqlQuery, [req.body, id], (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi chỉnh sửa companySpace:', error);
+//             res.status(500).json({ error: 'Error editing companySpace' });
+//         } else {
+//             if (results.affectedRows > 0) {
+//                 res.json({ success: true, message: 'Company updated successfully' });
+//             } else {
+//                 res.status(404).json({ error: 'Company not found' });
+//             }
+//         }
+//     });
+// });
+// app.post('/logout', async (req, res) => {
+//     return res.status(200).json({ message: 'Logout successful' });
+// });
+// app.post('/logoutCompany', async (req, res) => {
+//     try {
+//         // Thực hiện các truy vấn SQL DELETE để xóa dữ liệu từ các bảng
+//         await deleteDataFromTable('companySpace');
+//         await resetAutoIncrement('companySpace');
+
+//         await deleteDataFromTable('group1');
+//         await resetAutoIncrement('group1');
+
+//         await deleteDataFromTable('position');
+//         await resetAutoIncrement('position');
+
+//         await deleteDataFromTable('person');
+//         await resetAutoIncrement('person');
+
+//         // await deleteDataFromTable('news');
+//         // await resetAutoIncrement('news');
+
+//         await deleteDataFromTable('contact');
+//         await resetAutoIncrement('contact');
+
+//         res.json({ success: true, message: 'Đã logout và xóa dữ liệu company' });
+//     } catch (error) {
+//         console.error('Error:', error);
+//         res.status(500).json({ error: 'Đã xảy ra lỗi khi logout' });
+//     }
+// });
+
+// async function resetAutoIncrement(tableName) {
+//     const sqlQuery = `ALTER TABLE ${tableName} AUTO_INCREMENT = 1`;
+//     await db.query(sqlQuery);
+// }
+
+// async function deleteDataFromTable(tableName) {
+//     const sqlQuery = `DELETE FROM ${tableName}`;
+//     await db.query(sqlQuery);
+// }
+
+// // API endpoint /newsCategories
+// app.get('/newsCategories', (req, res) => {
+//     const sqlQuery = 'SELECT * FROM newsCategories';
+//     db.query(sqlQuery, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi lấy danh sách newsCategories:', error);
+//             res.status(500).json({ error: 'Lỗi khi lấy dữ liệu newsCategories' });
+//         } else {
+//             res.json({ success: true, newsCategories: results });
+//         }
+//     });
+// });
+
+// app.post('/newsCategories', (req, res) => {
+//     const newCategory = req.body;
+//     const sqlQuery = 'INSERT INTO newsCategories SET ?';
+//     db.query(sqlQuery, newCategory, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi thêm newsCategories:', error);
+//             res.status(500).json({ error: 'Lỗi khi thêm dữ liệu newsCategories' });
+//         } else {
+//             newCategory.id = results.insertId;
+//             res.status(201).json(newCategory);
+//         }
+//     });
+// });
+
+// app.put('/newsCategories/:id', (req, res) => {
+//     const { id } = req.params;
+//     const updatedCategory = req.body;
+//     const sqlQuery = 'UPDATE newsCategories SET ? WHERE id = ?';
+//     db.query(sqlQuery, [updatedCategory, id], (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi cập nhật newsCategories:', error);
+//             res.status(500).json({ error: 'Lỗi khi cập nhật dữ liệu newsCategories' });
+//         } else {
+//             if (results.affectedRows === 0) {
+//                 res.status(404).json({ message: 'Không tìm thấy danh mục để cập nhật' });
+//             } else {
+//                 updatedCategory.id = parseInt(id);
+//                 res.json(updatedCategory);
+//             }
+//         }
+//     });
+// });
+
+// app.delete('/newsCategories/:id', (req, res) => {
+//     const { id } = req.params;
+//     const sqlQuery = 'DELETE FROM newsCategories WHERE id = ?';
+//     db.query(sqlQuery, id, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi xóa newsCategories:', error);
+//             res.status(500).json({ error: 'Lỗi khi xóa dữ liệu newsCategories' });
+//         } else {
+//             if (results.affectedRows === 0) {
+//                 res.status(404).json({ message: 'Không tìm thấy danh mục để xóa' });
+//             } else {
+//                 res.json({ success: true, message: 'Đã xóa danh mục thành công' });
+//             }
+//         }
+//     });
+// });
+
+// // API endpoint /tintuc
+// app.post('/tintuc', (req, res) => {
+//     const newsData = req.body;
+//     const sqlQuery = 'INSERT INTO tintuc SET ?';
+//     db.query(sqlQuery, newsData, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi thêm tin tức:', error);
+//             res.status(500).json({ error: 'Lỗi khi thêm tin tức' });
+//         } else {
+//             res.status(201).json({ success: true, message: 'Tin tức đã được đăng thành công.' });
+//         }
+//     });
+// });
+
+// app.get('/tintuc', (req, res) => {
+//     const sqlQuery = 'SELECT * FROM tintuc';
+//     db.query(sqlQuery, (error, results) => {
+//         if (error) {
+//             console.error('Lỗi khi lấy danh sách tin tức:', error);
+//             res.status(500).json({ error: 'Lỗi khi lấy dữ liệu tin tức' });
+//         } else {
+//             res.json({ success: true, tintuc: results });
+//         }
+//     });
+// });
+
 
 
 app.get('/user', (req, res) => {
