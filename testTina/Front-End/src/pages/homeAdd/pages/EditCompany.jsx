@@ -4,9 +4,9 @@ import { FaCamera } from "react-icons/fa";
 import axios from "axios";
 const { Option } = Select;
 
-const EditCompany = ({ companyId = 1 }) => {
+const EditCompany = () => {
   // Sử dụng id mặc định là 1
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [workSpace, setWorkSpace] = useState("");
   const [number, setNumber] = useState("");
   const [website, setWebsite] = useState("");

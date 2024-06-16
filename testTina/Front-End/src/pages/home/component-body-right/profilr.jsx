@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import '../../style/css/profile.css'
 import avt from '../../style/img/avtDefault.png'
 import { useNavigate } from "react-router-dom";
-import { Modal } from 'antd'
+import { Avatar, Modal } from 'antd'
 import Review from "./review";
 import Forgot from "./forgot";
 import { notification } from 'antd';
@@ -67,7 +67,12 @@ const Profile = () => {
             <div className="profile-component-full">
                 <div className="title-profile-component">
                     <div className="img-profile">
-                        <img src={avt} alt="" height={60} />
+
+                        <Avatar
+                            style={{ background: '#9333EA' }} size={50}
+                        >
+                            {name}
+                        </Avatar>
                     </div>
                     <div className="text-profile">
                         <p id="name">{name}</p>

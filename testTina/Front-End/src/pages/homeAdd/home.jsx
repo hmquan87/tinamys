@@ -35,7 +35,7 @@ const HomeAdd = () => {
         <>
             <Layout className="relative bg-transparent min-h-[100%] min-w-[100%]">
                 <Header className='relative bg-inherit flex items-center justify-between border-b border-zinc-300'>
-                    <HeaderHomeAdd />
+                    <HeaderHomeAdd setCheckPath={setCheckPath} />
                 </Header>
 
                 <Layout className='min-h-[100%] min-w-[100%]'>

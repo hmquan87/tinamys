@@ -4,14 +4,14 @@ import baner from '../../style/img/bannerModalAddNew.svg'
 import { FaCamera } from "react-icons/fa";
 import { Select, Input, Button } from 'antd';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
+import axios from "axios";
 const { Option } = Select;
 
 const AddTask = ({ handleCancel }) => {
     const [workSpace, setWorkSpace] = useState('');
     const [focusWorkSpace, setFocusWorkSpace] = useState(false);
     const [outsiteWordSpace, setOutsiteWorkSpace] = useState(false);
-    const [number, setNumber] = useState('');
+    const [numberr, setNumber] = useState('');
     const [focusNumber, setFocusNumber] = useState(false);
     const [outsideNumber, setOutsiteNumber] = useState(false);
     const [website, setWebsite] = useState('');
@@ -20,7 +20,7 @@ const AddTask = ({ handleCancel }) => {
     const [selectedValue, setSelectedValue] = useState("Nhỏ hơn 50 nhân sự");
     const [selectedValue1, setSelectedValue1] = useState("Công ty");
     const [scale, setScale] = useState(true);
-    const [email, setEmail] = useState('');
+    const [emaill, setEmail] = useState('');
     const [focusEmail, setFocusEmail] = useState(false);
     const [outsideEmail, setOutsiteEmail] = useState(false);
 
@@ -49,7 +49,7 @@ const AddTask = ({ handleCancel }) => {
     }
 
     const handleOutsiteNumber = () => {
-        if (!number) {
+        if (!numberr) {
             setOutsiteNumber(true);
         }
     }
@@ -77,7 +77,7 @@ const AddTask = ({ handleCancel }) => {
     }
 
     const handleOutsiteEmail = () => {
-        if(!email) {
+        if(!emaill) {
             setOutsiteEmail(true);
         }
     } 
@@ -96,15 +96,20 @@ const AddTask = ({ handleCancel }) => {
         } else setScale(true);
     };
 
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const { name, email, number } = userData;
+    console.log('dataaaaa: ', name);
+    console.log('dataaaaa: ', email);
+    console.log('dataaaaa: ', number);
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const newWorkspace = {
             nameWorkSpace: workSpace,
             tyeSpace: selectedValue1,
-            phone: number,
+            phone: numberr,
             website: website,
-            email: email,
+            email: emaill,
             tyeSizePeople: selectedValue
         };
 
@@ -126,6 +131,11 @@ const AddTask = ({ handleCancel }) => {
             }
         } catch (error) {
             console.error('Error:', error);
+        }
+        try {
+            const res = await axios.post(`http://localhost:3001/addPerson1?email=${email}&name=${name}&phone=${number === null || number === undefined || number === '' ? '' : number}&status=${'Hoạt động'}`);
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -198,16 +208,16 @@ const AddTask = ({ handleCancel }) => {
                                         </div>
                                         <div className="input-custom">
                                             <Input
-                                                className={`ant-input ${!number && outsideNumber ? `${focusNumber ? 'err-ant-input' : ''}` : ''}`}
+                                                className={`ant-input ${!numberr && outsideNumber ? `${focusNumber ? 'err-ant-input' : ''}` : ''}`}
                                                 onFocus={handleFocusNumber}
                                                 onBlur={() => { handleBlurNumber(); handleOutsiteNumber() }}
-                                                value={number}
+                                                value={numberr}
                                                 onChange={(e) => setNumber(e.target.value)}
                                                 type="text"
                                                 placeholder="Số điện thoại"
                                             />
                                         </div>
-                                        <div className={`focus-error ${!number && outsideNumber ? 'show' : ''}`}>
+                                        <div className={`focus-error ${!numberr && outsideNumber ? 'show' : ''}`}>
                                             Số điện thoại không được để trống
                                         </div>
                                     </div>
@@ -235,10 +245,10 @@ const AddTask = ({ handleCancel }) => {
                                         </div>
                                         <div className="input-custom">
                                             <Input 
-                                                className={`ant-input ${!email && outsideEmail ? `${focusEmail ? 'err-ant-input' : ''}` : ''}`}
+                                                className={`ant-input ${!emaill && outsideEmail ? `${focusEmail ? 'err-ant-input' : ''}` : ''}`}
                                                 onFocus={handleFocusEmail}
                                                 onBlur={() => { handleBlurEmail(); handleOutsiteEmail() }}
-                                                value={email}
+                                                value={emaill}
                                                 onChange={(e) => setEmail(e.target.value)}
                                                 type="text" 
                                                 placeholder="Email" 
@@ -272,12 +282,25 @@ const AddTask = ({ handleCancel }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="row mt30">
-                                <div className="group-btn col-6 btn-task">
-                                    <Button onClick={handleCancel}>Hủy</Button>
+                            <div className="flex justify-between mt-3">
+                                <div className="">
+                                    <Button
+                                        className="h-[42px] w-[90px] text-[16px] font-medium"
+                                        type="primary"
+                                        danger
+                                        onClick={handleCancel}
+                                    >
+                                        Hủy
+                                    </Button>
                                 </div>
-                                <div className="group-btn col-6 btn-task">
-                                    <Button type="primary" htmlType="submit">Tạo không gian làm việc</Button>
+                                <div className="">
+                                    <Button
+                                        className="h-[42px] text-[16px] font-medium"
+                                        type="primary"
+                                        htmlType="submit"
+                                    >
+                                        Tạo không gian làm việc
+                                    </Button>
                                 </div>
                             </div>
                         </form>
