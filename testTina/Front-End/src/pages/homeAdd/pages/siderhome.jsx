@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import iconHome from '../../style/img/iconHome.svg';
 import iconMuctieu from '../../style/img/iconMuctieu.svg';
 import iconMuctieu1 from '../../style/img/iconMuctieu1.svg';
@@ -11,6 +11,7 @@ import i5 from '../../style/img/i5.svg';
 import i6 from '../../style/img/i6.svg';
 import { Menu } from 'antd'
 import { RightOutlined, LeftOutlined } from '@ant-design/icons'
+import axios from "axios";
 
 const { SubMenu } = Menu;
 
@@ -30,13 +31,28 @@ const menuItems1 = [
 ];
 
 const SiderHome = ({ setCheckPath }) => {
-    const [check, setCheck] = useState('');
+    const [check, setCheck] = useState('nav1');
     const [isMenu, setIsMenu] = useState(false)
+    const [company, setCompany] = useState('')
     const toggleMenu = () => {
         setIsMenu(!isMenu);
     }
-    // console.log(isMenu);
-    // console.log(check);
+    const [data, setData] = useState([]);
+    const fetchData = async () => {
+        try {
+            const res = await axios.get('http://localhost:3001/getDataCompany');
+            const namecom = res.data.companySpace;
+            setData(namecom)
+            setCompany(namecom.nameWorkSpace)
+        } catch (error) {
+
+        }
+    }
+    useEffect(() => {
+        fetchData();
+
+    }, [])
+    console.log(data);
     return (
         <div className="">
             <button
@@ -50,9 +66,10 @@ const SiderHome = ({ setCheckPath }) => {
                 mode="inline"
                 style={{ flex: '1', height: '100%' }}
                 inlineCollapsed={isMenu}
+                
             >
-                <SubMenu        
-                    
+                <SubMenu
+
                     key="sub1"
                     className="border-b border-zinc-300"
                     title={
@@ -60,12 +77,12 @@ const SiderHome = ({ setCheckPath }) => {
                             {!isMenu ?
                                 <div className='flex items-center pt-[40px] '>
                                     <div className='flex items-center justify-center text-[24px] h-[60px] w-[60px] mx-2 bg-purple-600 text-white '>
-                                        QH
+                                        {company.substring(0,2)}
                                     </div>
 
                                     <div className='leading-[20px] text-black'>
-                                        <div className='text-[18px] '>name</div>
-                                        <div className='text-[14px]'>nhân sự</div>
+                                        <div className='text-[18px] '>{data.nameWorkSpace}</div>
+                                        <div className='text-[14px]'>1 nhân sự</div>
                                     </div>
 
                                 </div>
@@ -76,12 +93,13 @@ const SiderHome = ({ setCheckPath }) => {
                             }
                         </div>
                     }
+                    
                 >
                     {menuItems.map(item => (
                         <Menu.Item
                             key={item.key}
                             onClick={() => { setCheck(item.key); setCheckPath(`${item.key}`) }}
-                            
+
                             className={check === item.key ? 'border-r-2 border-blue-600' : ''}
                         >
                             <div className={`flex gap-2 items-center `}>
@@ -97,11 +115,11 @@ const SiderHome = ({ setCheckPath }) => {
 
                         </Menu.Item>
                     ))}
-                </SubMenu>                
+                </SubMenu>
                 {menuItems1.map(item => (
                     <Menu.Item
                         key={item.key}
-                        onClick={(e) => { setCheck(e.key); setCheckPath(`${item.key}`)}}
+                        onClick={(e) => { setCheck(e.key); setCheckPath(`${item.key}`) }}
                         className={check === `${item.key}` ? 'border-r-2 border-blue-600' : ''}>
                         <div className={`flex gap-2 items-center`}>
                             <div className='items-center'>
@@ -116,7 +134,7 @@ const SiderHome = ({ setCheckPath }) => {
                     </Menu.Item>
                 ))}
             </Menu>
-            
+
         </div>
     )
 }

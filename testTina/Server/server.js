@@ -24,181 +24,90 @@ const db = mysql.createConnection({
 });
 
 
-
-
 app.get('/user', (req, res) => {
-    const sql = `SELECT * FROM user`;
-    db.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ error: 'Internal Server Error' });
-        else res.json(result);
-    })
-})
-app.post('/register', (req, res) => {
-    const { username, password, name, email, again } = req.body;
-    const insertSql = `INSERT INTO user (username, password, name, email) VALUES (?,?,?,?)`;
-    const values = [username, password, name, email];
-    if (again !== password) {
-        return res.status(400).json({ error: "Mật khẩu không khớp" });
-    }
-    const checkUsernameSql = `SELECT COUNT(*) AS count FROM user WHERE username = ?`;
-    db.query(checkUsernameSql, [username], (err, results) => {
+    fs.readFile(dbFilePath, 'utf8', (err, data) => {
         if (err) {
-            return res.status(500).json({ error: "Lỗi truy vấn kiểm tra username.", details: err.message });
+            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy thông tin.' });
         }
-        const count = results[0].count;
-        if (count > 0) {
-            return res.status(400).json({ error: "Username đã tồn tại" });
-        }
-        db.query(insertSql, values, (err, result) => {
-            if (err) {
-                return res.status(500).json({ error: "Lỗi chèn dữ liệu.", details: err.message });
-            }
-            const userId = result.insertId; 
-            res.status(200).json({ success: 'Đăng ký thành công', user: { id: userId, username,password, name, email } });
-        });
+        const currentData = JSON.parse(data);
+        res.json({ success: true, user: currentData.user });
     });
 });
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    if (!username || !password) {
-        return res.status(400).json({ error: 'Vui lòng cung cấp tên đăng nhập và mật khẩu.' });
-    }
-
-    const sql = `SELECT * FROM user WHERE username = ? AND password = ?`;
-    const values = [username, password];
-
-    db.query(sql, values, (err, results) => {
+    fs.readFile(dbFilePath, 'utf8', (err, data) => {
         if (err) {
-            return res.status(500).json({ error: 'Lỗi máy chủ nội bộ.' });
+            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi đọc thông tin đăng nhập.' });
+        }
+        try {
+            const users = JSON.parse(data).user;
+            const user = users.find(user => user.username === username && user.password === password);
+            if (user) {
+                res.json({ success: true, message: 'Đăng nhập thành công', user });
+
+            } else {
+                res.status(401).json({ success: false, message: 'Thông tin đăng nhập không chính xác' });
+            }
+        } catch (error) {
+            console.error('Đã xảy ra lỗi khi phân tích dữ liệu từ db.json:', error);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi xác thực người dùng.' });
+        }
+    });
+});
+
+app.post('/register', (req, res) => {
+    const { username, password, name, email, again } = req.body;
+
+    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
         }
 
-        if (results.length === 0) {
-            return res.status(401).json({ error: 'Tên đăng nhập hoặc mật khẩu không chính xác.' });
-        }
+        const currentData = JSON.parse(data);
 
-        const user = results[0];
-        res.status(200).json({ success: 'Đăng nhập thành công', user: { id: user.id, username: user.username, name: user.name } });
+        const check = currentData.user.find(user => user.username === username);
+        if (!check) {
+            if (again === password) {
+                currentData.user.push({ username, password, name, email });
+                fs.writeFile(dbFilePath, JSON.stringify(currentData), (err) => {
+                    if (err) {
+                        console.error('Đã xảy ra lỗi khi ghi file db.json:', err);
+                        return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
+                    }
+                    res.json({ success: true });
+                });
+            } else return res.status(500).json({ error: 'Mật khẩu không khớp!' });
+        } else return res.status(500).json({ error: 'Tài khoản đã tồn tại!' });
     });
 });
 
 
-// app.get('/user', (req, res) => {
-//     fs.readFile(dbFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//             console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
-//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy thông tin.' });
-//         }
-//         const currentData = JSON.parse(data);
-//         res.json({ success: true, user: currentData.user });
-//     });
-// });
-// app.post('/login', (req, res) => {
-//     const { username, password } = req.body;
-//     fs.readFile(dbFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//             console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
-//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi đọc thông tin đăng nhập.' });
-//         }
-//         try {
-//             const users = JSON.parse(data).user;
-//             const user = users.find(user => user.username === username && user.password === password);
-//             if (user) {
-//                 res.json({ success: true, message: 'Đăng nhập thành công', user });
-
-//             } else {
-//                 res.status(401).json({ success: false, message: 'Thông tin đăng nhập không chính xác' });
-//             }
-//         } catch (error) {
-//             console.error('Đã xảy ra lỗi khi phân tích dữ liệu từ db.json:', error);
-//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi xác thực người dùng.' });
-//         }
-//     });
-// });
-
-// app.post('/register', (req, res) => {
-//     const { username, password, name, email, again } = req.body;
-
-//     fs.readFile(dbFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//             console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
-//             return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
-//         }
-
-//         const currentData = JSON.parse(data);
-
-//         const check = currentData.user.find(user => user.username === username);
-//         if (!check) {
-//             if (again === password) {
-//                 currentData.user.push({ username, password, name, email });
-//                 fs.writeFile(dbFilePath, JSON.stringify(currentData), (err) => {
-//                     if (err) {
-//                         console.error('Đã xảy ra lỗi khi ghi file db.json:', err);
-//                         return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
-//                     }
-//                     res.json({ success: true });
-//                 });
-//             } else return res.status(500).json({ error: 'Mật khẩu không khớp!' });
-//         } else return res.status(500).json({ error: 'Tài khoản đã tồn tại!' });
-//     });
-// });
 
 app.post('/addProfile', (req, res) => {
     const { username, numberPhone } = req.body;
-    const updateSql = `UPDATE user SET number = ? WHERE username = ?`;
-    const values = [numberPhone, username];
-    db.query(updateSql, values, (err, result) => {
+    fs.readFile(dbFilePath, 'utf8', (err, data) => {
         if (err) {
-            console.error('Lỗi khi cập nhật thông tin người dùng:', err);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật thông tin người dùng.' });
+            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm người dùng.' });
         }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Người dùng không tồn tại.' });
-        }
-
-        res.json({ success: true });
+        const currentData = JSON.parse(data);
+        const userIndex = currentData.user.findIndex(user => user.username === username);
+        currentData.user[userIndex].number = numberPhone;
+        fs.writeFile(dbFilePath, JSON.stringify(currentData), (err) => {
+            if (err) {
+                console.error('Đã xảy ra lỗi khi ghi file db.json:', err);
+                return res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm số.' });
+            }
+            res.json({ success: true });
+        });
     });
 });
 
-app.post('/forgot', (req, res) => {
-    const { newPass, againPass, username } = req.body;
 
-    if (newPass !== againPass) {
-        return res.status(400).json({ error: 'Mật khẩu mới không khớp!' });
-    }
 
-    const updateSql = `UPDATE user SET password = ? WHERE username = ?`;
-    const values = [newPass, username];
-
-    db.query(updateSql, values, (err, result) => {
-        if (err) {
-            console.error('Lỗi khi cập nhật mật khẩu:', err);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi đổi mật khẩu.' });
-        }
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Người dùng không tồn tại.' });
-        }
-
-        res.json({ success: true, message: 'Đổi mật khẩu thành công!' });
-    });
-});
-
-app.post('/contact', (req, res) => {
-    const { name, email, phone, mess } = req.body;
-
-    const insertSql = `INSERT INTO contacts (name, email, phone, message) VALUES (?, ?, ?, ?)`;
-    const values = [name, email, phone, mess];
-
-    db.query(insertSql, values, (err, result) => {
-        if (err) {
-            console.error('Lỗi khi thêm tin nhắn liên hệ:', err);
-            return res.status(500).json({ error: 'Đã xảy ra lỗi khi gửi tin nhắn.' });
-        }
-
-        res.json({ success: true, message: 'Tin nhắn đã được gửi thành công!' });
-    });
-});
 
 
 app.post('/logout', async (req, res) => {
@@ -206,14 +115,17 @@ app.post('/logout', async (req, res) => {
 });
 
 
+app.get('/getDataGr', async (req, res) => {
+    try {
+        const data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const parsedData = JSON.parse(data);
+        res.json({ success: true, group: parsedData.group1 });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi lấy dữ liệu' });
+    }
+})
 
-app.get('/getDataGr', (req, res) => {
-    const sql = `SELECT * FROM group`;
-    db.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ error: 'Internal Server Error' });
-        else res.json(result);
-    })
-});
 
 
 app.post('/addGrLv1', async (req, res) => {
@@ -245,8 +157,40 @@ app.post('/deleteGrLv1', async (req, res) => {
         res.status(500).json({ error: 'Error deleting contact' });
     }
 });
+app.post('/deletePosition', async (req, res) => {
+    const { id } = req.query;
+    const idInt = parseInt(id);
 
-
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const dataDelete = JSON.parse(data);
+        dataDelete.position = dataDelete.position.filter(item => item.id !== idInt);
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataDelete));
+        res.json({ success: true, position: dataDelete.position });
+    } catch (err) {
+        console.error('Error:', err);
+        res.status(500).json({ error: 'Error deleting position' });
+    }
+});
+app.post('/contact', (req, res) => {
+    const { name, email, phone, mess } = req.body;
+    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error', err);
+            return res.status(500).json({ error: "Error add mess" });
+        }
+        const dataContact = JSON.parse(data);
+        dataContact.contact.push({ name, email, phone, mess });
+        fs.writeFile(dbFilePath, JSON.stringify(dataContact), (err) => {
+            if (err) {
+                console.error('Error writefile', err);
+                return res.status(500).json({ error: 'Error add write contact' })
+            }
+            toast.success("Sent!")
+            res.json({ success: true });
+        })
+    })
+});
 
 app.post('/editDataGr', async (req, res) => {
     const { id, valueNamegr, valueRv, memberId } = req.query;
@@ -276,6 +220,41 @@ app.post('/editDataGr', async (req, res) => {
 
             await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
             res.json({ success: true, group1: grData.group1 });
+        } else {
+            res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi cập nhật dữ liệu' });
+    }
+});
+app.post('/editDataPosition', async (req, res) => {
+    const { id, name, idPersion } = req.query;
+
+    let memberIdArray = [];
+    if (Array.isArray(idPersion)) {
+        memberIdArray = idPersion.map(member => parseInt(member));
+    } else {
+        memberIdArray.push(parseInt(idPersion));
+    }
+
+    console.log('memberIdArray', memberIdArray);
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        const grData = JSON.parse(data);
+        const idToFind = typeof grData.position[0].id === 'number' ? Number(id) : id;
+        const index = grData.position.findIndex(position => position.id === idToFind);
+
+        if (index !== -1) {
+            grData.position[index].name = name;
+
+            if (!Array.isArray(grData.position[index].idPersion)) {
+                grData.position[index].idPersion = [];
+            }
+            grData.position[index].idPersion.push(...memberIdArray);
+
+            await fs.promises.writeFile(dbFilePath, JSON.stringify(grData, null, 2));
+            res.json({ success: true, position: grData.position });
         } else {
             res.status(404).json({ error: 'Không tìm thấy phần tử để cập nhật' });
         }
@@ -330,7 +309,6 @@ app.get('/getPosition', async (req, res) => {
 
 app.post('/addPosition', async (req, res) => {
     const { name, group, permissions, idPersion } = req.query;
-    console.log('Permissions:', permissions);
 
     try {
         let data = await fs.promises.readFile(dbFilePath, 'utf8');
@@ -338,7 +316,12 @@ app.post('/addPosition', async (req, res) => {
         const maxId = Math.max(...dataPosition.position.map(item => item.id));
         const id = maxId >= 0 ? maxId + 1 : 1;
         const permissionsArray = permissions.split(',');
-        const idPersionArray = idPersion.split(',').map(id => parseInt(id.trim(), 10));
+
+        let idPersionArray = [];
+        if (idPersion) {
+            idPersionArray = idPersion.split(',').map(id => parseInt(id.trim(), 10)).filter(id => !isNaN(id));
+        }
+
         const newPosition = {
             id,
             name,
@@ -355,7 +338,9 @@ app.post('/addPosition', async (req, res) => {
         res.status(500).json({ error: 'Đã xảy ra lỗi khi thêm chức vụ' });
     }
 })
+app.get('/getDataGroup', async (req, res) => {
 
+})
 
 app.post('/deleteKeyIdGroup', async (req, res) => {
     const { groupKey, keyIdGroup, idPerson } = req.query;
@@ -364,9 +349,13 @@ app.post('/deleteKeyIdGroup', async (req, res) => {
         const dataUserss = JSON.parse(data);
         const keyIdGroupToDelete = Number(keyIdGroup);
         const groupKeyToDelete = Number(groupKey);
+        const idsToDelete = idPerson ? idPerson.split(',').map(id => Number(id)) : [];
+
         dataUserss.person.forEach(person => {
-            if (Array.isArray(person.keyIdGroup)) {
-                person.keyIdGroup = person.keyIdGroup.filter(group => group !== keyIdGroupToDelete);
+            if (idsToDelete.includes(Number(person.id))) {
+                if (Array.isArray(person.keyIdGroup)) {
+                    person.keyIdGroup = person.keyIdGroup.filter(group => group !== keyIdGroupToDelete);
+                }
                 if (Array.isArray(person.groupKey)) {
                     person.groupKey = person.groupKey.filter(group => group !== groupKeyToDelete);
                 }
@@ -381,6 +370,7 @@ app.post('/deleteKeyIdGroup', async (req, res) => {
         res.status(500).json({ error: 'Đã xảy ra lỗi khi xóa thuộc tính keyIdGroup' });
     }
 });
+
 
 
 app.get('/grDatatest', async (req, res) => {
@@ -615,7 +605,120 @@ app.put('/company-space/edit', async (req, res) => {
 });
 
 
+app.post('/logoutCompany', async (req, res) => {
+    try {
+        let data = await fs.promises.readFile(dbFilePath, 'utf8');
+        let jsonData = JSON.parse(data);
+        jsonData.company = [];
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(jsonData, null, 2));
+        res.json({ success: true, message: 'Đã logout và xóa dữ liệu company' });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi logout' });
+    }
+})
+
+
+
+// danh muc
+const readData = () => {
+    const data = fs.readFileSync(path.join(__dirname, './db.json'));
+    return JSON.parse(data);
+};
+
+const writeData = (data) => {
+    fs.writeFileSync(path.join(__dirname, './db.json'), JSON.stringify(data, null, 2));
+};
+
+app.get('/newsCategories', (req, res) => {
+    const data = readData();
+    res.json(data.newsCategories);
+});
+
+app.post('/newsCategories', (req, res) => {
+    const newCategory = req.body;
+    const data = readData();
+    newCategory.id = data.newsCategories.length ? data.newsCategories[data.newsCategories.length - 1].id + 1 : 1;
+    data.newsCategories.push(newCategory);
+    writeData(data);
+    res.status(201).json(newCategory);
+});
+
+app.put('/newsCategories/:id', (req, res) => {
+    const { id } = req.params;
+    const updatedCategory = req.body;
+    const data = readData();
+    const index = data.newsCategories.findIndex(category => category.id == id);
+    if (index !== -1) {
+        data.newsCategories[index] = { ...data.newsCategories[index], ...updatedCategory };
+        writeData(data);
+        res.json(data.newsCategories[index]);
+    } else {
+        res.status(404).json({ message: 'Category not found' });
+    }
+});
+
+app.delete('/newsCategories/:id', (req, res) => {
+    const { id } = req.params;
+    const data = readData();
+    const index = data.newsCategories.findIndex(category => category.id == id);
+    if (index !== -1) {
+        const deletedCategory = data.newsCategories.splice(index, 1);
+        writeData(data);
+        res.json(deletedCategory);
+    } else {
+        res.status(404).json({ message: 'Category not found' });
+    }
+});
+
+//thêm tin tức
+app.post('/tintuc', (req, res) => {
+    const newsData = req.body;
+
+    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi đọc dữ liệu tin tức.' });
+        }
+        try {
+            const dbData = JSON.parse(data);
+            dbData.news.push(newsData);
+
+            fs.writeFile(dbFilePath, JSON.stringify(dbData, null, 2), 'utf8', (writeErr) => {
+                if (writeErr) {
+                    console.error('Đã xảy ra lỗi khi ghi vào file db.json:', writeErr);
+                    return res.status(500).json({ error: 'Đã xảy ra lỗi khi lưu dữ liệu tin tức.' });
+                }
+                res.status(201).json({ success: true, message: 'Tin tức đã được đăng thành công.' });
+            });
+        } catch (error) {
+            console.error('Đã xảy ra lỗi khi phân tích file db.json:', error);
+            res.status(500).json({ error: 'Đã xảy ra lỗi khi xử lý dữ liệu tin tức.' });
+        }
+    });
+});
+
+app.get('/tintuc', (req, res) => {
+    fs.readFile(dbFilePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading db.json:', err);
+            return res.status(500).json({ error: 'Error fetching news data' });
+        }
+        try {
+            const parsedData = JSON.parse(data);
+            res.json({ success: true, news: parsedData.tintuc });
+        } catch (error) {
+            console.error('Error parsing db.json:', error);
+            res.status(500).json({ error: 'Error processing news data' });
+        }
+    });
+});
+
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+

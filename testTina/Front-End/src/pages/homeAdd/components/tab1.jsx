@@ -3,9 +3,12 @@ import ReactQuill from 'react-quill';
 import { Button, Form, Input, Switch, ConfigProvider, Select, Upload, message } from 'antd';
 import 'react-quill/dist/quill.snow.css';
 import { InboxOutlined } from '@ant-design/icons';
-import imgUpload from '../../style/img/GallerySend.png'
+import imgUpload from '../../style/img/GallerySend.png';
+import axios from 'axios';
 
 const { Dragger } = Upload;
+const { TextArea } = Input;
+
 const props = {
     name: 'file',
     multiple: true,
@@ -26,16 +29,33 @@ const props = {
     },
 };
 
-const { TextArea } = Input;
-const onFinish = (values) => {
-    console.log('Success:', values);
-};
-const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-};
-
 const Tab1 = () => {
     const [content, setContent] = useState('');
+    const [checkBtn, setCheckBtn] = useState(false);
+    const [form] = Form.useForm();
+    const [coverImageList, setCoverImageList] = useState([]);
+    const [highlightImageList, setHighlightImageList] = useState([]);
+
+    const handlePostNews = async () => {
+        try {
+            const formValues = form.getFieldsValue();
+            const response = await axios.post('http://localhost:3001/tintuc', {
+                title: formValues.title,
+                description: formValues.description,
+                content: content,
+                highlight: formValues.highlight,
+                category: formValues.category,
+                coverImage: coverImageList.map(file => file.originFileObj),
+                highlightImage: highlightImageList.map(file => file.originFileObj)
+            });
+            if (response.status === 201) {
+                message.success('Đăng tin tức thành công!');
+            }
+        } catch (error) {
+            message.error('Đăng tin tức thất bại!');
+            console.error('Error posting news:', error);
+        }
+    };
 
     const modules = {
         toolbar: [
@@ -55,30 +75,28 @@ const Tab1 = () => {
         'list', 'bullet', 'indent',
         'link', 'image', 'video'
     ];
-    const [value, setValue] = useState('');
-    const [checkBtn, setCheckBtn] = useState(false)
+
+    const handleCoverImageChange = ({ fileList }) => setCoverImageList(fileList);
+    const handleHighlightImageChange = ({ fileList }) => setHighlightImageList(fileList);
+
     return (
         <div className='absolute w-[100%]'>
             <div className='relative flex flex-row'>
                 <div className='basis-2/3'>
                     <Form
+                        form={form}
                         name="form-left"
                         layout="vertical"
-                    // onFinish={onFinish}
-                    // onFinishFailed={onFinishFailed}
-                    // autoComplete="on"
                     >
                         <Form.Item
-                            name="news"
+                            name="title"
                             label="Tiêu đề tin tức"
-                            rules={
-                                [
-                                    {
-                                        required: true,
-                                        message: 'Tiêu đề không được để trống'
-                                    }
-                                ]
-                            }
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Tiêu đề không được để trống'
+                                }
+                            ]}
                         >
                             <Input
                                 placeholder='Tin tức tiêu đề'
@@ -87,12 +105,10 @@ const Tab1 = () => {
                         </Form.Item>
 
                         <Form.Item
-                            name='news-editor'
-                            label="Mô tả ngắng"
+                            name='description'
+                            label="Mô tả ngắn"
                         >
                             <TextArea
-                                value={value}
-                                onChange={(e) => setValue(e.target.value)}
                                 placeholder="Mô tả ngắn"
                                 autoSize={{ minRows: 2, maxRows: 4 }}
                             />
@@ -127,14 +143,8 @@ const Tab1 = () => {
                             name='form-right'
                         >
                             <Form.Item
-                                name='switch'
+                                name='highlight'
                                 label="Đánh dấu tin nổi bật"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: ''
-                                    }
-                                ]}
                             >
                                 <ConfigProvider
                                     theme={{ token: { colorPrimary: '#FF6838' } }}
@@ -160,7 +170,7 @@ const Tab1 = () => {
                                 />
                             </Form.Item>
                             <Form.Item
-                                name='img1'
+                                name='coverImage'
                                 label='Ảnh bìa tin tức'
                                 rules={[
                                     {
@@ -170,8 +180,9 @@ const Tab1 = () => {
                                 ]}
                             >
                                 <Dragger
-
                                     {...props}
+                                    fileList={coverImageList}
+                                    onChange={handleCoverImageChange}
                                 >
                                     <div>
                                         <div className='flex justify-center'>
@@ -184,16 +195,16 @@ const Tab1 = () => {
                                             Kích thước khuyến nghị: 250 x 250 pixels
                                         </div>
                                     </div>
-
                                 </Dragger>
                             </Form.Item>
                             <Form.Item
-                                name='img1'
+                                name='highlightImage'
                                 label='Ảnh nổi bật'
                             >
                                 <Dragger
-
                                     {...props}
+                                    fileList={highlightImageList}
+                                    onChange={handleHighlightImageChange}
                                 >
                                     <div>
                                         <div className='flex justify-center'>
@@ -206,7 +217,6 @@ const Tab1 = () => {
                                             Kích thước khuyến nghị: 800 x 100 pixels
                                         </div>
                                     </div>
-
                                 </Dragger>
                             </Form.Item>
                         </Form>
@@ -215,12 +225,10 @@ const Tab1 = () => {
                         <Button
                             type='primary'
                             className={`w-[100%] ${checkBtn ? null : 'opacity-50'}`}
-                            
+                            onClick={handlePostNews}
                         >
                             Đăng tin tức
                         </Button>
-
-
                     </div>
                 </div>
             </div>
