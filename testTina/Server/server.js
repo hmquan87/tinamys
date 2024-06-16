@@ -4,8 +4,6 @@ const cors = require('cors');
 const fs = require('fs');
 const mysql = require('mysql');
 const { toast } = require('react-toastify');
-const { error } = require('console');
-
 
 const app = express();
 const port = 3001;
@@ -443,6 +441,21 @@ app.post("/addPerson", async (req, res) => {
         res.status(500).json({ error: "Error adding person" });
     }
 });
+app.post("/addPerson1", async (req, res) => {
+    const { email, name, phone, status } = req.query;
+    try {
+        let data = await fs.promises.readFile(dbFilePath, "utf8");
+        const dataAdd = JSON.parse(data);
+        const maxId = Math.max(...dataAdd.person.map((item) => item.id));
+        const id = maxId >= 0 ? maxId + 1 : 1;
+        dataAdd.person.push({ id, email, name, phone, status });
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAdd));
+        res.json({ success: true, person: dataAdd.person });
+    } catch (err) {
+        console.error("Error adding person:", err);
+        res.status(500).json({ error: "Error adding person" });
+    }
+});
 //update
 app.put("/updatePerson/:id", async (req, res) => {
     const { id } = req.params;
@@ -483,7 +496,7 @@ app.delete("/deletePerson/:id", async (req, res) => {
         }
 
         dataUpdate.person.splice(personIndex, 1);
-        dataUpdate.person.splice(personIndex, 1); // Xóa người dùng khỏi danh sách
+        dataUpdate.person.splice(personIndex, 1);
         await fs.promises.writeFile(dbFilePath, JSON.stringify(dataUpdate));
         res.json({ success: true, person: dataUpdate.person });
     } catch (err) {
@@ -510,9 +523,6 @@ app.get("/searchPerson", async (req, res) => {
 });
 
 
-
-
-
 const responseError = (res, msg) => {
     res.status(404).json({
         sttatus: 400,
@@ -520,7 +530,6 @@ const responseError = (res, msg) => {
     });
 }
 app.post('/company-space/add', async (req, res) => {
-    console.log('123123', req.body.nameWorkSpace);
     if (req.body) {
         if (!req.body.nameWorkSpace || req.body.nameWorkSpace === '') {
             responseError(res, 'Không gian làm việc không được để trống')
@@ -530,15 +539,6 @@ app.post('/company-space/add', async (req, res) => {
         }
         else if (!req.body.phone || req.body.phone === '') {
             responseError(res, 'Phone không được để trống')
-        }
-        else if (!req.body.website || req.body.website === '') {
-            responseError(res, 'Website không được để trống')
-        }
-        else if (!req.body.email || req.body.email === '') {
-            responseError(res, 'Email không được để trống')
-        }
-        else if (!req.body.tyeSizePeople || req.body.tyeSizePeople === '') {
-            responseError(res, 'Số lượng không được để trống')
         }
     }
 
@@ -609,7 +609,12 @@ app.post('/logoutCompany', async (req, res) => {
     try {
         let data = await fs.promises.readFile(dbFilePath, 'utf8');
         let jsonData = JSON.parse(data);
-        jsonData.company = [];
+        jsonData.companySpace = [];
+        jsonData.group1 = [];
+        jsonData.position = [];
+        jsonData.person = [];
+        jsonData.news = [];
+        jsonData.contact = [];
         await fs.promises.writeFile(dbFilePath, JSON.stringify(jsonData, null, 2));
         res.json({ success: true, message: 'Đã logout và xóa dữ liệu company' });
     } catch (error) {
@@ -713,8 +718,6 @@ app.get('/tintuc', (req, res) => {
         }
     });
 });
-
-
 
 
 app.listen(port, () => {

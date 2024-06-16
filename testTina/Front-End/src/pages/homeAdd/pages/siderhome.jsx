@@ -21,7 +21,7 @@ const menuItems = [
     { key: 'n3', icon: i3, text: 'Danh sách nhân sự' },
     { key: 'n4', icon: i4, text: 'Tin tức' },
     { key: 'n5', icon: i5, text: 'Quản lý tin tức' },
-    { key: 'n6', icon: i6, text: 'Chỉnh sửa công ty' }
+    // { key: 'n6', icon: i6, text: 'Chỉnh sửa công ty' }
 ];
 const menuItems1 = [
     { key: 'nav1', icon: iconHome, text: 'Trang chủ' },
@@ -34,10 +34,11 @@ const SiderHome = ({ setCheckPath }) => {
     const [check, setCheck] = useState('nav1');
     const [isMenu, setIsMenu] = useState(false)
     const [company, setCompany] = useState('')
+    const [data, setData] = useState([]);
     const toggleMenu = () => {
         setIsMenu(!isMenu);
     }
-    const [data, setData] = useState([]);
+    
     const fetchData = async () => {
         try {
             const res = await axios.get('http://localhost:3001/getDataCompany');
@@ -74,7 +75,7 @@ const SiderHome = ({ setCheckPath }) => {
                     className="border-b border-zinc-300"
                     title={
                         <div className="">
-                            {!isMenu ?
+                            {!isMenu &&
                                 <div className='flex items-center pt-[40px] '>
                                     <div className='flex items-center justify-center text-[24px] h-[60px] w-[60px] mx-2 bg-purple-600 text-white '>
                                         {company.substring(0,2)}
@@ -86,10 +87,7 @@ const SiderHome = ({ setCheckPath }) => {
                                     </div>
 
                                 </div>
-                                :
-                                <div className='flex items-center justify-center text-[24px] h-[60px] w-[60px] mx-2 bg-purple-600 text-white '>
-                                    QH
-                                </div>
+                                
                             }
                         </div>
                     }
