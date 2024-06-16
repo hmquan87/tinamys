@@ -92,7 +92,6 @@ const ListGr = () => {
     const [targetKeys1, setTargetKeys1] = useState([]);
     const [mockData1, setMockData1] = useState([]);
 
-
     const FetchDataGroup = async () => {
         try {
             const res = await axios.get(`http://localhost:3001/getDataGr`);
@@ -172,8 +171,9 @@ const ListGr = () => {
             if (res.data && res.data.success && res.data.group) {
                 const newGroupData = res.data.group;
                 AddPersonToTheGroup(targetKeys, leverGr, newGroupData.length);
+                localStorage.setItem('group1', JSON.stringify(newGroupData));
                 setOpen(false);
-                FetchDataGroup();
+                setGroup1Data(newGroupData)
             } else {
                 console.error(res.data);
             }
@@ -196,6 +196,8 @@ const ListGr = () => {
             if (res.data && res.data.success && Array.isArray(res.data.group)) {
                 const updatedGroupData = res.data.group;
                 DeleteKeyIdGroup(id, leverGr)
+                localStorage.setItem('group1', JSON.stringify(updatedGroupData));
+                setGroup1Data(updatedGroupData);
             } else {
                 console.error(res.data);
             }
@@ -209,8 +211,8 @@ const ListGr = () => {
             const res = await axios.post(`http://localhost:3001/editDataGr?id=${id}&valueNamegr=${valueNamegr}&valueRv=${valueRv}&memberId=${arrID}`)
             const updatedGroupData = res.data.group1;
             console.log('test32123123', updatedGroupData);
-            // localStorage.setItem('group1', JSON.stringify(updatedGroupData));
-            // setGroup1Data(updatedGroupData);
+            localStorage.setItem('group1', JSON.stringify(updatedGroupData));
+            setGroup1Data(updatedGroupData);
             setOpen2(false);
         } catch (error) {
             console.error(error);
@@ -525,7 +527,7 @@ const ListGr = () => {
                 </Layout>
 
             </div>
-            {/* model1 */}
+            {/* modal1 */}
             <Modal
                 className="bg-white rounded-lg"
                 title={

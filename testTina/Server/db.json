@@ -1,9 +1,41 @@
 {
-  "user": [],
+  "user": [
+    {
+      "username": "admin",
+      "password": "admin",
+      "name": "hung",
+      "email": "hung@gmail.com"
+    }
+  ],
   "contact": [],
   "group1": [],
   "position": [],
-  "person": [],
-  "companySpace": [],
+  "person": [
+    {
+      "id": 1,
+      "email": "hung@gmail.com",
+      "name": "hung",
+      "phone": "",
+      "status": "Hoạt động"
+    },
+    {
+      "id": 2,
+      "email": "hung@gmail.com",
+      "name": "hung",
+      "phone": "",
+      "status": "Hoạt động"
+    }
+  ],
+  "companySpace": [
+    {
+      "nameWorkSpace": "123",
+      "tyeSpace": "Công ty",
+      "phone": "123",
+      "website": "123",
+      "email": "123",
+      "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
+      "id": 1
+    }
+  ],
   "news": []
 }

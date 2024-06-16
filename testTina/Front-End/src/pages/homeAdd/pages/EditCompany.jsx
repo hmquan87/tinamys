@@ -1,229 +1,196 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Select, Button, notification } from "antd";
+import { Form, Input, Select, Button, notification, Row, Col } from "antd";
 import { FaCamera } from "react-icons/fa";
 import axios from "axios";
+
 const { Option } = Select;
 
 const EditCompany = () => {
-  // Sử dụng id mặc định là 1
-  const [loading, setLoading] = useState(false);
-  const [workSpace, setWorkSpace] = useState("");
-  const [number, setNumber] = useState("");
-  const [website, setWebsite] = useState("");
-  const [email, setEmail] = useState("");
-  const [selectedValue1, setSelectedValue1] = useState("");
-  const [selectedValue, setSelectedValue] = useState("");
+  const [detailData, setDetailData] = useState(null); // Dữ liệu chi tiết nhân sự
+  const [detailForm] = Form.useForm(); // Form dùng để chỉnh sửa thông tin
+  const [isEditMode, setIsEditMode] = useState(false); // Trạng thái chỉnh sửa
 
-  const [data, setData] = useState([]);
-  const fetchData = async () => {
-    try {
-      const res = await axios.get('http://localhost:3001/getDataCompany');
-      setData(res.data.companySpace)
-    } catch (error) {
-
-    }
-  }
+  // Hook useEffect được sử dụng để gửi yêu cầu HTTP khi component được render
   useEffect(() => {
-    fetchData();
-  }, [])
-  const handleEdit = async () => {
-    const requestData = {
-      nameWorkSpace: workSpace,
-      tyeSpace: selectedValue1,
-      phone: number,
-      website: website,
-      email: email,
-      tyeSizePeople: selectedValue,
-    };
+    fetchDataFromServer();
+  }, []);
 
+  // Hàm gửi yêu cầu HTTP để lấy dữ liệu từ máy chủ
+  const fetchDataFromServer = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get("http://localhost:3001/getDataCompany");
+      if (response.data.companySpace && response.data.companySpace.length > 0) {
+        setDetailData(response.data.companySpace[0]);
+        detailForm.setFieldsValue(response.data.companySpace[0]);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
+    }
+  };
+
+  // Hàm xử lý khi nhấn nút "Sửa"
+  const handleEdit = () => {
+    setIsEditMode(true);
+  };
+
+  // Hàm kiểm tra dữ liệu
+  const validateFields = (values) => {
+    const requiredFields = [
+      "nameWorkSpace",
+      "tyeSpace",
+      "phone",
+      "website",
+      "email",
+      "tyeSizePeople",
+    ];
+
+    for (const field of requiredFields) {
+      if (!values[field]) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  // Hàm xử lý khi nhấn nút "Xác nhận" sau khi sửa thông tin nhân sự
+  const handleUpdate = async () => {
+    try {
+      const values = await detailForm.validateFields();
+
+      // Kiểm tra các trường dữ liệu
+      if (!validateFields(values)) {
+        notification.error({
+          message: "Lỗi",
+          description:
+            "Lưu thông tin công ty không thành công, vui lòng điền đầy đủ thông tin.",
+        });
+        return;
+      }
+
+      const res = await axios.put(
         `http://localhost:3001/company-space/edit?id=${1}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        }
+        values
       );
 
-      const result = await response.json();
-      if (response.ok) {
-        console.log("Thành công:", result);
+      if (res.data && res.data.success) {
+        fetchDataFromServer();
+        setIsEditMode(false);
         notification.success({
           message: "Thành công",
           description: "Đã lưu thông tin thành công",
         });
       } else {
-        console.error("Lỗi:", result);
+        notification.error({
+          message: "Lỗi",
+          description: "Lưu thông tin công ty không thành công",
+        });
+        console.error(res.data);
       }
     } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu:", error);
+      notification.error({
+        message: "Lỗi",
+        description: "Lưu thông tin công ty không thành công",
+      });
+      console.error("Lỗi khi cập nhật thông tin công ty:", error);
     }
   };
 
-  if (loading) {
-    return <div>Đang tải...</div>;
-  }
-
   return (
-    <div className="w-[100%] flex justify-center">
-      <div className="w-[45%] mt-8 absolute">
-        <div className="relative text-[24px] font-semibold mb-3">
-          Thông tin công ty
-        </div>
-        <div className="relative border rounded-xl">
-          <div className="relative py-6 px-5">
-            <div className="relative flex justify-center">
-              <div className="relative w-[180px] h-[180px] bg-purple-700 rounded-full mt-4">
-                <div className="absolute bottom-1 right-2 text-[20px] bg-slate-200 p-2 rounded-full">
-                  <FaCamera />
-                </div>
-              </div>
-            </div>
-            <div className="flex flex-row pt-20">
-              <div className="basis-1/2 mr-4">
-                <Form layout="vertical" name="form-left">
-                  <Form.Item
-                    name="company"
-                    label="Tên không gian làm việc"
-                    className="custom-label-class"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng nhập tên không gian làm việc",
-                      },
-                    ]}
-                  >
-                    <Input
-                      className={`h-[42px]`}
-                      type="text"
-                      placeholder="Tên không gian làm việc"
-                      value={workSpace}
-                      onChange={(e) => setWorkSpace(e.target.value)}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name="workSpace"
-                    label="Loại hình không gian làm việc"
-                    className="custom-label-class"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng chọn loại hình không gian làm việc",
-                      },
-                    ]}
-                  >
-                    <Select
-                      showSearch
-                      className="h-[42px]"
-                      value={selectedValue1}
-                      onChange={setSelectedValue1}
-                      filterOption={(input, option) =>
-                        option.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                    >
-                      <Option value="Công ty">Công ty</Option>
-                      <Option value="Tổ chức">Tổ chức</Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="phone"
-                    label="Số điện thoại"
-                    className="custom-label-class"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng nhập số điện thoại",
-                      },
-                    ]}
-                  >
-                    <Input
-                      className={`h-[42px]`}
-                      value={number}
-                      onChange={(e) => setNumber(e.target.value)}
-                      type="text"
-                      placeholder="Số điện thoại"
-                    />
-                  </Form.Item>
-                </Form>
-              </div>
-              <div className="basis-1/2">
-                <Form name="form-right" layout="vertical">
-                  <Form.Item
-                    className="custom-label-class"
-                    name="website"
-                    label="Website"
-                  >
-                    <Input
-                      className="h-[42px]"
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                      type="text"
-                      placeholder="Website"
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    className="custom-label-class"
-                    name="email"
-                    label="Email"
-                  >
-                    <Input
-                      className="h-[42px]"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      type="text"
-                      placeholder="Email"
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    name="person"
-                    label="Số lượng nhân sự"
-                    className="custom-label-class"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Vui lòng chọn quy mô nhân sự",
-                      },
-                    ]}
-                  >
-                    <Select
-                      showSearch
-                      className="h-[42px]"
-                      value={selectedValue}
-                      onChange={setSelectedValue}
-                      allowClear
-                      placeholder="Quy mô nhân sự"
-                      filterOption={(input, option) =>
-                        option.children
-                          .toLowerCase()
-                          .indexOf(input.toLowerCase()) >= 0
-                      }
-                    >
-                      <Option value="max50">Nhỏ hơn 50 nhân sự</Option>
-                      <Option value="min50max100">Từ 50 đến 100 nhân sự</Option>
-                      <Option value="min100">Lớn hơn 100 nhân sự</Option>
-                      <Option value="Trên 200 nhân sự">Trên 200 nhân sự</Option>
-                    </Select>
-                  </Form.Item>
-                </Form>
-              </div>
-            </div>
-            <div className="relative flex justify-end">
-              <Button
-                type="primary"
-                className="text-[14px]"
-                onClick={handleEdit}
-              >
-                Lưu thông tin
-              </Button>
-            </div>
+    <div style={{ padding: "20px" }}>
+      <h2 style={{ textAlign: "center", fontSize: "24px" }}>
+        {isEditMode ? "Chỉnh sửa thông tin công ty" : "Thông tin công ty"}
+      </h2>
+      <div className="relative flex justify-center">
+        <div className="relative w-[180px] h-[180px] bg-purple-700 rounded-full mt-8">
+          <div className="absolute bottom-1 right-2 text-[20px] bg-slate-200 p-2 rounded-full">
+            <FaCamera />
           </div>
         </div>
       </div>
+      {detailData ? (
+        <div className="flex justify-center pt-20 mt-8 gap-8">
+          <Form
+            form={detailForm}
+            layout="vertical"
+            initialValues={detailData}
+            onFinish={handleUpdate}
+            className="w-[80%]"
+          >
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item label="Tên công ty" name="nameWorkSpace">
+                  <Input readOnly={!isEditMode} className="h-[40px]" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Website" name="website">
+                  <Input readOnly={!isEditMode} className="h-[40px]" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Loại hình không gian làm việc"
+                  name="tyeSpace"
+                >
+                  <Select disabled={!isEditMode} className="h-[40px]">
+                    <Option value="Công ty">Công ty</Option>
+                    <Option value="Tổ chức">Tổ chức</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Email" name="email">
+                  <Input readOnly={!isEditMode} className="h-[40px]" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Số điện thoại" name="phone">
+                  <Input readOnly={!isEditMode} className="h-[40px]" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Số lượng nhân sự" name="tyeSizePeople">
+                  <Select disabled={!isEditMode} className="h-[40px]">
+                    <Option value="Nhỏ hơn 50 nhân sự">
+                      Nhỏ hơn 50 nhân sự
+                    </Option>
+                    <Option value="Từ 50 đến 100 nhân sự">
+                      Từ 50 đến 100 nhân sự
+                    </Option>
+                    <Option value="Lớn hơn 100 nhân sự">
+                      Lớn hơn 100 nhân sự
+                    </Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            <div className="flex justify-end">
+              {isEditMode ? (
+                <>
+                  <Button
+                    key="cancel"
+                    onClick={() => setIsEditMode(false)}
+                    className="mr-4"
+                  >
+                    Hủy
+                  </Button>
+                  <Button key="ok" type="primary" htmlType="submit">
+                    Xác nhận
+                  </Button>
+                </>
+              ) : (
+                <Button type="primary" onClick={handleEdit}>
+                  Sửa nhân sự
+                </Button>
+              )}
+            </div>
+          </Form>
+        </div>
+      ) : (
+        <p style={{ textAlign: "center", marginTop: "20px" }}>
+          Không có dữ liệu công ty để hiển thị.
+        </p>
+      )}
     </div>
   );
 };

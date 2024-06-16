@@ -49,7 +49,7 @@ const dbFilePath = 'db.json';
 //         res.status(500).json({ error: 'Error adding group level 1' });
 //     }
 // });
- 
+
 
 // app.post('/deleteGrLv1', async (req, res) => {
 //     const { id } = req.body;
@@ -1112,7 +1112,10 @@ const responseError = (res, msg) => {
         error: msg
     });
 }
+
+
 app.post('/company-space/add', async (req, res) => {
+    console.log('123123', req.body.nameWorkSpace);
     if (req.body) {
         if (!req.body.nameWorkSpace || req.body.nameWorkSpace === '') {
             responseError(res, 'Không gian làm việc không được để trống')
@@ -1122,6 +1125,15 @@ app.post('/company-space/add', async (req, res) => {
         }
         else if (!req.body.phone || req.body.phone === '') {
             responseError(res, 'Phone không được để trống')
+        }
+        else if (!req.body.website || req.body.website === '') {
+            responseError(res, 'Website không được để trống')
+        }
+        else if (!req.body.email || req.body.email === '') {
+            responseError(res, 'Email không được để trống')
+        }
+        else if (!req.body.tyeSizePeople || req.body.tyeSizePeople === '') {
+            responseError(res, 'Số lượng không được để trống')
         }
     }
 
@@ -1144,7 +1156,6 @@ app.post('/company-space/add', async (req, res) => {
         res.status(500).json({ error: 'Error adding contact' });
     }
 });
-
 app.get("/getDataCompany", async (req, res) => {
     const id = req.query.id;
     try {
@@ -1163,29 +1174,32 @@ app.get("/getDataCompany", async (req, res) => {
     }
 });
 
-
 app.put('/company-space/edit', async (req, res) => {
-    const id = req.query.id;
-    console.log('id là gì', id);
-
+    const id = req.query.id
+    console.log('id la gi', id)
     try {
+
         let data = await fs.promises.readFile(dbFilePath, 'utf8');
-        const dataAddCompany = JSON.parse(data);
-        const elementIndex = dataAddCompany.companySpace.findIndex(item => item.id === Number(id));
-
-        if (elementIndex !== -1) {
-            dataAddCompany.companySpace[elementIndex] = { ...dataAddCompany.companySpace[elementIndex], ...req.body };
-            await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAddCompany));
-
-            res.json({ success: true, group: dataAddCompany.companySpace });
-        } else {
-            res.status(404).json({ error: 'Element not found' });
+        const dataAddCompany = JSON.parse(data)
+        const element = dataAddCompany.companySpace.find(item => item.id === Number(id));
+        console.log('element', element ? true : false)
+        if (element) {
+            const elementIndex = dataAddCompany.companySpace.findIndex(item => item.id === Number(id));
+            if (elementIndex !== -1) {
+                const updatedElement = req.body;
+                updatedElement.id = Number(element.id)
+                dataAddCompany.companySpace[elementIndex] = updatedElement;
+            }
         }
+        await fs.promises.writeFile(dbFilePath, JSON.stringify(dataAddCompany));
+        res.json({ success: true, group: dataAddCompany.companySpace });
+
     } catch (err) {
         console.error('Error:', err);
-        res.status(500).json({ error: 'Error editing company' });
+        res.status(500).json({ error: 'Error adding contact' });
     }
 });
+
 
 
 app.post('/logoutCompany', async (req, res) => {
