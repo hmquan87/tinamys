@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Table, Dropdown, Button, ConfigProvider } from "antd";
+import { Table, Dropdown, Button } from "antd";
 import { IoFilter } from "react-icons/io5";
 import { MdOutlineLock } from "react-icons/md";
 
@@ -14,7 +14,6 @@ const columns = [
         title: 'Tiêu đề',
         dataIndex: 'title',
         key: 'title',
-        // sorter: (a, b) => a.name - b.name,
     },
     {
         title: 'Tên danh mục',

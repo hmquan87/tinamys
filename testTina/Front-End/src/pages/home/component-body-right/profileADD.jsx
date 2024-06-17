@@ -99,7 +99,7 @@ const ProfileAdd = ({ setCheckPath }) => {
             });
         }
     }
-   
+
 
     return (
         <>

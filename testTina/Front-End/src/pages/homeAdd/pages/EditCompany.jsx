@@ -101,7 +101,10 @@ const EditCompany = () => {
         {isEditMode ? "Chỉnh sửa thông tin công ty" : "Thông tin công ty"}
       </h2>
       <div className="relative flex justify-center">
-        <div className="relative w-[180px] h-[180px] bg-purple-700 rounded-full mt-8">
+        <div className="relative w-[180px] h-[180px] bg-purple-700 rounded-full mt-8 flex justify-center items-center">
+          <div className="text-[60px] text-white font-medium mt-[-10px]">
+            {detailData.nameWorkSpace.slice(0,2)}
+          </div>
           <div className="absolute bottom-1 right-2 text-[20px] bg-slate-200 p-2 rounded-full">
             <FaCamera />
           </div>

@@ -4,6 +4,7 @@ import baner from "../../style/img/bannerModalAddNew.svg";
 import { FaCamera } from "react-icons/fa";
 import { Select, Input, Button, notification } from "antd";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const { Option } = Select;
 
@@ -11,7 +12,7 @@ const AddTask = ({ handleCancel }) => {
     const [workSpace, setWorkSpace] = useState("");
     const [focusWorkSpace, setFocusWorkSpace] = useState(false);
     const [outsiteWorkSpace, setOutsiteWorkSpace] = useState(false);
-    const [number, setNumber] = useState("");
+    const [numberr, setNumber] = useState("");
     const [focusNumber, setFocusNumber] = useState(false);
     const [outsideNumber, setOutsideNumber] = useState(false);
     const [website, setWebsite] = useState("");
@@ -20,7 +21,7 @@ const AddTask = ({ handleCancel }) => {
     const [selectedValue, setSelectedValue] = useState("Nhỏ hơn 50 nhân sự");
     const [selectedValue1, setSelectedValue1] = useState("Công ty");
     const [scale, setScale] = useState(true);
-    const [email, setEmail] = useState("");
+    const [emaill, setEmail] = useState("");
     const [focusEmail, setFocusEmail] = useState(false);
     const [outsideEmail, setOutsideEmail] = useState(false);
 
@@ -32,7 +33,7 @@ const AddTask = ({ handleCancel }) => {
 
     const handleFocusNumber = () => setFocusNumber(true);
     const handleBlurNumber = () => setFocusNumber(false);
-    const handleOutsiteNumber = () => !number && setOutsideNumber(true);
+    const handleOutsiteNumber = () => !numberr && setOutsideNumber(true);
 
     const handleFocusWebsite = () => setFocusWebsite(true);
     const handleBlurWebsite = () => setFocusWebsite(false);
@@ -40,36 +41,37 @@ const AddTask = ({ handleCancel }) => {
 
     const handleFocusEmail = () => setFocusEmail(true);
     const handleBlurEmail = () => setFocusEmail(false);
-    const handleOutsiteEmail = () => !email && setOutsideEmail(true);
+    const handleOutsiteEmail = () => !emaill && setOutsideEmail(true);
 
     const handleChange = (value) => setSelectedValue(value);
     const handleChange1 = (value) => setSelectedValue1(value);
     const handleBlur = () => setScale(!!selectedValue);
-
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const { name, email, number } = userData;
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const newWorkspace = {
             nameWorkSpace: workSpace,
             tyeSpace: selectedValue1,
-            phone: number,
+            phone: numberr,
             website: website,
-            email: email,
+            email: emaill,
             tyeSizePeople: selectedValue,
         };
 
         if (
             !workSpace ||
-            !number ||
+            !numberr ||
             !selectedValue1 ||
             !selectedValue ||
             !website ||
-            !email
+            !emaill
         ) {
             setOutsiteWorkSpace(!workSpace);
-            setOutsideNumber(!number);
+            setOutsideNumber(!numberr);
             setOutsideWebsite(!website);
-            setOutsideEmail(!email);
+            setOutsideEmail(!emaill);
             setScale(!!selectedValue);
             notification.error({
                 message: "Tạo không gian làm việc không thành công",
@@ -102,6 +104,13 @@ const AddTask = ({ handleCancel }) => {
                 message: "Tạo không gian làm việc không thành công",
                 description: "Đã xảy ra lỗi khi kết nối với máy chủ.",
             });
+        }
+        try {
+            const res = await axios.post(`http://localhost:3001/addPerson1?email=${email}&name=${name}&phone=${number === null || number === undefined || number === '' ? '' : number}&status=${'Hoạt động'}`);
+            const newPersonData = res.data.person;
+            localStorage.setItem("personData", JSON.stringify(newPersonData));
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -186,21 +195,21 @@ const AddTask = ({ handleCancel }) => {
                                         </div>
                                         <div className="input-custom">
                                             <Input
-                                                className={`ant-input ${!number && outsideNumber ? "err-ant-input" : ""
+                                                className={`ant-input ${!numberr && outsideNumber ? "err-ant-input" : ""
                                                     }`}
                                                 onFocus={handleFocusNumber}
                                                 onBlur={() => {
                                                     handleBlurNumber();
                                                     handleOutsiteNumber();
                                                 }}
-                                                value={number}
+                                                value={numberr}
                                                 onChange={(e) => setNumber(e.target.value)}
                                                 type="text"
                                                 placeholder="Số điện thoại"
                                             />
                                         </div>
                                         <div
-                                            className={`focus-error ${!number && outsideNumber ? "show" : ""
+                                            className={`focus-error ${!numberr && outsideNumber ? "show" : ""
                                                 }`}
                                         >
                                             Số điện thoại không được để trống
@@ -242,7 +251,7 @@ const AddTask = ({ handleCancel }) => {
                                         </div>
                                         <div className="input-custom">
                                             <Input
-                                                className={`ant-input ${!email && outsideEmail ? "err-ant-input" : ""
+                                                className={`ant-input ${!emaill && outsideEmail ? "err-ant-input" : ""
                                                     }`}
                                                 type="text"
                                                 placeholder="Email"
@@ -251,12 +260,12 @@ const AddTask = ({ handleCancel }) => {
                                                     handleBlurEmail();
                                                     handleOutsiteEmail();
                                                 }}
-                                                value={email}
+                                                value={emaill}
                                                 onChange={(e) => setEmail(e.target.value)}
                                             />
                                         </div>
                                         <div
-                                            className={`focus-error ${!email && outsideEmail ? "show" : ""
+                                            className={`focus-error ${!emaill && outsideEmail ? "show" : ""
                                                 }`}
                                         >
                                             Email không được để trống
