@@ -128,7 +128,7 @@ const ListGr = () => {
 
         }
     }
-
+    
     const [dataSource, setDataSource] = useState([]);
     useEffect(() => {
         const fetchDataPerson = async () => {
@@ -347,20 +347,24 @@ const ListGr = () => {
 
 
     const countMembers = (groupId) => {
-        console.log('groupId: ', groupId);
-        var count = 0;
-        // const newArray = [];
-        // const newTarget = [];
+        let count = 0;
         personData.forEach(person => {
             if (Array.isArray(person.keyIdGroup) && person.keyIdGroup.includes(groupId)) {
                 count++;
-                // newArray.push(person);
             }
-            // else { newTarget.push(person); };
         });
         return count;
     };
     const arrID = [1, 3, 4];
+
+
+    const resetFields = () => {
+        setValueNamegr('');
+        setValueRv('');
+        setCheckBtn(false);
+        setValueInheritance('');
+    };
+
 
     return (
         <>
@@ -404,7 +408,7 @@ const ListGr = () => {
                                                         <div className="w-[90%] flex flex-row p-2 border-zinc-500 border">
                                                             <div className="basis-1/3 mr-2">
                                                                 <div className="h-[100px] w-[100px] bg-red-300 text-[50px] flex items-center justify-center text-white">
-                                                                    {items.valueNamegr}
+                                                                    {items.valueNamegr.slice(0,2)}
                                                                 </div>
                                                             </div>
                                                             <div className="basis-2/3 flex justify-between">
@@ -492,7 +496,7 @@ const ListGr = () => {
                                         {person.name.slice(0, 2)}
                                     </Avatar>
                                 </div>
-                                <div className="basis-3/4 flex flex-col">
+                                <div className="basis-3/4 flex flex-col ml-2 text-[14px] font-medium">
                                     <div className="mt-1">
                                         {person.name}
                                     </div>
@@ -675,7 +679,15 @@ const ListGr = () => {
                                 className="text-[14px] w-[160px] h-[44px] p-2"
                                 type="primary"
                                 danger={!valueNamegr && !valueRv ? true : false}
-                                onClick={() => checkBtn ? handleAdd1() : setOpen(false)}
+                                onClick={() => {
+                                    if (checkBtn) {
+                                        handleAdd1();
+                                        resetFields();
+                                    } else {
+                                        setOpen(false);
+                                        resetFields();
+                                    }
+                                }}
                             >
                                 {!valueNamegr && !valueRv ? 'Đóng' : 'Thêm nhóm'}
                             </Button>
@@ -957,7 +969,7 @@ const ListGr = () => {
                                             className="text-[14px] w-[160px] h-[44px] p-2"
                                             type="primary"
                                             danger={!valueNamegr && !valueRv ? true : false}
-                                            onClick={() => !valueNamegr && !valueRv ? setOpen2(false) : handleEdit(item.id, valueNamegr, valueRv, arrID)}
+                                            onClick={() => !valueNamegr && !valueRv ? setOpen2(false) : handleEdit(item.id, valueNamegr, valueRv, targetKeys)}
                                         >
                                             {!valueNamegr && !valueRv ? 'Đóng' : 'Lưu chỉnh sửa'}
                                         </Button>

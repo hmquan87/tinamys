@@ -8,8 +8,73 @@
     }
   ],
   "contact": [],
-  "group1": [],
-  "position": [],
+  "group1": [
+    {
+      "id": 1,
+      "leverGr": "1",
+      "valueNamegr": "1312",
+      "valueRv": "3",
+      "valueInheritance": "",
+      "memberId": []
+    },
+    {
+      "id": 2,
+      "leverGr": "2",
+      "valueNamegr": "nhóm 2",
+      "valueRv": "",
+      "valueInheritance": "nhóm 1"
+    },
+    {
+      "id": 3,
+      "leverGr": "3",
+      "valueNamegr": "nhóm 3",
+      "valueRv": "",
+      "valueInheritance": "nhóm 2"
+    },
+    {
+      "id": 4,
+      "leverGr": "1",
+      "valueNamegr": "nhóm 3",
+      "valueRv": "3",
+      "valueInheritance": "nhóm 2"
+    },
+    {
+      "id": 5,
+      "leverGr": "2",
+      "valueNamegr": "3",
+      "valueRv": "",
+      "valueInheritance": "nhóm 1"
+    },
+    {
+      "id": 6,
+      "leverGr": "2",
+      "valueNamegr": "12",
+      "valueRv": "222",
+      "valueInheritance": "nhóm 1"
+    },
+    {
+      "id": 7,
+      "leverGr": "3",
+      "valueNamegr": "21",
+      "valueRv": "",
+      "valueInheritance": ""
+    }
+  ],
+  "position": [
+    {
+      "id": 1,
+      "name": "Chức vụ 1",
+      "group": "nhóm 2",
+      "permissions": [
+        "Quản lý nhóm",
+        "Quản lý chức vụ",
+        "Quản lý nhân sự"
+      ],
+      "idPersion": [
+        1
+      ]
+    }
+  ],
   "person": [
     {
       "id": 1,
@@ -20,22 +85,35 @@
     },
     {
       "id": 2,
-      "email": "hung@gmail.com",
-      "name": "hung",
-      "phone": "",
+      "email": "hoanglop8a1@gmail.com",
+      "name": "name",
+      "phone": "0985755188",
+      "group": "nhóm 2",
+      "position": "Chức vụ 1",
       "status": "Hoạt động"
     }
   ],
   "companySpace": [
     {
-      "nameWorkSpace": "123",
+      "nameWorkSpace": "3123",
       "tyeSpace": "Công ty",
-      "phone": "123",
+      "phone": "312312",
       "website": "123",
-      "email": "123",
+      "email": "123123",
       "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
       "id": 1
     }
   ],
-  "news": []
+  "news": [],
+  "newsCategories": [
+    {
+      "category": "123",
+      "color": "132123",
+      "newsQuantity": "32",
+      "timeCreate": "2",
+      "personCreate": "2",
+      "display": "2",
+      "id": 1
+    }
+  ]
 }

@@ -41,21 +41,37 @@ const SiderHome = ({ setCheckPath }) => {
 
     const [personData, setPersonData] = useState([])
 
-    
+    const [length, setLength] = useState(0);
 
     useEffect(() => {
-        const FetchDataPerson = async () => {
-            try {
-                const res = await axios.get(`http://localhost:3001/getDataPerson`);
-                const data = res.data;
-                setPersonData(data.person)
-            } catch (error) {
-
+        const updateLength = () => {
+            const datalocal = localStorage.getItem('personData');
+            if (datalocal) {
+                const parsedData = JSON.parse(datalocal);
+                setLength(parsedData.length);
             }
-        }
-        FetchDataPerson();
-    }, [])
+        };
 
+        updateLength();
+
+        const intervalId = setInterval(updateLength, 1);
+        return () => clearInterval(intervalId);
+    }, []);
+
+
+    
+
+    // console.log('daaaaaa: ', length);
+
+    const FetchDataPerson = async () => {
+        try {
+            const res = await axios.get(`http://localhost:3001/getDataPerson`);
+            const data = res.data;
+            setPersonData(data.person)
+        } catch (error) {
+
+        }
+    }
     const fetchData = async () => {
         try {
             const res = await axios.get(`http://localhost:3001/getDataCompany?id=${1}`);
@@ -69,17 +85,17 @@ const SiderHome = ({ setCheckPath }) => {
     }
     useEffect(() => {
         fetchData();
-
+        FetchDataPerson();
     }, [])
     console.log(data);
     return (
         <div className="">
-            <button
+            {/* <button
                 className=" absolute shadow-md right-[-8%] top-[14%] h-[40px] w-[40px] z-40 bg-white rounded-full"
                 onClick={toggleMenu}
             >
                 {!isMenu ? <LeftOutlined /> : <RightOutlined />}
-            </button>
+            </button> */}
 
             <Menu
                 mode="inline"
@@ -101,7 +117,7 @@ const SiderHome = ({ setCheckPath }) => {
 
                                     <div className='leading-[20px] text-black'>
                                         <div className='text-[18px] '>{data.nameWorkSpace}</div>
-                                        <div className='text-[14px]'>{personData.length} nhân sự</div>
+                                        <div className='text-[14px]'>{length} nhân sự</div>
                                     </div>
 
                                 </div>

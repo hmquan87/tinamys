@@ -27,7 +27,6 @@ const columns = [
     title: "Họ và tên",
     dataIndex: "name",
     key: "name",
-    sorter: (a, b) => a.name.localeCompare(b.name),
   },
   {
     title: "Trạng thái",
@@ -56,7 +55,10 @@ const columns = [
   },
 ];
 
+
 // Component chính
+let id = 0;
+
 const ListPerson = () => {
   const [data, setData] = useState([]); // Dữ liệu nhân sự
   const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái hiển thị modal thêm nhân sự
@@ -69,16 +71,13 @@ const ListPerson = () => {
   const [dataGroup, setDataGroup] = useState([]);
   const [dataPosition, setDataPosition] = useState([]);
   // Hook useEffect được sử dụng để gửi yêu cầu HTTP khi component được render
-  useEffect(() => {
-    fetchDataFromServer();
-    fetchDataGroup();
-    fetchDataPosition();
-  }, []);
-
+ 
   // Hàm gửi yêu cầu HTTP để lấy dữ liệu từ máy chủ
   const fetchDataFromServer = async () => {
     try {
       const response = await axios.get("http://localhost:3001/getDataPerson");
+      const dataperson = response.data.person
+
       setData(response.data.person);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
@@ -86,7 +85,7 @@ const ListPerson = () => {
   };
 
   const fetchDataGroup = async () => {
-    
+
     try {
       const res = await axios.get("http://localhost:3001/grDatatest");
       setDataGroup(res.data.dataGroup)
@@ -95,13 +94,13 @@ const ListPerson = () => {
     }
   }
   const fetchDataPosition = async () => {
-  try {
-    const res = await axios.get('http://localhost:3001/getPosition')
-    setDataPosition(res.data.position)
-  } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
+    try {
+      const res = await axios.get('http://localhost:3001/getPosition')
+      setDataPosition(res.data.position)
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
+    }
   }
-}
   // Hàm gửi yêu cầu HTTP để thêm một nhân sự mới
   const AddPerson = async (values) => {
     try {
@@ -119,7 +118,11 @@ const ListPerson = () => {
       console.error(error);
     }
   };
- 
+  useEffect(() => {
+    fetchDataFromServer();
+    fetchDataGroup();
+    fetchDataPosition();
+  }, []);
 
   // Hàm hiển thị modal thêm nhân sự 
   const showModalAdd = () => {
@@ -181,6 +184,7 @@ const ListPerson = () => {
         setIsDetailModalVisible(false);
         setDetailData(null);
         setIsEditMode(false);
+        localStorage.setItem("personData", JSON.stringify(res.data.person));
         console.log("Cập nhật thành công");
       } else {
         console.error(res.data);
@@ -200,6 +204,7 @@ const ListPerson = () => {
         fetchDataFromServer();
         setIsDetailModalVisible(false);
         setDetailData(null);
+        localStorage.setItem("personData", JSON.stringify(res.data.person));
         console.log("Xóa nhân sự thành công");
       } else {
         console.error(res.data);
@@ -229,6 +234,7 @@ const ListPerson = () => {
   };
   console.log(dataGroup);
   return (
+    
     <div>
       <div>
         <div className=" flex items-center pt-10 pl-6 pb-2">
@@ -413,7 +419,7 @@ const ListPerson = () => {
               </Select>
             </Form.Item>
             <Form.Item label="Nhóm" name="group">
-              <Select placeholder="Chọn Nhóm">
+              <Select disabled={!isEditMode} placeholder="Chọn Nhóm">
                 {dataGroup.map(item => (
                   <Select.Option key={item.valueNamegr} value={item.valueNamegr}>
                     {item.valueNamegr}
@@ -423,8 +429,11 @@ const ListPerson = () => {
             </Form.Item>
             <Form.Item label="Chức vụ" name="position">
               <Select disabled={!isEditMode} className="h-[40px]">
-                <Option value="Quản lý">Quản lý</Option>
-                <Option value="Nhân viên">Nhân viên</Option>
+                {dataPosition.map(item =>
+                  <Select.Option key={item.name} value={item.name}>
+                    {item.name}
+                  </Select.Option>
+                )}
               </Select>
             </Form.Item>
             <Form.Item label="Số điện thoại" name="phone">
