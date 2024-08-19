@@ -158,7 +158,7 @@ const ListPs = () => {
     }, [dataGroup1, dataGroup2]);
 
     const handleOpenModal = () => {
-        
+
         setCheckedList(defaultCheckedList)
         setCheckAllMembers(false);
         addForm.setFieldsValue({
@@ -206,7 +206,7 @@ const ListPs = () => {
 
         }
     }
-    
+
 
     const handleClick = (key, id) => {
         console.log('key: ', key);

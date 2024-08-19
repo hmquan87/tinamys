@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Input,
   Table,
-  Dropdown,
   Button,
-  ConfigProvider,
   Modal,
   Form,
   Select,
@@ -12,11 +10,9 @@ import {
 import { Option } from "antd/lib/mentions";
 import "../../style/css/asset.css";
 import { SearchOutlined } from "@ant-design/icons";
-import { IoFilter } from "react-icons/io5";
 import { GrAdd } from "react-icons/gr";
 import axios from "axios";
 
-// Khai báo các cột của bảng dữ liệu
 const columns = [
   {
     title: "STT",
@@ -56,23 +52,20 @@ const columns = [
 ];
 
 
-// Component chính
-let id = 0;
 
 const ListPerson = () => {
-  const [data, setData] = useState([]); // Dữ liệu nhân sự
-  const [isModalVisible, setIsModalVisible] = useState(false); // Trạng thái hiển thị modal thêm nhân sự
-  const [addForm] = Form.useForm(); // Form dùng để thêm nhân sự
-  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false); // Trạng thái hiển thị modal chi tiết nhân sự
-  const [detailData, setDetailData] = useState(null); // Dữ liệu chi tiết nhân sự
-  const [detailForm] = Form.useForm(); // Form dùng để chỉnh sửa thông tin
-  const [isEditMode, setIsEditMode] = useState(false); // Trạng thái chỉnh sửa
-  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false); // Trạng thái hiển thị modal xác nhận xóa
+  const [data, setData] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [addForm] = Form.useForm();
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+  const [detailData, setDetailData] = useState(null);
+  const [detailForm] = Form.useForm();
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [confirmDeleteVisible, setConfirmDeleteVisible] = useState(false);
   const [dataGroup, setDataGroup] = useState([]);
   const [dataPosition, setDataPosition] = useState([]);
-  // Hook useEffect được sử dụng để gửi yêu cầu HTTP khi component được render
- 
-  // Hàm gửi yêu cầu HTTP để lấy dữ liệu từ máy chủ
+
+  
   const fetchDataFromServer = async () => {
     try {
       const response = await axios.get("http://localhost:3001/getDataPerson");
@@ -101,7 +94,6 @@ const ListPerson = () => {
       console.error("Lỗi khi lấy dữ liệu từ máy chủ:", error);
     }
   }
-  // Hàm gửi yêu cầu HTTP để thêm một nhân sự mới
   const AddPerson = async (values) => {
     try {
       const res = await axios.post("http://localhost:3001/addPerson", values);
@@ -124,33 +116,28 @@ const ListPerson = () => {
     fetchDataPosition();
   }, []);
 
-  // Hàm hiển thị modal thêm nhân sự 
   const showModalAdd = () => {
     addForm.resetFields();
     setIsModalVisible(true);
   };
 
-  // Hàm xử lý khi click nút "Xác nhận" trên modal thêm nhân sự
   const handleOk = async () => {
     try {
       const values = await addForm.validateFields();
       addForm.resetFields();
-      await AddPerson(values); // Thêm nhân sự
+      await AddPerson(values);
       setIsModalVisible(false);
-      // Sau khi thêm thành công, cập nhật lại dữ liệu hiển thị trên bảng
       fetchDataFromServer();
     } catch (error) {
       console.error("Vui lòng nhập đủ thông tin!");
     }
   };
 
-  // Hàm xử lý khi nhấn nút "Hủy" trên modal thêm nhân sự
   const handleCancel = () => {
     addForm.resetFields();
     setIsModalVisible(false);
   };
 
-  // Hàm hiển thị modal chi tiết nhân sự
   const showDetailModal = (record) => {
     setDetailData(record);
     setIsDetailModalVisible(true);
@@ -158,19 +145,16 @@ const ListPerson = () => {
     detailForm.setFieldsValue(record);
   };
 
-  // Hàm xử lý khi nhấn nút "Hủy" trên modal chi tiết nhân sự
   const handleDetailModalCancel = () => {
     setIsDetailModalVisible(false);
     setDetailData(null);
     setIsEditMode(false);
   };
 
-  // Hàm xử lý khi nhấn nút "Sửa" trên modal chi tiết nhân sự
   const handleEdit = () => {
     setIsEditMode(true);
   };
 
-  // Hàm xử lý khi nhấn nút "Xác nhận" sau khi sửa thông tin nhân sự
   const handleUpdate = async () => {
     try {
       const values = await detailForm.validateFields();
@@ -194,7 +178,6 @@ const ListPerson = () => {
     }
   };
 
-  // Hàm gửi yêu cầu HTTP để xóa một nhân sự
   const deletePerson = async (id) => {
     try {
       const res = await axios.delete(
@@ -214,19 +197,14 @@ const ListPerson = () => {
     }
   };
 
-  //Search
   const [filteredData, setFilteredData] = useState([]);
 
-  // Xử lý sự kiện onChange của thanh tìm kiếm
   const handleSearch = async (value) => {
     try {
-      // Gửi yêu cầu tìm kiếm tới server
       const response = await axios.get(
         `http://localhost:3001/searchPerson?query=${value}`
       );
-      // Cập nhật dữ liệu hiển thị trên bảng
       setFilteredData(response.data.person);
-      // Sau khi cập nhật dữ liệu từ máy chủ, bạn có thể gọi lại fetchDataFromServer() để đảm bảo cập nhật dữ liệu mới nhất từ máy chủ
       fetchDataFromServer();
     } catch (error) {
       console.error("Lỗi khi tìm kiếm:", error);
@@ -234,7 +212,7 @@ const ListPerson = () => {
   };
   console.log(dataGroup);
   return (
-    
+
     <div>
       <div>
         <div className=" flex items-center pt-10 pl-6 pb-2">
@@ -250,7 +228,6 @@ const ListPerson = () => {
             <Input
               placeholder="Tìm kiếm"
               prefix={<SearchOutlined className="h-[26px]" />}
-              //   Gọi hàm handleSearch
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
@@ -282,7 +259,7 @@ const ListPerson = () => {
                 form={addForm}
                 layout="vertical"
                 onFinish={(values) => {
-                  console.log(values); // Lưu trữ giá trị nhập liệu vào đây
+                  console.log(values);
                 }}
                 className="w-[380px]"
               >

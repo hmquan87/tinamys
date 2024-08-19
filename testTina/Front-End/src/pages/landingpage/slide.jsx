@@ -8,9 +8,6 @@ import avt3 from "../style/img/avatarfeedback3.svg";
 import "../style/css/slide.css";
 
 const Slide = () => {
-
-  
-
   const settings = {
     className: "center",
     centerMode: true,

@@ -228,7 +228,7 @@ const LoginForm = () => {
             )}
             {showSigninForm && (
                 <>
-                    <button id="backbtn" onClick={handleBackLoginForm}><IoMdArrowBack size={30} /></button>
+                    <button id="backbtn" onClick={handleBackLoginForm}><IoMdArrowBack className="" size={30} /></button>
                     <SigninComponent onSuccess={handleSigninSuccess} />
                 </>
             )}
