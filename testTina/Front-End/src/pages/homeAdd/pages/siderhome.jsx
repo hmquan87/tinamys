@@ -25,7 +25,7 @@ const menuItems = [
 ];
 const menuItems1 = [
     { key: 'nav1', icon: iconHome, text: 'Trang chủ' },
-    { key: 'nav2', icon: iconMuctieu, text: 'Muc tiêu cá nhân' },
+    { key: 'nav2', icon: iconMuctieu, text: 'Muc tiêu công ty' },
     { key: 'nav3', icon: iconMuctieu1, text: 'Muc tiêu cá nhân' },
     { key: 'nav4', icon: iconLich, text: 'Lịch làm việc' },
 ];
@@ -59,7 +59,7 @@ const SiderHome = ({ setCheckPath }) => {
     }, []);
 
 
-    
+
 
     // console.log('daaaaaa: ', length);
 

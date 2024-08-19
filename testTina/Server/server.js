@@ -53,6 +53,12 @@ app.post('/login', (req, res) => {
 app.post('/register', (req, res) => {
     const { username, password, name, email, again } = req.body;
 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: 'Định dạng email không hợp lệ!' });
+    }
+
     fs.readFile(dbFilePath, 'utf8', (err, data) => {
         if (err) {
             console.error('Đã xảy ra lỗi khi đọc file db.json:', err);
@@ -72,11 +78,14 @@ app.post('/register', (req, res) => {
                     }
                     res.json({ success: true });
                 });
-            } else return res.status(500).json({ error: 'Mật khẩu không khớp!' });
-        } else return res.status(500).json({ error: 'Tài khoản đã tồn tại!' });
+            } else {
+                return res.status(400).json({ error: 'Mật khẩu không khớp!' });
+            }
+        } else {
+            return res.status(400).json({ error: 'Tài khoản đã tồn tại!' });
+        }
     });
 });
-
 
 
 app.post('/addProfile', (req, res) => {
@@ -196,13 +205,6 @@ app.post('/editDataGr', async (req, res) => {
             memberIdArray.push(parseInt(memberId));
         }
     }
-    // if (Array.isArray(memberId)) {
-    //     memberIdArray = memberId.map(member => parseInt(member));
-    // } else {
-    //     memberIdArray.push(parseInt(memberId));
-    // }
-
-    // console.log('memberIdArray', memberIdArray);
     try {
         let data = await fs.promises.readFile(dbFilePath, 'utf8');
         const grData = JSON.parse(data);

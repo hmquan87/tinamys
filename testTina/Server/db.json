@@ -1,119 +1,123 @@
 {
-  "user": [
-    {
-      "username": "admin",
-      "password": "admin",
-      "name": "hung",
-      "email": "hung@gmail.com"
-    }
-  ],
-  "contact": [],
-  "group1": [
-    {
-      "id": 1,
-      "leverGr": "1",
-      "valueNamegr": "1312",
-      "valueRv": "3",
-      "valueInheritance": "",
-      "memberId": []
-    },
-    {
-      "id": 2,
-      "leverGr": "2",
-      "valueNamegr": "nhóm 2",
-      "valueRv": "",
-      "valueInheritance": "nhóm 1"
-    },
-    {
-      "id": 3,
-      "leverGr": "3",
-      "valueNamegr": "nhóm 3",
-      "valueRv": "",
-      "valueInheritance": "nhóm 2"
-    },
-    {
-      "id": 4,
-      "leverGr": "1",
-      "valueNamegr": "nhóm 3",
-      "valueRv": "3",
-      "valueInheritance": "nhóm 2"
-    },
-    {
-      "id": 5,
-      "leverGr": "2",
-      "valueNamegr": "3",
-      "valueRv": "",
-      "valueInheritance": "nhóm 1"
-    },
-    {
-      "id": 6,
-      "leverGr": "2",
-      "valueNamegr": "12",
-      "valueRv": "222",
-      "valueInheritance": "nhóm 1"
-    },
-    {
-      "id": 7,
-      "leverGr": "3",
-      "valueNamegr": "21",
-      "valueRv": "",
-      "valueInheritance": ""
-    }
-  ],
-  "position": [
-    {
-      "id": 1,
-      "name": "Chức vụ 1",
-      "group": "nhóm 2",
-      "permissions": [
-        "Quản lý nhóm",
-        "Quản lý chức vụ",
-        "Quản lý nhân sự"
-      ],
-      "idPersion": [
-        1
-      ]
-    }
-  ],
-  "person": [
-    {
-      "id": 1,
-      "email": "hung@gmail.com",
-      "name": "hung",
-      "phone": "",
-      "status": "Hoạt động"
-    },
-    {
-      "id": 2,
-      "email": "hoanglop8a1@gmail.com",
-      "name": "name",
-      "phone": "0985755188",
-      "group": "nhóm 2",
-      "position": "Chức vụ 1",
-      "status": "Hoạt động"
-    }
-  ],
-  "companySpace": [
-    {
-      "nameWorkSpace": "3123",
-      "tyeSpace": "Công ty",
-      "phone": "312312",
-      "website": "123",
-      "email": "123123",
-      "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
-      "id": 1
-    }
-  ],
-  "news": [],
-  "newsCategories": [
-    {
-      "category": "123",
-      "color": "132123",
-      "newsQuantity": "32",
-      "timeCreate": "2",
-      "personCreate": "2",
-      "display": "2",
-      "id": 1
-    }
-  ]
+    "user": [
+        {
+            "username": "tunglv",
+            "password": "123123",
+            "name": "tung lv",
+            "email": "tung@gmail.com"
+        },
+        {
+            "username": "hung",
+            "password": "123",
+            "name": "hung",
+            "email": "hung@gmail.com"
+        },
+        {
+            "username": "123123",
+            "password": "123123",
+            "name": "123123",
+            "email": "123123@gmail.com"
+        },
+        {
+            "username": "admin",
+            "password": "admin",
+            "name": "admin",
+            "email": "quanhm.872002@gmail.com"
+        }
+    ],
+    "contact": [],
+    "group1": [
+        {
+            "id": 1,
+            "leverGr": "1",
+            "valueNamegr": "group1",
+            "valueRv": "",
+            "valueInheritance": ""
+        }
+    ],
+    "position": [
+        {
+            "id": 1,
+            "name": "Position",
+            "group": "group1",
+            "permissions": [
+                "Quản lý nhóm",
+                "Quản lý chức vụ",
+                "Quản lý nhân sự",
+                "Quản lý tin tức"
+            ],
+            "idPersion": [
+                1
+            ]
+        }
+    ],
+    "person": [
+        {
+            "id": 1,
+            "email": "quanhm.872002@gmail.com",
+            "name": "admin",
+            "phone": "",
+            "status": "Hoạt động",
+            "groupKey": [
+                1
+            ],
+            "keyIdGroup": [
+                1
+            ]
+        }
+    ],
+    "companySpace": [
+        {
+            "nameWorkSpace": "Space1",
+            "tyeSpace": "Công ty",
+            "phone": "0987654321",
+            "website": "123",
+            "email": "123@gmail.com",
+            "tyeSizePeople": "Nhỏ hơn 50 nhân sự",
+            "id": 1
+        }
+    ],
+    "tintuc": [
+        {
+            "title": "tin tuc 1",
+            "description": "Doan duc thang",
+            "content": "Đoàn Đức thắng sẽ là thành viên mới của công ty chúng ta",
+            "category": "Category 1",
+            "coverImage": "./assets/beauty_1641004015189.JPG",
+            "highlightImage": "./assets/beauty_1641004015189.JPG",
+            "highlight": true
+        },
+        {
+            "title": "tin tuc 2",
+            "description": "thang ",
+            "content": "Thắng sẽ là thành viên mới của công ty chúng ta",
+            "category": "Category 2",
+            "coverImage": "path/to/cover/image2.jpg",
+            "highlightImage": "path/to/highlight/image2.jpg",
+            "highlight": false
+        }
+    ],
+    "newsCategories": [
+        {
+            "id": 1,
+            "stt": 1,
+            "category": "Công nghệ",
+            "color": "Đỏ",
+            "newsQuantity": 10,
+            "timeCreate": "2024-05-01T12:34:56Z",
+            "personCreate": "Alice",
+            "display": true
+        },
+        {
+            "id": 2,
+            "stt": 2,
+            "category": "Sức khỏe",
+            "color": "Xanh lá",
+            "newsQuantity": 8,
+            "timeCreate": "2024-05-02T14:22:16Z",
+            "personCreate": "Bob",
+            "display": true
+        }
+    ],
+    "news": []
 }
